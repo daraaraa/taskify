@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CBE Project Hub — Powered by Taskify</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root{
+  --cbe-navy:#0A2540; --cbe-navy-2:#13305a; --cbe-gold:#D4A531; --cbe-gold-soft:#F5E6B8;
+  --primary:#0A2540; --primary-hover:#13305a; --accent:#D4A531;
+  --bg:#F4F6FA; --surface:#ffffff; --surface-2:#FAFBFD;
+  --border:#E1E6EF; --border-heavy:#B6C0D1;
+  --text:#0F172A; --muted:#64748B;
+  --danger:#DC2626; --warn:#D97706; --success:#059669; --info:#2563EB;
+  --sla-green:#059669; --sla-amber:#D97706; --sla-red:#DC2626;
+  --radius:6px; --radius-lg:10px;
+  --shadow-sm:0 1px 2px rgba(10,37,64,.06);
+  --shadow:0 4px 10px -2px rgba(10,37,64,.12);
+  --shadow-lg:0 14px 30px -8px rgba(10,37,64,.22);
+}
+*{box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);margin:0;height:100vh;display:flex;flex-direction:column;overflow:hidden;font-size:14px}
+h1,h2,h3,h4,p{margin:0}
+.hidden{display:none!important}
+button{font-family:inherit;cursor:pointer;border:none;border-radius:var(--radius);padding:.5rem .85rem;font-weight:500;font-size:.85rem;display:inline-flex;align-items:center;gap:.4rem;transition:all .15s}
+button.primary{background:var(--cbe-navy);color:#fff}
+button.primary:hover{background:var(--cbe-navy-2)}
+button.gold{background:var(--cbe-gold);color:var(--cbe-navy);font-weight:600}
+button.gold:hover{filter:brightness(.95)}
+button.secondary{background:#fff;color:var(--text);border:1px solid var(--border)}
+button.secondary:hover{background:var(--surface-2);border-color:var(--border-heavy)}
+button.ghost{background:transparent;color:var(--muted)}
+button.ghost:hover{background:var(--bg);color:var(--text)}
+button.danger{background:#fff;color:var(--danger);border:1px solid #fecaca}
+button.icon{padding:.4rem;border-radius:6px}
+input,select,textarea{width:100%;padding:.5rem .65rem;border:1px solid var(--border);border-radius:var(--radius);font-family:inherit;font-size:.85rem;background:#fff}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--cbe-navy);box-shadow:0 0 0 3px rgba(10,37,64,.1)}
+textarea{resize:vertical;min-height:60px}
+.flex{display:flex;gap:.5rem;align-items:center}
+.muted{color:var(--muted)}
+hr{border:0;border-top:1px solid var(--border)}
+
+/* LOGIN */
+.login-wrap{flex:1;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--cbe-navy) 0%,#071a2e 100%)}
+.login-card{background:#fff;border-radius:var(--radius-lg);padding:2.5rem;width:440px;box-shadow:var(--shadow-lg);text-align:center}
+.login-logo{display:inline-flex;align-items:center;gap:.5rem;background:var(--cbe-navy);color:var(--cbe-gold);padding:.5rem 1rem;border-radius:8px;font-weight:700;margin-bottom:1rem}
+.login-card h2{font-size:1.4rem;margin-bottom:.25rem;color:var(--cbe-navy)}
+.login-card p{color:var(--muted);margin-bottom:1.5rem;font-size:.85rem}
+
+/* TOP BAR */
+.topbar{background:var(--cbe-navy);color:#fff;height:52px;display:flex;align-items:center;padding:0 1rem;gap:1rem;border-bottom:2px solid var(--cbe-gold)}
+.brand{display:flex;align-items:center;gap:.5rem;font-weight:700;font-size:1rem;color:#fff}
+.brand .gold-dot{width:10px;height:10px;background:var(--cbe-gold);border-radius:50%}
+.brand small{color:var(--cbe-gold);font-weight:500;font-size:.7rem;letter-spacing:1px;text-transform:uppercase}
+.search-box{flex:1;max-width:460px;position:relative}
+.search-box input{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;padding-left:2rem}
+.search-box input::placeholder{color:rgba(255,255,255,.6)}
+.search-box i{position:absolute;left:.5rem;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.6)}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:.75rem}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--cbe-gold);color:var(--cbe-navy);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem}
+.role-badge{background:rgba(212,165,49,.15);color:var(--cbe-gold);padding:.2rem .6rem;border-radius:999px;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+
+/* NOTIFICATION BELL */
+.bell-wrap{position:relative}
+.bell-btn{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.15);padding:.4rem;border-radius:6px;cursor:pointer;position:relative}
+.bell-btn:hover{background:rgba(255,255,255,.15)}
+.bell-badge{position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;font-size:.6rem;font-weight:700;padding:2px 5px;border-radius:999px;min-width:16px;text-align:center;border:2px solid var(--cbe-navy)}
+.notif-panel{position:absolute;top:calc(100% + .5rem);right:0;width:340px;max-height:420px;background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);border:1px solid var(--border);z-index:300;overflow:hidden;display:flex;flex-direction:column}
+.notif-panel h4{padding:.75rem 1rem;border-bottom:1px solid var(--border);font-size:.85rem;display:flex;justify-content:space-between;align-items:center;color:var(--text)}
+.notif-list{overflow-y:auto;flex:1}
+.notif-item{padding:.65rem 1rem;border-bottom:1px solid var(--border);cursor:pointer;font-size:.8rem;line-height:1.4}
+.notif-item:hover{background:var(--surface-2)}
+.notif-item.unread{background:#f0f7ff;border-left:3px solid var(--info)}
+.notif-item small{color:var(--muted);font-size:.7rem;display:block;margin-top:2px}
+
+/* MAIN LAYOUT */
+.workspace{flex:1;display:flex;overflow:hidden}
+.sidebar{
+  width:290px;
+  min-width:290px;
+  background:#fff;
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  overflow-y:auto;
+  transition:width .22s ease,min-width .22s ease;
+}
+.sidebar.collapsed{
+  width:72px;
+  min-width:72px;
+}
+.sidebar.collapsed .sidebar-section h4,
+.sidebar.collapsed .nav-label{
+  display:none;
+}
+.sidebar.collapsed .sidebar-section{
+  padding:.75rem .45rem;
+}
+.sidebar.collapsed .nav-item{
+  justify-content:center;
+  padding:.55rem .35rem;
+}
+.sidebar.collapsed .nav-item i{
+  margin-top:0;
+}
+.sidebar.collapsed .nav-sub{
+  padding-left:0 !important;
+}
+.sidebar-section{padding:.75rem 1rem;border-bottom:1px solid var(--border)}
+.sidebar-section h4{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center}
+.nav-item{display:flex;align-items:flex-start;gap:.5rem;padding:.5rem .6rem;border-radius:var(--radius);color:var(--text);cursor:pointer;font-size:.85rem;margin-bottom:2px}
+.nav-item:hover{background:var(--surface-2)}
+.nav-item.active{background:#eaf1fb;color:var(--cbe-navy);font-weight:600}
+.nav-item i{width:14px;height:14px;color:var(--muted);margin-top:2px}
+.nav-item.active i{color:var(--cbe-navy)}
+.nav-sub{padding-left:1.5rem;font-size:.8rem;color:var(--muted)}
+.nav-label{display:flex;flex-direction:column;line-height:1.2}
+.nav-meta{font-size:.68rem;color:var(--muted);margin-top:2px}
+.nav-item i[data-lucide="chevron-right"],
+.nav-item i[data-lucide="chevron-down"]{
+  color:var(--cbe-navy);
+  opacity:.8;
+}
+
+/* VIEW TOGGLE */
+.view-toolbar{background:#fff;border-bottom:1px solid var(--border);padding:.5rem 1rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+.breadcrumb{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:.35rem;flex-wrap:wrap}
+.breadcrumb strong{color:var(--text);font-weight:600}
+.view-tabs{display:flex;background:var(--surface-2);padding:3px;border-radius:var(--radius);border:1px solid var(--border)}
+.view-tab{padding:.35rem .7rem;border-radius:4px;font-size:.8rem;cursor:pointer;color:var(--muted);display:flex;align-items:center;gap:.3rem}
+.view-tab.active{background:#fff;color:var(--cbe-navy);font-weight:600;box-shadow:var(--shadow-sm)}
+
+.main-area{flex:1;position:relative;overflow:hidden}
+
+/* CANVAS */
+.viewport{width:100%;height:100%;position:relative;overflow:hidden;background:var(--bg);background-image:radial-gradient(#cbd5e1 1px,transparent 1px);background-size:22px 22px;cursor:grab;user-select:none}
+.viewport.panning{cursor:grabbing}
+.canvas-plane{position:absolute;top:0;left:0;transform-origin:0 0;display:flex;gap:4rem;padding:3rem}
+
+/* TREE */
+.tree ul{padding-top:24px;position:relative;display:flex;justify-content:center;padding-left:0;margin:0}
+.tree li{float:left;text-align:center;list-style:none;position:relative;padding:24px 10px 0 10px}
+.tree li::before,.tree li::after{content:'';position:absolute;top:0;right:50%;border-top:2px solid var(--border-heavy);width:50%;height:24px}
+.tree li::after{right:auto;left:50%;border-left:2px solid var(--border-heavy)}
+.tree li:only-child::after,.tree li:only-child::before{display:none}
+.tree li:only-child{padding-top:0}
+.tree li:first-child::before,.tree li:last-child::after{border:0 none}
+.tree li:last-child::before{border-right:2px solid var(--border-heavy);border-radius:0 5px 0 0}
+.tree li:first-child::after{border-radius:5px 0 0 0}
+.tree ul ul::before{content:'';position:absolute;top:0;left:50%;border-left:2px solid var(--border-heavy);width:0;height:24px;margin-left:-1px}
+
+/* NODES */
+.node{display:inline-flex;flex-direction:column;background:#fff;border:1px solid var(--border);border-left:4px solid var(--cbe-navy);border-radius:var(--radius);padding:.65rem .75rem;min-width:220px;max-width:250px;box-shadow:var(--shadow-sm);text-align:left;position:relative;z-index:2;transition:.15s}
+.node:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
+.node-project{border:1px solid var(--cbe-navy);border-left:4px solid var(--cbe-gold);background:linear-gradient(180deg,#fff 0%,#FAF6EC 100%)}
+.node-key{font-size:.68rem;color:var(--muted);font-weight:600;letter-spacing:.5px;font-family:'SF Mono',monospace}
+.node-title{font-weight:600;font-size:.85rem;line-height:1.25;margin:2px 0 6px;word-wrap:break-word}
+.node-footer{display:flex;align-items:center;gap:.35rem;font-size:.7rem;flex-wrap:wrap}
+.type-icon{width:14px;height:14px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700}
+.t-epic{background:#7C3AED}.t-story{background:#059669}.t-task{background:#2563EB}.t-sub{background:#0891B2}.t-bug{background:#DC2626}.t-risk{background:#D97706}.t-compliance{background:#0A2540}
+.badge{padding:.1rem .45rem;border-radius:4px;font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.s-todo{background:#F1F5F9;color:#475569}
+.s-in-progress{background:#FEF3C7;color:#B45309}
+.s-review{background:#DBEAFE;color:#1E40AF}
+.s-done{background:#D1FAE5;color:#065F46}
+.s-blocked{background:#FEE2E2;color:#991B1B}
+.prio{display:inline-flex;align-items:center;gap:2px;font-size:.7rem;font-weight:600}
+.prio.highest{color:#DC2626}.prio.high{color:#EA580C}.prio.medium{color:#D97706}.prio.low{color:#059669}
+.mini-avatar{width:20px;height:20px;border-radius:50%;background:var(--cbe-navy);color:#fff;font-size:.65rem;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-left:auto}
+.inactive-item{opacity:.45;filter:grayscale(80%)}
+
+/* SLA */
+.sla-pill{display:inline-flex;align-items:center;gap:3px;padding:.1rem .4rem;border-radius:4px;font-size:.65rem;font-weight:700;font-family:'SF Mono',monospace}
+.sla-green{background:#D1FAE5;color:var(--sla-green)}
+.sla-amber{background:#FEF3C7;color:var(--sla-amber)}
+.sla-red{background:#FEE2E2;color:var(--sla-red);animation:pulse-red 2s infinite}
+.sla-breach{background:var(--sla-red);color:#fff}
+@keyframes pulse-red{0%,100%{opacity:1}50%{opacity:.6}}
+
+/* Meta */
+.meta-mini{display:inline-flex;align-items:center;gap:2px;font-size:.65rem;color:var(--muted)}
+.meta-mini i{width:11px;height:11px}
+
+/* Hover actions */
+.node-actions{position:absolute;top:-1px;right:-1px;bottom:-1px;left:-1px;background:rgba(255,255,255,.92);backdrop-filter:blur(3px);border-radius:var(--radius);display:flex;gap:.2rem;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.15s;z-index:10}
+.node:hover .node-actions{opacity:1;pointer-events:auto}
+
+/* Add form */
+.add-form{background:#fff;padding:.6rem;border-radius:var(--radius);margin-top:.5rem;border:1px dashed var(--cbe-navy);display:flex;flex-direction:column;gap:.4rem;position:relative;z-index:20;min-width:220px}
+
+/* Canvas controls */
+.canvas-ctrl{position:absolute;bottom:1rem;right:1rem;display:flex;gap:.25rem;z-index:10;background:#fff;padding:.35rem;border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border)}
+.canvas-info{position:absolute;top:1rem;right:1rem;background:#fff;padding:.5rem .75rem;border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);font-size:.75rem;color:var(--muted)}
+
+/* KANBAN */
+.kanban{display:flex;gap:1rem;padding:1rem;height:100%;overflow-x:auto;background:var(--bg)}
+.kanban-col{min-width:280px;width:280px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:.75rem;display:flex;flex-direction:column}
+.kanban-col h4{font-size:.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:.75rem;display:flex;justify-content:space-between}
+.kanban-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:.65rem;margin-bottom:.5rem;cursor:pointer;box-shadow:var(--shadow-sm)}
+.kanban-card:hover{border-color:var(--cbe-navy)}
+
+/* LIST */
+.list-view{padding:1rem;overflow-y:auto;height:100%}
+.list-table{width:100%;background:#fff;border:1px solid var(--border);border-radius:var(--radius);border-collapse:collapse;font-size:.85rem}
+.list-table th{background:var(--surface-2);text-align:left;padding:.6rem .75rem;font-weight:600;font-size:.75rem;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border)}
+.list-table td{padding:.6rem .75rem;border-bottom:1px solid var(--border)}
+.list-table tr:hover{background:var(--surface-2);cursor:pointer}
+
+/* DRAWER */
+.drawer{position:fixed;top:0;right:0;width:540px;height:100%;background:#fff;box-shadow:var(--shadow-lg);border-left:1px solid var(--border);z-index:200;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column}
+.drawer.open{transform:translateX(0)}
+.drawer-head{padding:1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.5rem}
+.drawer-body{padding:0;overflow-y:auto;flex:1}
+.drawer-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--surface-2);position:sticky;top:0;z-index:5}
+.drawer-tab{flex:1;padding:.6rem .5rem;text-align:center;font-size:.75rem;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;display:inline-flex;align-items:center;justify-content:center;gap:.3rem;text-transform:uppercase;letter-spacing:.3px}
+.drawer-tab:hover{background:#fff}
+.drawer-tab.active{color:var(--cbe-navy);border-bottom-color:var(--cbe-gold);background:#fff}
+.drawer-tab .count-pill{background:var(--cbe-navy);color:#fff;font-size:.6rem;padding:1px 5px;border-radius:999px;font-weight:700}
+.drawer-pane{padding:1rem;display:none}
+.drawer-pane.active{display:block}
+.drawer-field{margin-bottom:1rem}
+.drawer-field label{display:block;font-size:.7rem;text-transform:uppercase;color:var(--muted);margin-bottom:.25rem;font-weight:600;letter-spacing:.5px}
+.drawer-subpath{font-size:.72rem;color:var(--muted);margin-left:.5rem}
+
+/* SLA Card */
+.sla-card{padding:.75rem;border-radius:var(--radius);margin-bottom:1rem;border:1px solid var(--border);background:var(--surface-2)}
+.sla-card.active-sla-green{border-left:4px solid var(--sla-green);background:#ecfdf5}
+.sla-card.active-sla-amber{border-left:4px solid var(--sla-amber);background:#fffbeb}
+.sla-card.active-sla-red{border-left:4px solid var(--sla-red);background:#fef2f2}
+.sla-card h5{font-size:.8rem;display:flex;align-items:center;gap:.3rem;margin-bottom:.25rem;color:var(--text)}
+.sla-bar{height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;margin:.5rem 0}
+.sla-bar-fill{height:100%;transition:width .3s}
+.sla-countdown{font-family:'SF Mono',monospace;font-size:1.1rem;font-weight:700;letter-spacing:.5px}
+
+/* COMMENTS */
+.comment{padding:.75rem;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:.5rem;background:#fff}
+.comment-head{display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem}
+.comment-head strong{font-size:.85rem}
+.comment-head small{color:var(--muted);font-size:.7rem}
+.comment-body{font-size:.85rem;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+.mention-tag{background:#eaf1fb;color:var(--cbe-navy);padding:0 4px;border-radius:3px;font-weight:600}
+.mention-popup{position:absolute;background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);max-height:180px;overflow-y:auto;z-index:999;min-width:200px}
+.mention-option{padding:.5rem .75rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;font-size:.85rem}
+.mention-option:hover,.mention-option.active{background:#eaf1fb}
+.comment-input-wrap{position:relative}
+
+/* ATTACHMENTS */
+.attach-drop{border:2px dashed var(--border-heavy);border-radius:var(--radius);padding:1.25rem;text-align:center;cursor:pointer;transition:.15s;background:var(--surface-2);margin-bottom:.75rem}
+.attach-drop:hover,.attach-drop.drag-active{border-color:var(--cbe-navy);background:#eaf1fb}
+.attach-item{display:flex;align-items:center;gap:.65rem;padding:.6rem;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:.4rem;background:#fff}
+.attach-icon{width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;font-weight:700;flex-shrink:0}
+.attach-info{flex:1;min-width:0}
+.attach-info strong{font-size:.8rem;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.attach-info small{font-size:.7rem;color:var(--muted)}
+
+/* AUDIT */
+.audit-entry{padding:.5rem .75rem;border-left:2px solid var(--border);margin-left:.5rem;position:relative;font-size:.8rem;line-height:1.45}
+.audit-entry::before{content:'';position:absolute;left:-5px;top:.85rem;width:8px;height:8px;border-radius:50%;background:var(--cbe-gold);border:2px solid #fff}
+.audit-entry.a-create::before{background:var(--success)}
+.audit-entry.a-delete::before{background:var(--danger)}
+.audit-entry.a-comment::before{background:var(--info)}
+.audit-entry small{color:var(--muted);font-size:.7rem;display:block;margin-top:2px}
+.audit-diff{font-size:.72rem;background:var(--surface-2);padding:.35rem .5rem;border-radius:4px;margin-top:4px;font-family:'SF Mono',monospace}
+.audit-diff .old{color:var(--danger);text-decoration:line-through}
+.audit-diff .new{color:var(--success);font-weight:600}
+
+/* DRAG-DROP */
+li[draggable="true"]>.node{cursor:grab}
+li[draggable="true"]>.node:active{cursor:grabbing;transform:scale(1.03)}
+.dragging-branch{opacity:.4}
+.drag-over{border:2px dashed var(--cbe-gold)!important;background:#FAF6EC!important}
+
+/* MEMBER VIEW */
+.member-view{flex:1;overflow-y:auto;padding:1.5rem;background:var(--bg)}
+.member-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.stat{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem}
+.stat h3{font-size:1.6rem;color:var(--cbe-navy);margin-top:.25rem}
+.stat small{color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px}
+
+/* TOAST */
+#toast-stack{position:fixed;top:70px;right:1rem;z-index:500;display:flex;flex-direction:column;gap:.5rem;pointer-events:none}
+.toast{background:#fff;border-left:4px solid var(--cbe-gold);padding:.75rem 1rem;border-radius:var(--radius);box-shadow:var(--shadow-lg);min-width:260px;max-width:320px;font-size:.85rem;animation:slide-in .25s;pointer-events:auto}
+.toast.success{border-left-color:var(--success)}
+.toast.danger{border-left-color:var(--danger)}
+.toast.warn{border-left-color:var(--warn)}
+@keyframes slide-in{from{transform:translateX(30px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+@media (max-width: 1200px){
+  .drawer{width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="view-login" class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo"><span class="gold-dot" style="background:var(--cbe-gold)"></span> CBE</div>
+    <h2>Commercial Bank of Ethiopia</h2>
+    <p>Project Hub · Enterprise PMO Platform</p>
+
+    <select id="login-user" style="margin-bottom:1rem">
+      <option value="11">Ato Amare — Executive VP, Technology</option>
+      <option value="12">Ato Tariku — VP, Digital Factory</option>
+      <option value="13">Ato Adamu — AI Tribe Lead</option>
+      <option value="14">Ato Abebe — SwE@DF</option>
+      <option value="15">Ato Abel — SwE@DF</option>
+      <option value="16">W/ro Selam — SwE@DF</option>
+    </select>
+
+    <button class="primary" style="width:100%" onclick="app.login()">
+      Sign In Securely <i data-lucide="shield-check" style="width:16px"></i>
+    </button>
+    <p style="margin-top:1rem;font-size:.7rem">🔒 Protected by CBE SSO · Internal use only</p>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="view-app" class="hidden" style="flex:1;display:flex;flex-direction:column">
+  <div class="topbar">
+    <div class="brand"><span class="gold-dot"></span> CBE Project Hub <small>· Powered by Taskify</small></div>
+
+    <div class="search-box">
+      <i data-lucide="search" style="width:14px"></i>
+      <input id="global-search" placeholder="Search issues, keys, projects..." oninput="app.search(this.value)">
+    </div>
+
+    <div class="topbar-right">
+      <button class="gold" onclick="app.openCreate()"><i data-lucide="plus" style="width:14px"></i> Create</button>
+
+      <div class="bell-wrap">
+        <button class="bell-btn" onclick="app.toggleNotifPanel()">
+          <i data-lucide="bell" style="width:16px"></i>
+          <span id="bell-badge" class="bell-badge hidden">0</span>
+        </button>
+        <div id="notif-panel" class="notif-panel hidden"></div>
+      </div>
+
+      <span id="nav-role" class="role-badge"></span>
+      <div id="nav-avatar" class="avatar"></div>
+      <button class="icon ghost" style="color:#fff" onclick="app.logout()" title="Logout">
+        <i data-lucide="log-out" style="width:16px"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="workspace">
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <section style="flex:1;display:flex;flex-direction:column">
+      <div class="view-toolbar">
+        <button id="sidebar-toggle-btn" class="icon secondary" onclick="app.toggleSidebar()" title="Collapse sidebar">
+          <i data-lucide="panel-left-close" style="width:16px"></i>
+        </button>
+        <div class="breadcrumb" id="breadcrumb"></div>
+        <div style="margin-left:auto" class="flex">
+          <div class="view-tabs" id="view-tabs">
+            <div class="view-tab active" data-view="tree" onclick="app.setView('tree')"><i data-lucide="git-fork" style="width:13px"></i> Tree</div>
+            <div class="view-tab" data-view="kanban" onclick="app.setView('kanban')"><i data-lucide="columns-3" style="width:13px"></i> Board</div>
+            <div class="view-tab" data-view="list" onclick="app.setView('list')"><i data-lucide="list" style="width:13px"></i> List</div>
+          </div>
+        </div>
+      </div>
+      <div class="main-area" id="main-area"></div>
+    </section>
+  </div>
+</div>
+
+<!-- ISSUE DRAWER -->
+<div id="drawer" class="drawer">
+  <div class="drawer-head">
+    <span id="drawer-key" class="node-key"></span>
+    <button class="icon ghost" style="margin-left:auto" onclick="app.closeDrawer()">
+      <i data-lucide="x" style="width:18px"></i>
+    </button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</div>
+
+<!-- TOASTS -->
+<div id="toast-stack"></div>
+
+<script>
+const state = {
+  currentUser:null,
+  selectedProjectId:null,
+  view:'tree',
+  drawerTab:'details',
+  drawerIssueId:null,
+  sidebarCollapsed:false,
+
+  orgOpen:{
+    'div-4': true,
+    'dep-41': true,
+    'team-401': true,
+    'team-402': false,
+    'team-403': false
+  },
+
+  users:[
+    {id:11,name:"Amare",role:"portfolio-owner",dept:"TECH",title:"Executive VP, Technology"},
+    {id:12,name:"Tariku",role:"department-head",dept:"DFX",title:"VP, Digital Factory"},
+    {id:13,name:"Adamu",role:"lead",dept:"AI",title:"AI Tribe Lead"},
+    {id:14,name:"Abebe",role:"analyst",dept:"AI",title:"SwE@DF"},
+    {id:15,name:"Abel",role:"member",dept:"AI",title:"SwE@DF"},
+    {id:16,name:"Selam",role:"member",dept:"AI",title:"SwE@DF"},
+  ],
+
+  divisions:[
+    {id:4,name:"Technology",ownerId:11},
+  ],
+
+  departments:[
+    {id:41,divisionId:4,name:"Digital Factory",code:"DFX",headId:12},
+  ],
+
+  teams:[
+    {id:401,departmentId:41,name:"AI Team",code:"AI",leadId:13},
+    {id:402,departmentId:41,name:"Mobile Squad",code:"MOB",leadId:12},
+    {id:403,departmentId:41,name:"API & Integration Squad",code:"API",leadId:12},
+  ],
+
+  projects:[
+    {id:4101,deptId:41,teamId:401,title:"AI Service Desk Assistant",code:"AI",isActive:true,isCollapsed:false,lead:13},
+    {id:4102,deptId:41,teamId:401,title:"AML Alert Prioritization Engine",code:"AMLAI",isActive:true,isCollapsed:false,lead:13},
+    {id:4103,deptId:41,teamId:401,title:"Customer Churn Prediction Pilot",code:"CHURN",isActive:true,isCollapsed:false,lead:13},
+  ],
+
+  issues:[
+    {
+      id:5001, projectId:4101, parentId:null, key:"AI-1", type:"epic",
+      title:"Enterprise AI Assistant for Internal Support",
+      status:"in-progress", assignedTo:13, priority:"high", points:13, due:"2026-05-30",
+      labels:["AI","Internal-Tools","Technology"], notes:"Internal AI assistant for employee support and ticket guidance.",
+      isActive:true, isCollapsed:false, sla:{hours:240,startedAt:Date.now()-86400000*2}
+    },
+    {
+      id:5002, projectId:4101, parentId:5001, key:"AI-2", type:"story",
+      title:"Design AI assistant knowledge base structure",
+      status:"review", assignedTo:14, priority:"high", points:5, due:"2026-05-08",
+      labels:["AI","Knowledge-Base"], notes:"Organize FAQ, SOP, and ticket playbooks for the assistant.",
+      isActive:true, isCollapsed:false, sla:{hours:72,startedAt:Date.now()-3600000*30}
+    },
+    {
+      id:5003, projectId:4101, parentId:5001, key:"AI-3", type:"task",
+      title:"Build embedding pipeline for internal documents",
+      status:"in-progress", assignedTo:16, priority:"high", points:8, due:"2026-05-12",
+      labels:["AI","RAG","Data"], notes:"Chunk documents and store embeddings for retrieval.",
+      isActive:true, isCollapsed:false, sla:{hours:96,startedAt:Date.now()-3600000*20}
+    },
+    {
+      id:5004, projectId:4101, parentId:5003, key:"AI-4", type:"sub-task",
+      title:"Prepare vector schema for HR, IT, and Operations manuals",
+      status:"todo", assignedTo:16, priority:"medium", points:3, due:"2026-05-06",
+      labels:["Schema","RAG"], notes:"",
+      isActive:true, isCollapsed:false, sla:null
+    },
+    {
+      id:5005, projectId:4101, parentId:5001, key:"AI-5", type:"compliance",
+      title:"Review AI assistant responses for data privacy and banking compliance",
+      status:"review", assignedTo:14, priority:"highest", points:8, due:"2026-05-10",
+      labels:["Compliance","AI","Privacy","Regulatory"], notes:"Validate prompts, masking, and restricted data handling.",
+      isActive:true, isCollapsed:false, sla:{hours:48,startedAt:Date.now()-3600000*38}
+    },
+    {
+      id:5006, projectId:4102, parentId:null, key:"AMLAI-1", type:"epic",
+      title:"AI-assisted AML alert scoring",
+      status:"todo", assignedTo:13, priority:"highest", points:21, due:"2026-06-15",
+      labels:["AML","AI","Risk","Regulatory"], notes:"Rank AML alerts to reduce analyst fatigue and improve response time.",
+      isActive:true, isCollapsed:false, sla:{hours:168,startedAt:Date.now()-3600000*12}
+    },
+    {
+      id:5007, projectId:4102, parentId:5006, key:"AMLAI-2", type:"risk",
+      title:"False positives may bias alert prioritization",
+      status:"in-progress", assignedTo:14, priority:"high", points:5, due:"2026-05-20",
+      labels:["Risk","AML","Model-Risk"], notes:"Need thresholds, explainability, and audit-ready outputs.",
+      isActive:true, isCollapsed:false, sla:{hours:72,startedAt:Date.now()-3600000*10}
+    },
+    {
+      id:5008, projectId:4103, parentId:null, key:"CHURN-1", type:"story",
+      title:"Build pilot model for customer churn prediction",
+      status:"todo", assignedTo:15, priority:"medium", points:8, due:"2026-05-25",
+      labels:["AI","Analytics","Customer-Experience"], notes:"Pilot on selected segment before bank-wide rollout.",
+      isActive:true, isCollapsed:false, sla:null
+    }
+  ],
+
+  audit:[
+    {id:1,issueId:5001,userId:13,action:'create',field:null,from:null,to:null,at:Date.now()-86400000*2,text:'Created issue'},
+    {id:2,issueId:5005,userId:13,action:'create',field:null,from:null,to:null,at:Date.now()-3600000*40,text:'Created compliance review item'},
+    {id:3,issueId:5005,userId:14,action:'update',field:'status',from:'todo',to:'review',at:Date.now()-3600000*12,text:'Changed status'},
+  ],
+
+  comments:[
+    {id:1,issueId:5001,userId:13,body:'@Abebe prepare the business knowledge sources for the first retrieval prototype.',at:Date.now()-3600000*15,mentions:[14]},
+    {id:2,issueId:5005,userId:14,body:'@Adamu compliance review started. I will attach privacy checklist after legal review.',at:Date.now()-3600000*8,mentions:[13]},
+  ],
+
+  attachments:[
+    {id:1,issueId:5005,userId:14,name:'AI_Privacy_Checklist_v1.pdf',size:245678,type:'application/pdf',at:Date.now()-3600000*6,dataUrl:null},
+  ],
+
+  notifications:[],
+  nextId:9000,
+  nextAudit:100,
+  nextComment:100,
+  nextAttach:100,
+  nextNotif:100,
+};
+
+const util = {
+  now:()=>Date.now(),
+  fmtTime(ts){
+    const d=util.now()-ts;
+    if(d<60000)return 'just now';
+    if(d<3600000)return Math.floor(d/60000)+'m ago';
+    if(d<86400000)return Math.floor(d/3600000)+'h ago';
+    if(d<2592000000)return Math.floor(d/86400000)+'d ago';
+    return new Date(ts).toLocaleDateString();
+  },
+  fmtFull(ts){return new Date(ts).toLocaleString();},
+  fmtSize(b){
+    if(b<1024)return b+' B';
+    if(b<1048576)return (b/1024).toFixed(1)+' KB';
+    return (b/1048576).toFixed(2)+' MB';
+  },
+  fileColor(type){
+    if(!type)return '#64748B';
+    if(type.includes('pdf'))return '#DC2626';
+    if(type.includes('image'))return '#7C3AED';
+    if(type.includes('word')||type.includes('doc'))return '#2563EB';
+    if(type.includes('sheet')||type.includes('excel'))return '#059669';
+    if(type.includes('zip'))return '#D97706';
+    return '#0A2540';
+  },
+  fileLabel(name){
+    const ext=(name.split('.').pop()||'FILE').toUpperCase();
+    return ext.length<=4?ext:'FILE';
+  },
+  escape(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));},
+  highlightMentions(text){
+    const esc=util.escape(text);
+    return esc.replace(/@(\w+)/g,(m,n)=>{
+      const u=state.users.find(x=>x.name.toLowerCase()===n.toLowerCase());
+      return u?`<span class="mention-tag">@${u.name}</span>`:m;
+    });
+  }
+};
+
+const sla = {
+  compute(issue){
+    if(!issue.sla || issue.status==='done') return null;
+    const elapsed=Date.now()-issue.sla.startedAt;
+    const total=issue.sla.hours*3600000;
+    const remaining=total-elapsed;
+    const pct=Math.max(0,Math.min(100,(remaining/total)*100));
+    let level='green';
+    if(remaining<=0) level='breach';
+    else if(pct<=25) level='red';
+    else if(pct<=50) level='amber';
+    return {remaining,total,pct,level,breached:remaining<=0};
+  },
+  fmt(ms){
+    if(ms<=0){
+      const over=-ms;
+      const d=Math.floor(over/86400000), h=Math.floor(over%86400000/3600000);
+      return `-${d}d ${h}h`;
+    }
+    const d=Math.floor(ms/86400000), h=Math.floor(ms%86400000/3600000), m=Math.floor(ms%3600000/60000);
+    if(d>0) return `${d}d ${h}h ${m}m`;
+    if(h>0) return `${h}h ${m}m`;
+    return `${m}m`;
+  },
+  scan(){
+    state.issues.forEach(i=>{
+      const s=sla.compute(i);
+      if(!s) return;
+      if(s.breached && !i._breachNotified){
+        i._breachNotified=true;
+        const proj=state.projects.find(p=>p.id===i.projectId);
+        const targets=new Set([i.assignedTo, proj?.lead].filter(Boolean));
+        targets.forEach(uid=>notif.push(uid,'sla',`⚠️ SLA BREACH: ${i.key} — ${i.title}`,i.id));
+        audit.log(i.id,0,'sla_breach',null,null,null,'SLA breached');
+      }
+    });
+  }
+};
+
+const audit = {
+  log(issueId,userId,action,field,from,to,text){
+    state.audit.push({
+      id:state.nextAudit++,
+      issueId,
+      userId:userId || state.currentUser?.id || 0,
+      action,
+      field,
+      from,
+      to,
+      at:Date.now(),
+      text
+    });
+  },
+  forIssue(id){return state.audit.filter(a=>a.issueId===id).sort((a,b)=>b.at-a.at);}
+};
+
+const notif = {
+  push(userId,type,text,issueId){
+    state.notifications.push({id:state.nextNotif++,userId,type,text,issueId,at:Date.now(),read:false});
+    if(state.currentUser && userId===state.currentUser.id){
+      const label={mention:'💬',sla:'⚠️',comment:'💭',assign:'📌'}[type] || '🔔';
+      ui.toast(`${label} ${text}`,type==='sla'?'danger':'success');
+      ui.updateBell();
+    }
+  },
+  forMe(){return state.currentUser ? state.notifications.filter(n=>n.userId===state.currentUser.id).sort((a,b)=>b.at-a.at) : [];},
+  unread(){return this.forMe().filter(n=>!n.read).length;},
+  markAllRead(){this.forMe().forEach(n=>n.read=true);ui.updateBell();}
+};
+
+const ui = {
+  toast(msg,kind='success'){
+    const el=document.createElement('div');
+    el.className='toast '+kind;
+    el.innerHTML=msg;
+    document.getElementById('toast-stack').appendChild(el);
+    setTimeout(()=>{
+      el.style.opacity=0;
+      el.style.transform='translateX(30px)';
+      setTimeout(()=>el.remove(),300);
+    },3500);
+  },
+  updateBell(){
+    const n=notif.unread();
+    const b=document.getElementById('bell-badge');
+    if(!b) return;
+    if(n>0){ b.classList.remove('hidden'); b.innerText=n>9?'9+':n; }
+    else b.classList.add('hidden');
+  }
+};
+
+const canvasPan = {
+  x:60,y:40,scale:.95,isDragging:false,startX:0,startY:0,upd:null,
+  init(){
+    const vp=document.getElementById('viewport'); if(!vp) return;
+    const plane=document.getElementById('canvas-plane');
+    const upd=()=>{
+      plane.style.transform=`translate(${this.x}px,${this.y}px) scale(${this.scale})`;
+      vp.style.backgroundPosition=`${this.x}px ${this.y}px`;
+      vp.style.backgroundSize=`${22*this.scale}px ${22*this.scale}px`;
+    };
+    upd();
+    vp.onmousedown=(e)=>{
+      if(e.target.closest('.node') || e.target.closest('.canvas-ctrl') || e.target.closest('.canvas-info')) return;
+      this.isDragging=true;
+      vp.classList.add('panning');
+      this.startX=e.clientX-this.x;
+      this.startY=e.clientY-this.y;
+    };
+    window.addEventListener('mousemove',e=>{
+      if(!this.isDragging) return;
+      this.x=e.clientX-this.startX;
+      this.y=e.clientY-this.startY;
+      upd();
+    });
+    window.addEventListener('mouseup',()=>{
+      this.isDragging=false;
+      vp.classList.remove('panning');
+    });
+    vp.addEventListener('wheel',e=>{
+      e.preventDefault();
+      this.scale=Math.min(Math.max(.3,this.scale+(e.deltaY>0?-.08:.08)),2);
+      upd();
+    },{passive:false});
+    this.upd=upd;
+  },
+  zoom(a){this.scale=Math.min(Math.max(.3,this.scale+a),2);this.upd&&this.upd();},
+  reset(){this.x=60;this.y=40;this.scale=.95;this.upd&&this.upd();}
+};
+
+const app = {
+  isOrgOpen(key){
+    return state.orgOpen[key] !== false;
+  },
+
+  toggleOrgNode(key){
+    state.orgOpen[key] = !this.isOrgOpen(key);
+    this.renderSidebar();
+  },
+
+  expandProjectPath(projectId){
+    const project = state.projects.find(p => p.id === projectId);
+    if(!project) return;
+
+    const dept = state.departments.find(d => d.id === project.deptId);
+    const div = dept ? state.divisions.find(v => v.id === dept.divisionId) : null;
+    const team = state.teams.find(t => t.id === project.teamId);
+
+    if(div) state.orgOpen[`div-${div.id}`] = true;
+    if(dept) state.orgOpen[`dep-${dept.id}`] = true;
+    if(team) state.orgOpen[`team-${team.id}`] = true;
+  },
+
+  toggleSidebar(){
+    state.sidebarCollapsed = !state.sidebarCollapsed;
+    const sb = document.getElementById('sidebar');
+    if(sb) sb.classList.toggle('collapsed', state.sidebarCollapsed);
+    this.updateSidebarToggleButton();
+  },
+
+  updateSidebarToggleButton(){
+    const btn = document.getElementById('sidebar-toggle-btn');
+    if(!btn) return;
+    btn.innerHTML = `<i data-lucide="${state.sidebarCollapsed ? 'panel-left-open' : 'panel-left-close'}" style="width:16px"></i>`;
+    btn.title = state.sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar';
+    lucide.createIcons();
+  },
+
+  login(){
+    const id=parseInt(document.getElementById('login-user').value);
+    state.currentUser=state.users.find(u=>u.id===id);
+
+    document.getElementById('view-login').classList.add('hidden');
+    document.getElementById('view-app').classList.remove('hidden');
+
+    document.getElementById('nav-avatar').innerText=state.currentUser.name[0];
+    document.getElementById('nav-role').innerText=state.currentUser.title;
+
+    const defaultProjectByUser = {
+      11:4101,
+      12:4101,
+      13:4101,
+      14:4101,
+      15:4102,
+      16:4101
+    };
+    state.selectedProjectId = defaultProjectByUser[id] || state.projects[0]?.id;
+    this.expandProjectPath(state.selectedProjectId);
+
+    sla.scan();
+    this.renderSidebar();
+    this.render();
+    ui.updateBell();
+    lucide.createIcons();
+  },
+
+  logout(){
+    state.currentUser=null;
+    state.drawerIssueId=null;
+    document.getElementById('view-app').classList.add('hidden');
+    document.getElementById('view-login').classList.remove('hidden');
+  },
+
+  renderSidebar(){
+    const sb = document.getElementById('sidebar');
+    sb.classList.toggle('collapsed', state.sidebarCollapsed);
+
+    let html = `
+      <div class="sidebar-section">
+        <h4>Workspace</h4>
+        <div class="nav-item active" title="My Dashboard">
+          <i data-lucide="home"></i>
+          <div class="nav-label">My Dashboard</div>
+        </div>
+        <div class="nav-item" title="Inbox">
+          <i data-lucide="inbox"></i>
+          <div class="nav-label">Inbox</div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h4>Enterprise Structure</h4>`;
+
+    state.divisions.forEach(div => {
+      const owner = state.users.find(u => u.id === div.ownerId);
+      const divKey = `div-${div.id}`;
+      const divOpen = this.isOrgOpen(divKey);
+
+      html += `
+        <div class="nav-item" title="${util.escape(div.name)}" onclick="app.toggleOrgNode('${divKey}')" style="font-weight:700">
+          <i data-lucide="${divOpen ? 'chevron-down' : 'chevron-right'}"></i>
+          <div class="nav-label">
+            <div>${util.escape(div.name)}</div>
+            <div class="nav-meta">Owner: ${owner ? util.escape(owner.name) : '—'}</div>
+          </div>
+        </div>`;
+
+      if(divOpen){
+        state.departments
+          .filter(dep => dep.divisionId === div.id)
+          .forEach(dep => {
+            const head = state.users.find(u => u.id === dep.headId);
+            const depKey = `dep-${dep.id}`;
+            const depOpen = this.isOrgOpen(depKey);
+
+            html += `
+              <div class="nav-item nav-sub" title="${util.escape(dep.name)}" onclick="app.toggleOrgNode('${depKey}')" style="font-weight:600">
+                <i data-lucide="${depOpen ? 'chevron-down' : 'chevron-right'}"></i>
+                <div class="nav-label">
+                  <div>${util.escape(dep.name)}</div>
+                  <div class="nav-meta">Director: ${head ? util.escape(head.name) : '—'}</div>
+                </div>
+              </div>`;
+
+            if(depOpen){
+              state.teams
+                .filter(team => team.departmentId === dep.id)
+                .forEach(team => {
+                  const lead = state.users.find(u => u.id === team.leadId);
+                  const teamKey = `team-${team.id}`;
+                  const teamOpen = this.isOrgOpen(teamKey);
+                  const projectCount = state.projects.filter(p => p.teamId === team.id).length;
+
+                  html += `
+                    <div class="nav-item nav-sub" title="${util.escape(team.name)}" onclick="app.toggleOrgNode('${teamKey}')" style="padding-left:2.2rem;color:var(--cbe-navy)">
+                      <i data-lucide="${teamOpen ? 'chevron-down' : 'chevron-right'}"></i>
+                      <div class="nav-label">
+                        <div>${util.escape(team.name)}</div>
+                        <div class="nav-meta">Lead: ${lead ? util.escape(lead.name) : '—'} · ${projectCount} project${projectCount !== 1 ? 's' : ''}</div>
+                      </div>
+                    </div>`;
+
+                  if(teamOpen){
+                    state.projects
+                      .filter(p => p.teamId === team.id)
+                      .forEach(project => {
+                        const active = project.id === state.selectedProjectId ? 'active' : '';
+                        html += `
+                          <div class="nav-item nav-sub ${active}" title="${util.escape(project.title)}" style="padding-left:3.1rem" onclick="app.selectProject(${project.id})">
+                            <i data-lucide="folder-kanban"></i>
+                            <div class="nav-label">
+                              <div>${util.escape(project.title)}</div>
+                              <div class="nav-meta">${util.escape(project.code)}</div>
+                            </div>
+                          </div>`;
+                      });
+                  }
+                });
+            }
+          });
+      }
+    });
+
+    html += `
+      </div>
+
+      <div class="sidebar-section">
+        <h4>Quick Filters</h4>
+        <div class="nav-item" title="Assigned to me"><i data-lucide="user"></i><div class="nav-label">Assigned to me</div></div>
+        <div class="nav-item" title="AI Team items"><i data-lucide="brain-circuit"></i><div class="nav-label">AI Team items</div></div>
+        <div class="nav-item" title="Compliance items"><i data-lucide="shield"></i><div class="nav-label">Compliance items</div></div>
+        <div class="nav-item" title="SLA at risk"><i data-lucide="timer"></i><div class="nav-label">SLA at risk</div></div>
+      </div>`;
+
+    sb.innerHTML = html;
+    lucide.createIcons();
+    this.updateSidebarToggleButton();
+  },
+
+  selectProject(id){
+    state.selectedProjectId = id;
+    this.expandProjectPath(id);
+    this.renderSidebar();
+    this.render();
+  },
+
+  setView(v){
+    state.view=v;
+    document.querySelectorAll('.view-tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
+    this.render();
+  },
+
+  render(){
+    const user=state.currentUser;
+    const project=state.projects.find(p=>p.id===state.selectedProjectId);
+    if(!project){
+      document.getElementById('breadcrumb').innerHTML='<strong>Dashboard</strong>';
+      document.getElementById('main-area').innerHTML='<div class="member-view"><p class="muted">No project selected.</p></div>';
+      lucide.createIcons();
+      return;
+    }
+
+    const dept=state.departments.find(d=>d.id===project.deptId);
+    const div=dept ? state.divisions.find(d=>d.id===dept.divisionId) : null;
+    const team=state.teams.find(t=>t.id===project.teamId);
+
+    document.getElementById('breadcrumb').innerHTML = project
+      ? `<i data-lucide="chevron-right" style="width:12px"></i> ${util.escape(div?.name || 'Division')}
+         <i data-lucide="chevron-right" style="width:12px"></i> ${util.escape(dept?.name || 'Department')}
+         <i data-lucide="chevron-right" style="width:12px"></i> ${util.escape(team ? team.name : 'No Team')}
+         <i data-lucide="chevron-right" style="width:12px"></i> <strong>${util.escape(project.title)}</strong>
+         <span class="node-key" style="margin-left:.5rem">[${util.escape(project.code)}]</span>`
+      : '<strong>Dashboard</strong>';
+
+    if(user.role==='member' || user.role==='analyst'){
+      this.renderMemberDash();
+      lucide.createIcons();
+      return;
+    }
+
+    if(state.view==='tree') this.renderTree();
+    else if(state.view==='kanban') this.renderKanban();
+    else this.renderList();
+
+    lucide.createIcons();
+  },
+
+  renderTree(){
+    const main=document.getElementById('main-area');
+    const project=state.projects.find(p=>p.id===state.selectedProjectId);
+    const issues=state.issues.filter(i=>i.projectId===project.id);
+    const top=issues.filter(i=>i.parentId===null);
+
+    const nodesHtml = '<ul><li>' + this.projectNode(project,top.length) +
+      (project.isCollapsed || top.length===0 ? '' : `<ul>${top.map(t=>this.renderIssueBranch(t,issues)).join('')}</ul>`) +
+      '</li></ul>';
+
+    main.innerHTML=`
+      <div id="viewport" class="viewport">
+        <div class="canvas-info">💡 Drag nodes to re-parent · Scroll to zoom · Drag canvas to pan</div>
+        <div id="canvas-plane" class="canvas-plane">
+          <div class="tree ${project.isActive?'':'inactive-item'}">${nodesHtml}</div>
+        </div>
+        <div class="canvas-ctrl">
+          <button class="icon secondary" onclick="canvasPan.zoom(.15)"><i data-lucide="zoom-in" style="width:16px"></i></button>
+          <button class="icon secondary" onclick="canvasPan.zoom(-.15)"><i data-lucide="zoom-out" style="width:16px"></i></button>
+          <button class="icon secondary" onclick="canvasPan.reset()"><i data-lucide="focus" style="width:16px"></i></button>
+        </div>
+      </div>`;
+    canvasPan.init();
+  },
+
+  projectNode(p,childCount){
+    const lead=state.users.find(u=>u.id===p.lead);
+    const team=state.teams.find(t=>t.id===p.teamId);
+    return `
+      <div class="node node-project" ondrop="app.drop(event,null,${p.id})" ondragover="app.allowDrop(event)" ondragleave="app.dragLeave(event)">
+        <div class="node-key">${util.escape(p.code)} · PROJECT</div>
+        <div class="node-title"><i data-lucide="folder-kanban" style="width:14px"></i> ${util.escape(p.title)}</div>
+        <div class="node-footer">
+          ${team ? `<span class="badge" style="background:#eef2ff;color:#1e3a8a">${util.escape(team.name)}</span>` : ''}
+          ${p.isActive?'<span class="badge s-in-progress">Active</span>':'<span class="badge s-blocked">Deactivated</span>'}
+          ${childCount?`<span class="badge" style="background:var(--cbe-gold-soft);color:var(--cbe-navy)">${childCount} items</span>`:''}
+          <div class="mini-avatar" title="${lead?util.escape(lead.name):''}">${lead?lead.name[0]:'?'}</div>
+        </div>
+        <div class="node-actions">
+          ${childCount?`<button class="icon secondary" onclick="app.toggleCollapse('project',${p.id})" title="${p.isCollapsed?'Expand':'Collapse'}"><i data-lucide="${p.isCollapsed?'chevron-down':'chevron-up'}" style="width:14px"></i></button>`:''}
+          <button class="icon secondary" onclick="app.toggleForm('p${p.id}')" title="Add Issue"><i data-lucide="plus" style="width:14px"></i></button>
+          <button class="icon secondary" onclick="app.toggleProjectActive(${p.id})" title="Toggle Active"><i data-lucide="power" style="width:14px"></i></button>
+          <button class="icon danger" onclick="app.deleteProject(${p.id})" title="Delete"><i data-lucide="trash-2" style="width:14px"></i></button>
+        </div>
+      </div>
+      <div id="form-p${p.id}" class="add-form hidden">${this.formHtml('project',p.id)}</div>
+    `;
+  },
+
+  renderIssueBranch(issue,all){
+    const kids=all.filter(i=>i.parentId===issue.id);
+    const inactive=issue.isActive?'':'inactive-item';
+    return `<li draggable="true" ondragstart="app.dragStart(event,${issue.id})" ondragend="app.dragEnd(event)" class="${inactive}">
+      ${this.issueNode(issue,kids.length)}
+      ${issue.isCollapsed || kids.length===0 ? '' : `<ul>${kids.map(k=>this.renderIssueBranch(k,all)).join('')}</ul>`}
+    </li>`;
+  },
+
+  issueNode(i,childCount){
+    const assignee=state.users.find(u=>u.id===i.assignedTo);
+    const typeIcon={epic:'E',story:'S',task:'T','sub-task':'U',bug:'B',risk:'R',compliance:'C'}[i.type]||'T';
+    const typeCls={epic:'t-epic',story:'t-story',task:'t-task','sub-task':'t-sub',bug:'t-bug',risk:'t-risk',compliance:'t-compliance'}[i.type]||'t-task';
+    const prioIcon={highest:'chevrons-up',high:'chevron-up',medium:'equal',low:'chevron-down'}[i.priority]||'equal';
+    const cc=state.comments.filter(c=>c.issueId===i.id).length;
+    const ac=state.attachments.filter(a=>a.issueId===i.id).length;
+    const s=sla.compute(i);
+
+    return `
+      <div class="node" onclick="app.openIssue(${i.id})"
+          ondrop="app.drop(event,${i.id},${i.projectId})" ondragover="app.allowDrop(event)" ondragleave="app.dragLeave(event)">
+        <div class="node-key">
+          ${util.escape(i.key)}
+          ${s?`<span class="sla-pill sla-${s.level==='breach'?'breach':s.level}" title="SLA: ${sla.fmt(s.remaining)}"><i data-lucide="timer" style="width:10px"></i>${sla.fmt(s.remaining)}</span>`:''}
+        </div>
+        <div class="node-title">${util.escape(i.title)}</div>
+        <div class="node-footer">
+          <span class="type-icon ${typeCls}" title="${i.type}">${typeIcon}</span>
+          <span class="badge s-${i.status}">${i.status.replace('-',' ')}</span>
+          <span class="prio ${i.priority}" title="${i.priority} priority"><i data-lucide="${prioIcon}" style="width:12px"></i></span>
+          ${i.points?`<span class="badge" style="background:#eef2ff;color:#4338ca">${i.points}pt</span>`:''}
+          ${cc?`<span class="meta-mini" title="${cc} comments"><i data-lucide="message-square"></i>${cc}</span>`:''}
+          ${ac?`<span class="meta-mini" title="${ac} attachments"><i data-lucide="paperclip"></i>${ac}</span>`:''}
+          <div class="mini-avatar" title="${assignee?util.escape(assignee.name):'Unassigned'}">${assignee?assignee.name[0]:'?'}</div>
+        </div>
+        <div class="node-actions" onclick="event.stopPropagation()">
+          ${childCount?`<button class="icon secondary" onclick="app.toggleCollapse('issue',${i.id})"><i data-lucide="${i.isCollapsed?'chevron-down':'chevron-up'}" style="width:14px"></i></button>`:''}
+          <button class="icon secondary" onclick="app.toggleForm('i${i.id}')" title="Add child"><i data-lucide="plus" style="width:14px"></i></button>
+          <button class="icon secondary" onclick="app.openIssue(${i.id})" title="Details"><i data-lucide="eye" style="width:14px"></i></button>
+          <button class="icon secondary" onclick="app.toggleIssueActive(${i.id})" title="Toggle"><i data-lucide="power" style="width:14px"></i></button>
+          <button class="icon danger" onclick="app.deleteIssue(${i.id})" title="Delete"><i data-lucide="trash-2" style="width:14px"></i></button>
+        </div>
+      </div>
+      <div id="form-i${i.id}" class="add-form hidden">${this.formHtml('issue',i.id)}</div>
+    `;
+  },
+
+  formHtml(ctx,id){
+    const memberOpts=state.users.map(u=>`<option value="${u.id}">${util.escape(u.name)}</option>`).join('');
+    const typeOpts=['task','story','epic','sub-task','bug','risk','compliance']
+      .map(t=>`<option value="${t}">${t[0].toUpperCase()+t.slice(1)}</option>`).join('');
+    return `
+      <input placeholder="Issue title" id="nt-${ctx}-${id}">
+      <div class="flex">
+        <select id="ntype-${ctx}-${id}">${typeOpts}</select>
+        <select id="nassign-${ctx}-${id}">${memberOpts}</select>
+      </div>
+      <div class="flex">
+        <select id="nprio-${ctx}-${id}">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+          <option value="highest">Highest</option>
+        </select>
+        <input type="number" min="1" placeholder="Pts" id="npts-${ctx}-${id}" style="width:70px">
+        <input type="number" min="0" placeholder="SLA hrs" id="nsla-${ctx}-${id}" style="width:80px" title="SLA in hours (optional)">
+      </div>
+      <div class="flex">
+        <button class="primary" style="flex:1" onclick="app.createIssue('${ctx}',${id})">Create</button>
+        <button class="secondary" onclick="app.toggleForm('${ctx==='project'?'p':'i'}${id}')">Cancel</button>
+      </div>`;
+  },
+
+  renderKanban(){
+    const main=document.getElementById('main-area');
+    const project=state.projects.find(p=>p.id===state.selectedProjectId);
+    const issues=state.issues.filter(i=>i.projectId===project.id && i.isActive);
+    const cols=[['todo','To Do'],['in-progress','In Progress'],['review','In Review'],['done','Done']];
+    let html='<div class="kanban">';
+    cols.forEach(([s,label])=>{
+      const items=issues.filter(i=>i.status===s);
+      html+=`<div class="kanban-col"><h4>${label} <span>${items.length}</span></h4>`;
+      items.forEach(i=>{
+        const assignee=state.users.find(u=>u.id===i.assignedTo);
+        const slaS=sla.compute(i);
+        const cc=state.comments.filter(c=>c.issueId===i.id).length;
+        const ac=state.attachments.filter(a=>a.issueId===i.id).length;
+        html+=`
+          <div class="kanban-card" onclick="app.openIssue(${i.id})">
+            <div class="node-key">${util.escape(i.key)} ${slaS?`<span class="sla-pill sla-${slaS.level==='breach'?'breach':slaS.level}">${sla.fmt(slaS.remaining)}</span>`:''}</div>
+            <div style="font-weight:600;margin:3px 0 6px;font-size:.85rem">${util.escape(i.title)}</div>
+            <div class="node-footer">
+              <span class="type-icon ${'t-'+(i.type==='sub-task'?'sub':i.type)}">${i.type[0].toUpperCase()}</span>
+              <span class="prio ${i.priority}"><i data-lucide="chevron-up" style="width:12px"></i></span>
+              ${i.points?`<span class="badge" style="background:#eef2ff;color:#4338ca">${i.points}</span>`:''}
+              ${cc?`<span class="meta-mini"><i data-lucide="message-square"></i>${cc}</span>`:''}
+              ${ac?`<span class="meta-mini"><i data-lucide="paperclip"></i>${ac}</span>`:''}
+              <div class="mini-avatar">${assignee?assignee.name[0]:'?'}</div>
+            </div>
+          </div>`;
+      });
+      html+='</div>';
+    });
+    html+='</div>';
+    main.innerHTML=html;
+    lucide.createIcons();
+  },
+
+  renderList(){
+    const main=document.getElementById('main-area');
+    const project=state.projects.find(p=>p.id===state.selectedProjectId);
+    const issues=state.issues.filter(i=>i.projectId===project.id);
+    let html=`<div class="list-view"><table class="list-table"><thead><tr>
+      <th>Key</th><th>Type</th><th>Title</th><th>Status</th><th>Priority</th><th>Assignee</th><th>Due</th><th>Pts</th><th>SLA</th><th>💬</th><th>📎</th></tr></thead><tbody>`;
+    issues.forEach(i=>{
+      const a=state.users.find(u=>u.id===i.assignedTo);
+      const s=sla.compute(i);
+      const cc=state.comments.filter(c=>c.issueId===i.id).length;
+      const ac=state.attachments.filter(at=>at.issueId===i.id).length;
+      html+=`<tr onclick="app.openIssue(${i.id})">
+        <td><span class="node-key">${util.escape(i.key)}</span></td>
+        <td><span class="type-icon ${'t-'+(i.type==='sub-task'?'sub':i.type)}">${i.type[0].toUpperCase()}</span> ${i.type}</td>
+        <td style="font-weight:500">${util.escape(i.title)}</td>
+        <td><span class="badge s-${i.status}">${i.status}</span></td>
+        <td><span class="prio ${i.priority}">${i.priority}</span></td>
+        <td>${a?util.escape(a.name):'—'}</td>
+        <td>${i.due||'—'}</td>
+        <td>${i.points||'—'}</td>
+        <td>${s?`<span class="sla-pill sla-${s.level==='breach'?'breach':s.level}">${sla.fmt(s.remaining)}</span>`:'—'}</td>
+        <td>${cc||'—'}</td>
+        <td>${ac||'—'}</td>
+      </tr>`;
+    });
+    html+='</tbody></table></div>';
+    main.innerHTML=html;
+  },
+
+  renderMemberDash(){
+    const main=document.getElementById('main-area');
+    const mine=state.issues.filter(i=>i.assignedTo===state.currentUser.id && i.isActive);
+    const open=mine.filter(i=>i.status!=='done').length;
+    const done=mine.filter(i=>i.status==='done').length;
+    const highPrio=mine.filter(i=>['high','highest'].includes(i.priority)).length;
+    const pts=mine.reduce((s,i)=>s+(i.points||0),0);
+
+    let html=`<div class="member-view">
+      <h2 style="margin-bottom:.25rem">Hello, ${util.escape(state.currentUser.name)} 👋</h2>
+      <p class="muted" style="margin-bottom:1rem">Here are your assigned items across all AI Team projects.</p>
+      <div class="stat-row">
+        <div class="stat"><small>Open Issues</small><h3>${open}</h3></div>
+        <div class="stat"><small>Completed</small><h3>${done}</h3></div>
+        <div class="stat"><small>High Priority</small><h3 style="color:var(--danger)">${highPrio}</h3></div>
+        <div class="stat"><small>Total Story Points</small><h3 style="color:var(--cbe-gold)">${pts}</h3></div>
+      </div>
+      <h3 style="margin-bottom:.75rem">My Issues</h3>
+      <div class="member-grid">`;
+
+    mine.forEach(i=>{
+      const p=state.projects.find(pr=>pr.id===i.projectId);
+      const s=sla.compute(i);
+      html+=`
+        <div class="kanban-card" onclick="app.openIssue(${i.id})">
+          <div class="node-key">${util.escape(i.key)} · ${util.escape(p.title)} ${s?`<span class="sla-pill sla-${s.level==='breach'?'breach':s.level}">${sla.fmt(s.remaining)}</span>`:''}</div>
+          <div style="font-weight:600;margin:4px 0 8px">${util.escape(i.title)}</div>
+          <div class="node-footer">
+            <span class="type-icon ${'t-'+(i.type==='sub-task'?'sub':i.type)}">${i.type[0].toUpperCase()}</span>
+            <span class="badge s-${i.status}">${i.status}</span>
+            <span class="prio ${i.priority}">${i.priority}</span>
+            ${i.due?`<span class="muted" style="font-size:.7rem">📅 ${i.due}</span>`:''}
+          </div>
+        </div>`;
+    });
+
+    if(mine.length===0) html+='<p class="muted">🎉 No assigned issues.</p>';
+    html+='</div></div>';
+    main.innerHTML=html;
+  },
+
+  openIssue(id){
+    const i=state.issues.find(x=>x.id===id);
+    if(!i) return;
+    state.drawerIssueId=id;
+    state.drawerTab='details';
+    this.renderDrawer();
+    document.getElementById('drawer').classList.add('open');
+  },
+
+  setDrawerTab(t){
+    state.drawerTab=t;
+    this.renderDrawer();
+  },
+
+  renderDrawer(){
+    const i=state.issues.find(x=>x.id===state.drawerIssueId);
+    if(!i) return;
+    const p=state.projects.find(x=>x.id===i.projectId);
+    const d=state.departments.find(x=>x.id===p.deptId);
+    const div=state.divisions.find(x=>x.id===d.divisionId);
+    const team=state.teams.find(x=>x.id===p.teamId);
+    const s=sla.compute(i);
+    const cc=state.comments.filter(c=>c.issueId===i.id).length;
+    const ac=state.attachments.filter(a=>a.issueId===i.id).length;
+    const au=state.audit.filter(a=>a.issueId===i.id).length;
+
+    document.getElementById('drawer-key').innerHTML = `
+      ${util.escape(i.key)}
+      <span style="margin-left:.5rem" class="type-icon ${'t-'+(i.type==='sub-task'?'sub':i.type)}">${i.type[0].toUpperCase()}</span>
+      <span class="muted" style="text-transform:capitalize">${i.type}</span>
+      <span class="drawer-subpath">· ${util.escape(div.name)} / ${util.escape(d.name)} / ${util.escape(team.name)}</span>
+    `;
+
+    const tabs=`<div class="drawer-tabs">
+      <div class="drawer-tab ${state.drawerTab==='details'?'active':''}" onclick="app.setDrawerTab('details')"><i data-lucide="info" style="width:13px"></i> Details</div>
+      <div class="drawer-tab ${state.drawerTab==='comments'?'active':''}" onclick="app.setDrawerTab('comments')"><i data-lucide="message-square" style="width:13px"></i> Comments ${cc?`<span class="count-pill">${cc}</span>`:''}</div>
+      <div class="drawer-tab ${state.drawerTab==='attachments'?'active':''}" onclick="app.setDrawerTab('attachments')"><i data-lucide="paperclip" style="width:13px"></i> Files ${ac?`<span class="count-pill">${ac}</span>`:''}</div>
+      <div class="drawer-tab ${state.drawerTab==='history'?'active':''}" onclick="app.setDrawerTab('history')"><i data-lucide="history" style="width:13px"></i> Audit ${au?`<span class="count-pill">${au}</span>`:''}</div>
+    </div>`;
+
+    let pane='';
+
+    if(state.drawerTab==='details'){
+      const slaBlock=s?`<div class="sla-card active-sla-${s.level==='breach'?'red':s.level}">
+        <h5><i data-lucide="timer" style="width:14px"></i> Regulatory SLA ${s.breached?'<span class="badge" style="background:var(--danger);color:#fff;margin-left:.4rem">BREACHED</span>':''}</h5>
+        <div class="sla-countdown" style="color:var(--sla-${s.level==='breach'?'red':s.level})">${sla.fmt(s.remaining)}</div>
+        <div class="sla-bar"><div class="sla-bar-fill" style="width:${s.pct}%;background:var(--sla-${s.level==='breach'?'red':s.level})"></div></div>
+        <small class="muted">Target: ${i.sla.hours}h · Started ${util.fmtTime(i.sla.startedAt)}</small>
+      </div>` :
+      `<div class="sla-card">
+        <h5><i data-lucide="timer" style="width:14px"></i> SLA</h5>
+        <small class="muted">No SLA configured. Set regulatory timer below.</small>
+      </div>`;
+
+      pane=`<div class="drawer-pane active">
+        <h3 style="margin-bottom:.75rem">${util.escape(i.title)}</h3>
+        ${slaBlock}
+
+        <div class="flex" style="gap:.5rem;margin-bottom:1rem">
+          <div style="flex:1">
+            <label style="font-size:.7rem;text-transform:uppercase;color:var(--muted);font-weight:600">SLA Hours</label>
+            <input type="number" min="0" value="${i.sla?i.sla.hours:''}" placeholder="e.g. 72" onchange="app.updateSla(${i.id},this.value)">
+          </div>
+          <button class="secondary" style="align-self:end" onclick="app.resetSla(${i.id})"><i data-lucide="refresh-cw" style="width:14px"></i> Reset</button>
+        </div>
+
+        <div class="drawer-field"><label>Status</label>
+          <select onchange="app.updateIssue(${i.id},'status',this.value)">
+            ${['todo','in-progress','review','done','blocked'].map(x=>`<option value="${x}" ${i.status===x?'selected':''}>${x}</option>`).join('')}
+          </select>
+        </div>
+
+        <div class="drawer-field"><label>Assignee</label>
+          <select onchange="app.updateIssue(${i.id},'assignedTo',parseInt(this.value))">
+            ${state.users.map(u=>`<option value="${u.id}" ${i.assignedTo===u.id?'selected':''}>${util.escape(u.name)} (${util.escape(u.title)})</option>`).join('')}
+          </select>
+        </div>
+
+        <div class="drawer-field"><label>Priority</label>
+          <select onchange="app.updateIssue(${i.id},'priority',this.value)">
+            ${['low','medium','high','highest'].map(p=>`<option value="${p}" ${i.priority===p?'selected':''}>${p}</option>`).join('')}
+          </select>
+        </div>
+
+        <div class="flex" style="gap:.75rem">
+          <div class="drawer-field" style="flex:1"><label>Story Points</label>
+            <input type="number" value="${i.points||''}" onchange="app.updateIssue(${i.id},'points',parseInt(this.value)||0)"></div>
+          <div class="drawer-field" style="flex:1"><label>Due Date</label>
+            <input type="date" value="${i.due||''}" onchange="app.updateIssue(${i.id},'due',this.value)"></div>
+        </div>
+
+        <div class="drawer-field"><label>Labels</label>
+          <input value="${(i.labels||[]).join(', ')}" onchange="app.updateIssue(${i.id},'labels',this.value.split(',').map(s=>s.trim()).filter(Boolean))">
+        </div>
+
+        <div class="drawer-field"><label>Description / Notes</label>
+          <textarea onchange="app.updateIssue(${i.id},'notes',this.value)">${util.escape(i.notes||'')}</textarea>
+        </div>
+      </div>`;
+    }
+    else if(state.drawerTab==='comments'){
+      const comments=state.comments.filter(c=>c.issueId===i.id).sort((a,b)=>a.at-b.at);
+      pane=`<div class="drawer-pane active">
+        <div class="comment-input-wrap">
+          <label style="font-size:.7rem;text-transform:uppercase;color:var(--muted);font-weight:600;display:block;margin-bottom:.35rem">Add Comment · use @ to mention</label>
+          <textarea id="comment-input" placeholder="Write a comment... tag people with @Amare, @Tariku, @Adamu, @Abebe, @Abel, @Selam"
+            oninput="app.onCommentInput(event)" onkeydown="app.onCommentKey(event)"></textarea>
+          <div id="mention-popup" class="mention-popup hidden"></div>
+          <button class="primary" style="margin-top:.5rem" onclick="app.addComment()"><i data-lucide="send" style="width:13px"></i> Post Comment</button>
+        </div>
+        <hr style="margin:1rem 0">
+        ${comments.length===0?'<p class="muted" style="text-align:center;padding:1rem">No comments yet.</p>':comments.map(c=>{
+          const u=state.users.find(x=>x.id===c.userId);
+          return `<div class="comment">
+            <div class="comment-head">
+              <div class="avatar" style="width:26px;height:26px;font-size:.7rem;background:var(--cbe-navy);color:#fff">${u?u.name[0]:'?'}</div>
+              <strong>${u?util.escape(u.name):'Unknown'}</strong>
+              <small>${util.fmtTime(c.at)}</small>
+              ${c.userId===state.currentUser.id?`<button class="icon ghost" style="margin-left:auto" onclick="app.deleteComment(${c.id})"><i data-lucide="trash-2" style="width:13px"></i></button>`:''}
+            </div>
+            <div class="comment-body">${util.highlightMentions(c.body)}</div>
+          </div>`;
+        }).join('')}
+      </div>`;
+    }
+    else if(state.drawerTab==='attachments'){
+      const files=state.attachments.filter(a=>a.issueId===i.id).sort((a,b)=>b.at-a.at);
+      pane=`<div class="drawer-pane active">
+        <div class="attach-drop" id="drop-zone"
+          onclick="document.getElementById('file-input').click()"
+          ondragover="event.preventDefault();this.classList.add('drag-active')"
+          ondragleave="this.classList.remove('drag-active')"
+          ondrop="app.handleDrop(event)">
+          <i data-lucide="upload-cloud" style="width:28px;color:var(--cbe-navy)"></i>
+          <div style="font-weight:600;margin-top:.35rem">Click or drop files here</div>
+          <small class="muted">PDF · DOCX · XLSX · Images · Max 10MB each</small>
+          <input type="file" id="file-input" multiple style="display:none" onchange="app.handleFiles(this.files)">
+        </div>
+        ${files.length===0?'<p class="muted" style="text-align:center;padding:1rem">No attachments uploaded.</p>':files.map(f=>{
+          const u=state.users.find(x=>x.id===f.userId);
+          return `<div class="attach-item">
+            <div class="attach-icon" style="background:${util.fileColor(f.type)}">${util.fileLabel(f.name)}</div>
+            <div class="attach-info">
+              <strong title="${util.escape(f.name)}">${util.escape(f.name)}</strong>
+              <small>${util.fmtSize(f.size)} · uploaded by ${u?util.escape(u.name):'?'} · ${util.fmtTime(f.at)}</small>
+            </div>
+            ${f.dataUrl?`<button class="icon secondary" onclick="app.downloadFile(${f.id})" title="Download"><i data-lucide="download" style="width:14px"></i></button>`:''}
+            ${f.userId===state.currentUser.id?`<button class="icon danger" onclick="app.deleteAttach(${f.id})" title="Remove"><i data-lucide="trash-2" style="width:14px"></i></button>`:''}
+          </div>`;
+        }).join('')}
+      </div>`;
+    }
+    else if(state.drawerTab==='history'){
+      const entries=audit.forIssue(i.id);
+      pane=`<div class="drawer-pane active">
+        <div class="muted" style="font-size:.75rem;margin-bottom:.75rem;padding:.5rem .65rem;background:var(--surface-2);border-radius:var(--radius);border-left:3px solid var(--cbe-gold)">
+          <strong style="color:var(--text)">🔒 Immutable Audit Trail</strong><br>
+          Every change is logged for internal governance and compliance review.
+        </div>
+        ${entries.length===0?'<p class="muted">No history yet.</p>':entries.map(a=>{
+          const u=state.users.find(x=>x.id===a.userId);
+          const icon={create:'plus-circle',delete:'trash-2',update:'edit-3',comment:'message-square',attach:'paperclip',sla_breach:'alert-triangle',assign:'user'}[a.action]||'activity';
+          let diff='';
+          if(a.action==='update' && a.from!==null){
+            diff=`<div class="audit-diff"><span class="old">${util.escape(String(a.from))}</span> → <span class="new">${util.escape(String(a.to))}</span></div>`;
+          }
+          return `<div class="audit-entry a-${a.action}">
+            <div class="flex" style="gap:.4rem">
+              <i data-lucide="${icon}" style="width:13px;color:var(--muted)"></i>
+              <strong style="font-size:.8rem">${u?util.escape(u.name):'System'}</strong>
+              <span class="muted" style="font-size:.78rem">${util.escape(a.text)}${a.field?` <code style="background:#eef2ff;color:#4338ca;padding:0 4px;border-radius:3px;font-size:.7rem">${util.escape(a.field)}</code>`:''}</span>
+            </div>
+            ${diff}
+            <small title="${util.fmtFull(a.at)}">${util.fmtTime(a.at)} · ${util.fmtFull(a.at)}</small>
+          </div>`;
+        }).join('')}
+      </div>`;
+    }
+
+    document.getElementById('drawer-body').innerHTML=tabs+pane;
+    lucide.createIcons();
+  },
+
+  closeDrawer(){
+    document.getElementById('drawer').classList.remove('open');
+    state.drawerIssueId=null;
+  },
+
+  updateIssue(id,field,val){
+    const i=state.issues.find(x=>x.id===id);
+    if(!i) return;
+    const old=i[field];
+    if(JSON.stringify(old)===JSON.stringify(val)) return;
+
+    i[field]=val;
+    audit.log(id,state.currentUser.id,'update',field,Array.isArray(old)?old.join(', '):old,Array.isArray(val)?val.join(', '):val,`Changed ${field}`);
+
+    if(field==='assignedTo' && val!==state.currentUser.id){
+      notif.push(val,'assign',`You were assigned to ${i.key} — ${i.title}`,id);
+    }
+
+    this.render();
+    if(state.drawerIssueId===id) this.renderDrawer();
+    ui.toast('✓ Saved','success');
+  },
+
+  updateSla(id,hours){
+    const i=state.issues.find(x=>x.id===id);
+    if(!i) return;
+    const prev=i.sla ? i.sla.hours : null;
+    const h=parseInt(hours);
+
+    if(!h){
+      i.sla=null;
+      audit.log(id,state.currentUser.id,'update','sla',prev,'cleared','Cleared SLA');
+    } else {
+      i.sla={hours:h,startedAt:Date.now()};
+      i._breachNotified=false;
+      audit.log(id,state.currentUser.id,'update','sla',prev,h+'h','Updated SLA');
+    }
+
+    this.render();
+    this.renderDrawer();
+    ui.toast('⏱ SLA updated','success');
+  },
+
+  resetSla(id){
+    const i=state.issues.find(x=>x.id===id);
+    if(!i || !i.sla) return;
+    i.sla.startedAt=Date.now();
+    i._breachNotified=false;
+    audit.log(id,state.currentUser.id,'update','sla','running','restarted','Reset SLA timer');
+    this.render();
+    this.renderDrawer();
+    ui.toast('⏱ SLA timer reset','success');
+  },
+
+  _mentionState:{active:false,query:'',start:0,selected:0},
+
+  onCommentInput(e){
+    const ta=e.target;
+    const val=ta.value;
+    const pos=ta.selectionStart;
+    const before=val.slice(0,pos);
+    const m=before.match(/@(\w*)$/);
+    const pop=document.getElementById('mention-popup');
+
+    if(m){
+      this._mentionState={active:true,query:m[1].toLowerCase(),start:pos-m[0].length,selected:0};
+      const matches=state.users.filter(u=>u.name.toLowerCase().startsWith(m[1].toLowerCase()));
+      if(matches.length===0){
+        pop.classList.add('hidden');
+        return;
+      }
+      pop.classList.remove('hidden');
+      pop.innerHTML=matches.map((u,idx)=>`
+        <div class="mention-option ${idx===0?'active':''}" data-uid="${u.id}" onclick="app.insertMention(${u.id})">
+          <div class="avatar" style="width:22px;height:22px;font-size:.65rem;background:var(--cbe-navy);color:#fff">${u.name[0]}</div>
+          ${util.escape(u.name)} <small class="muted">${util.escape(u.title)}</small>
+        </div>`).join('');
+      pop.style.top=(ta.offsetTop+ta.offsetHeight+4)+'px';
+      pop.style.left=ta.offsetLeft+'px';
+    } else {
+      this._mentionState.active=false;
+      pop.classList.add('hidden');
+    }
+  },
+
+  onCommentKey(e){
+    const ms=this._mentionState;
+    if(!ms.active){
+      if(e.key==='Enter' && (e.ctrlKey||e.metaKey)){
+        e.preventDefault();
+        this.addComment();
+      }
+      return;
+    }
+
+    const pop=document.getElementById('mention-popup');
+    const opts=pop.querySelectorAll('.mention-option');
+    if(!opts.length) return;
+
+    if(e.key==='ArrowDown'){
+      e.preventDefault();
+      ms.selected=(ms.selected+1)%opts.length;
+      opts.forEach((o,i)=>o.classList.toggle('active',i===ms.selected));
+    } else if(e.key==='ArrowUp'){
+      e.preventDefault();
+      ms.selected=(ms.selected-1+opts.length)%opts.length;
+      opts.forEach((o,i)=>o.classList.toggle('active',i===ms.selected));
+    } else if(e.key==='Enter' || e.key==='Tab'){
+      e.preventDefault();
+      this.insertMention(parseInt(opts[ms.selected].dataset.uid));
+    } else if(e.key==='Escape'){
+      ms.active=false;
+      pop.classList.add('hidden');
+    }
+  },
+
+  insertMention(uid){
+    const u=state.users.find(x=>x.id===uid);
+    if(!u) return;
+    const ta=document.getElementById('comment-input');
+    const ms=this._mentionState;
+    const val=ta.value;
+    ta.value=val.slice(0,ms.start)+'@'+u.name+' '+val.slice(ta.selectionStart);
+    const newPos=ms.start+u.name.length+2;
+    ta.focus();
+    ta.setSelectionRange(newPos,newPos);
+    ms.active=false;
+    document.getElementById('mention-popup').classList.add('hidden');
+  },
+
+  addComment(){
+    const ta=document.getElementById('comment-input');
+    const body=ta.value.trim();
+    if(!body) return;
+
+    const mentions=[];
+    body.replace(/@(\w+)/g,(m,n)=>{
+      const u=state.users.find(x=>x.name.toLowerCase()===n.toLowerCase());
+      if(u && !mentions.includes(u.id)) mentions.push(u.id);
+    });
+
+    const c={id:state.nextComment++,issueId:state.drawerIssueId,userId:state.currentUser.id,body,at:Date.now(),mentions};
+    state.comments.push(c);
+
+    const issue=state.issues.find(x=>x.id===state.drawerIssueId);
+    audit.log(state.drawerIssueId,state.currentUser.id,'comment',null,null,null,'Added comment');
+
+    mentions.forEach(uid=>{
+      if(uid!==state.currentUser.id) notif.push(uid,'mention',`${state.currentUser.name} mentioned you on ${issue.key}`,issue.id);
+    });
+
+    if(issue.assignedTo!==state.currentUser.id && !mentions.includes(issue.assignedTo)){
+      notif.push(issue.assignedTo,'comment',`${state.currentUser.name} commented on ${issue.key}`,issue.id);
+    }
+
+    ta.value='';
+    this.renderDrawer();
+    this.render();
+    ui.toast('✓ Comment posted','success');
+  },
+
+  deleteComment(id){
+    if(!confirm('Delete this comment?')) return;
+    const c=state.comments.find(x=>x.id===id);
+    if(!c) return;
+    state.comments=state.comments.filter(x=>x.id!==id);
+    audit.log(c.issueId,state.currentUser.id,'delete','comment',null,null,'Deleted comment');
+    this.renderDrawer();
+    this.render();
+  },
+
+  handleFiles(fileList){
+    Array.from(fileList).forEach(file=>{
+      if(file.size>10*1024*1024){
+        ui.toast('⚠ '+file.name+' exceeds 10MB','danger');
+        return;
+      }
+      const reader=new FileReader();
+      reader.onload=e=>{
+        const att={id:state.nextAttach++,issueId:state.drawerIssueId,userId:state.currentUser.id,name:file.name,size:file.size,type:file.type,at:Date.now(),dataUrl:e.target.result};
+        state.attachments.push(att);
+        audit.log(state.drawerIssueId,state.currentUser.id,'attach',null,null,file.name,`Uploaded file: ${file.name}`);
+
+        const issue=state.issues.find(x=>x.id===state.drawerIssueId);
+        if(issue && issue.assignedTo!==state.currentUser.id){
+          notif.push(issue.assignedTo,'comment',`${state.currentUser.name} attached ${file.name} to ${issue.key}`,issue.id);
+        }
+
+        this.renderDrawer();
+        this.render();
+        ui.toast('✓ Uploaded '+file.name,'success');
+      };
+      reader.readAsDataURL(file);
+    });
+  },
+
+  handleDrop(e){
+    e.preventDefault();
+    e.currentTarget.classList.remove('drag-active');
+    if(e.dataTransfer.files && e.dataTransfer.files.length) this.handleFiles(e.dataTransfer.files);
+  },
+
+  downloadFile(id){
+    const f=state.attachments.find(x=>x.id===id);
+    if(!f || !f.dataUrl) return;
+    const a=document.createElement('a');
+    a.href=f.dataUrl;
+    a.download=f.name;
+    a.click();
+  },
+
+  deleteAttach(id){
+    if(!confirm('Remove this attachment?')) return;
+    const f=state.attachments.find(x=>x.id===id);
+    if(!f) return;
+    state.attachments=state.attachments.filter(x=>x.id!==id);
+    audit.log(f.issueId,state.currentUser.id,'delete','attachment',f.name,null,`Deleted file: ${f.name}`);
+    this.renderDrawer();
+    this.render();
+  },
+
+  toggleNotifPanel(){
+    const p=document.getElementById('notif-panel');
+    if(p.classList.contains('hidden')) this.renderNotifPanel();
+    p.classList.toggle('hidden');
+  },
+
+  renderNotifPanel(){
+    const list=notif.forMe();
+    const p=document.getElementById('notif-panel');
+    p.innerHTML=`<h4>Notifications <button class="ghost" style="font-size:.7rem" onclick="notif.markAllRead();app.renderNotifPanel()">Mark all read</button></h4>
+      <div class="notif-list">
+        ${list.length===0?'<p class="muted" style="padding:1rem;text-align:center">No notifications</p>':
+          list.map(n=>`<div class="notif-item ${n.read?'':'unread'}" onclick="app.clickNotif(${n.id})">${util.escape(n.text)}<small>${util.fmtTime(n.at)}</small></div>`).join('')}
+      </div>`;
+  },
+
+  clickNotif(id){
+    const n=state.notifications.find(x=>x.id===id);
+    if(!n) return;
+    n.read=true;
+    if(n.issueId) this.openIssue(n.issueId);
+    document.getElementById('notif-panel').classList.add('hidden');
+    ui.updateBell();
+  },
+
+  createIssue(ctx,parentId){
+    const title=document.getElementById(`nt-${ctx}-${parentId}`).value.trim();
+    if(!title) return;
+
+    const type=document.getElementById(`ntype-${ctx}-${parentId}`).value;
+    const assignedTo=parseInt(document.getElementById(`nassign-${ctx}-${parentId}`).value);
+    const priority=document.getElementById(`nprio-${ctx}-${parentId}`).value;
+    const points=parseInt(document.getElementById(`npts-${ctx}-${parentId}`).value)||0;
+    const slaHours=parseInt(document.getElementById(`nsla-${ctx}-${parentId}`).value)||0;
+
+    let projectId, parent=null;
+    if(ctx==='project'){
+      projectId=parentId;
+    } else {
+      const p=state.issues.find(x=>x.id===parentId);
+      projectId=p.projectId;
+      parent=parentId;
+    }
+
+    const project=state.projects.find(p=>p.id===projectId);
+    const count=state.issues.filter(i=>i.projectId===projectId).length+1;
+    const newIssue={
+      id:state.nextId++,
+      projectId,
+      parentId:parent,
+      key:`${project.code}-${count}`,
+      type,
+      title,
+      status:'todo',
+      assignedTo,
+      priority,
+      points,
+      due:'',
+      labels:[],
+      notes:'',
+      isActive:true,
+      isCollapsed:false,
+      sla:slaHours?{hours:slaHours,startedAt:Date.now()}:null
+    };
+
+    state.issues.push(newIssue);
+    audit.log(newIssue.id,state.currentUser.id,'create',null,null,null,`Created ${type}: ${title}`);
+    if(assignedTo!==state.currentUser.id) notif.push(assignedTo,'assign',`You were assigned ${newIssue.key} — ${title}`,newIssue.id);
+
+    this.render();
+    ui.toast('✓ Created '+newIssue.key,'success');
+  },
+
+  toggleForm(id){
+    const el=document.getElementById(`form-${id}`);
+    if(el) el.classList.toggle('hidden');
+  },
+
+  toggleCollapse(kind,id){
+    if(kind==='project'){
+      const p=state.projects.find(x=>x.id===id);
+      p.isCollapsed=!p.isCollapsed;
+    } else {
+      const i=state.issues.find(x=>x.id===id);
+      i.isCollapsed=!i.isCollapsed;
+    }
+    this.render();
+  },
+
+  toggleProjectActive(id){
+    const p=state.projects.find(x=>x.id===id);
+    p.isActive=!p.isActive;
+    this.render();
+  },
+
+  toggleIssueActive(id){
+    const i=state.issues.find(x=>x.id===id);
+    i.isActive=!i.isActive;
+    audit.log(id,state.currentUser.id,'update','active',!i.isActive,i.isActive,'Toggled active');
+    this.render();
+  },
+
+  deleteProject(id){
+    if(!confirm('Delete this project and all issues?')) return;
+    state.projects=state.projects.filter(p=>p.id!==id);
+    state.issues=state.issues.filter(i=>i.projectId!==id);
+    state.selectedProjectId=state.projects[0]?.id || null;
+    if(state.selectedProjectId) this.expandProjectPath(state.selectedProjectId);
+    this.renderSidebar();
+    this.render();
+  },
+
+  deleteIssue(id){
+    if(!confirm('Delete this issue and its children?')) return;
+    const i=state.issues.find(x=>x.id===id);
+    const kill=(ids)=>{
+      state.issues.filter(item=>ids.includes(item.parentId)).forEach(c=>kill([c.id]));
+      state.issues=state.issues.filter(item=>!ids.includes(item.id));
+    };
+    audit.log(id,state.currentUser.id,'delete',null,i?.title,null,`Deleted ${i?.key || 'issue'}`);
+    kill([id]);
+    this.render();
+  },
+
+  openCreate(){
+    alert('Quick-Create modal placeholder: Project / Issue / Epic / Risk / Compliance');
+  },
+
+  search(q){
+    if(!q) return;
+  },
+
+  dragStart(e,id){
+    e.dataTransfer.setData('text/plain',id);
+    e.target.classList.add('dragging-branch');
+    e.stopPropagation();
+  },
+
+  dragEnd(e){
+    e.target.classList.remove('dragging-branch');
+    document.querySelectorAll('.drag-over').forEach(n=>n.classList.remove('drag-over'));
+  },
+
+  allowDrop(e){
+    e.preventDefault();
+    e.currentTarget.classList.add('drag-over');
+  },
+
+  dragLeave(e){
+    e.currentTarget.classList.remove('drag-over');
+  },
+
+  drop(e,newParentId,projectId){
+    e.preventDefault();
+    e.currentTarget.classList.remove('drag-over');
+
+    const id=parseInt(e.dataTransfer.getData('text/plain'));
+    const issue=state.issues.find(i=>i.id===id);
+    if(!issue || issue.id===newParentId) return;
+
+    let p=newParentId;
+    while(p){
+      if(p===id) return;
+      p=state.issues.find(i=>i.id===p)?.parentId;
+    }
+
+    const oldParent=issue.parentId;
+    issue.parentId=newParentId;
+    issue.projectId=projectId;
+    audit.log(id,state.currentUser.id,'update','parent',oldParent,newParentId,'Re-parented issue');
+    this.render();
+  }
+};
+
+setInterval(()=>{
+  if(!state.currentUser) return;
+  sla.scan();
+  app.render();
+  if(state.drawerIssueId) app.renderDrawer();
+},30000);
+
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.bell-wrap')){
+    document.getElementById('notif-panel')?.classList.add('hidden');
+  }
+});
+
+lucide.createIcons();
+</script>
+</body>
+</html>
