@@ -126,9 +126,10 @@ hr{border:0;border-top:1px solid var(--border)}
 
 /* VIEW TOGGLE */
 .view-toolbar{background:#fff;border-bottom:1px solid var(--border);padding:.5rem 1rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
-.breadcrumb{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:.35rem;flex-wrap:wrap}
+.breadcrumb{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;min-width:0;flex:1;overflow:hidden}
+.breadcrumb > *{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .breadcrumb strong{color:var(--text);font-weight:600}
-.view-tabs{display:flex;background:var(--surface-2);padding:3px;border-radius:var(--radius);border:1px solid var(--border)}
+.view-tabs{display:flex;background:var(--surface-2);padding:3px;border-radius:var(--radius);border:1px solid var(--border);flex-shrink:0}
 .view-tab{padding:.35rem .7rem;border-radius:4px;font-size:.8rem;cursor:pointer;color:var(--muted);display:flex;align-items:center;gap:.3rem}
 .view-tab.active{background:#fff;color:var(--cbe-navy);font-weight:600;box-shadow:var(--shadow-sm)}
 
@@ -197,9 +198,11 @@ hr{border:0;border-top:1px solid var(--border)}
 /* KANBAN */
 .kanban{display:flex;gap:1rem;padding:1rem;height:100%;overflow-x:auto;background:var(--bg)}
 .kanban-col{min-width:280px;width:280px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:.75rem;display:flex;flex-direction:column}
+.kanban-col.drag-over{border-color:var(--cbe-gold);background:#FAF6EC}
 .kanban-col h4{font-size:.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:.75rem;display:flex;justify-content:space-between}
 .kanban-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:.65rem;margin-bottom:.5rem;cursor:pointer;box-shadow:var(--shadow-sm)}
 .kanban-card:hover{border-color:var(--cbe-navy)}
+.kanban-card.dragging{opacity:.5;transform:scale(1.05);cursor:grabbing}
 
 /* LIST */
 .list-view{padding:1rem;overflow-y:auto;height:100%}
@@ -869,6 +872,12 @@ const app = {
   setView(v){
     state.view=v;
     document.querySelectorAll('.view-tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
+    
+    // Auto-collapse sidebar when switching to kanban view for better space utilization
+    if(v === 'kanban' && !state.sidebarCollapsed){
+      this.toggleSidebar();
+    }
+    
     this.render();
   },
 
@@ -1037,14 +1046,15 @@ const app = {
     let html='<div class="kanban">';
     cols.forEach(([s,label])=>{
       const items=issues.filter(i=>i.status===s);
-      html+=`<div class="kanban-col"><h4>${label} <span>${items.length}</span></h4>`;
+      html+=`<div class="kanban-col" data-status="${s}" ondrop="app.kanbanDrop(event)" ondragover="app.kanbanAllowDrop(event)" ondragleave="app.kanbanDragLeave(event)">
+        <h4>${label} <span>${items.length}</span></h4>`;
       items.forEach(i=>{
         const assignee=state.users.find(u=>u.id===i.assignedTo);
         const slaS=sla.compute(i);
         const cc=state.comments.filter(c=>c.issueId===i.id).length;
         const ac=state.attachments.filter(a=>a.issueId===i.id).length;
         html+=`
-          <div class="kanban-card" onclick="app.openIssue(${i.id})">
+          <div class="kanban-card" draggable="true" ondragstart="app.kanbanDragStart(event,${i.id})" ondragend="app.kanbanDragEnd(event)" onclick="app.openIssue(${i.id})">
             <div class="node-key">${util.escape(i.key)} ${slaS?`<span class="sla-pill sla-${slaS.level==='breach'?'breach':slaS.level}">${sla.fmt(slaS.remaining)}</span>`:''}</div>
             <div style="font-weight:600;margin:3px 0 6px;font-size:.85rem">${util.escape(i.title)}</div>
             <div class="node-footer">
@@ -1709,6 +1719,55 @@ const app = {
     issue.projectId=projectId;
     audit.log(id,state.currentUser.id,'update','parent',oldParent,newParentId,'Re-parented issue');
     this.render();
+  },
+
+  kanbanDragStart(e,id){
+    e.dataTransfer.setData('text/plain',id);
+    e.target.classList.add('dragging');
+    e.stopPropagation();
+  },
+
+  kanbanDragEnd(e){
+    e.target.classList.remove('dragging');
+    document.querySelectorAll('.drag-over').forEach(n=>n.classList.remove('drag-over'));
+  },
+
+  kanbanAllowDrop(e){
+    e.preventDefault();
+    e.currentTarget.classList.add('drag-over');
+  },
+
+  kanbanDragLeave(e){
+    e.currentTarget.classList.remove('drag-over');
+  },
+
+  kanbanDrop(e){
+    e.preventDefault();
+    e.currentTarget.classList.remove('drag-over');
+
+    const id=parseInt(e.dataTransfer.getData('text/plain'));
+    const newStatus=e.currentTarget.dataset.status;
+    const issue=state.issues.find(i=>i.id===id);
+
+    if(!issue || issue.status===newStatus) return;
+
+    const oldStatus=issue.status;
+    issue.status=newStatus;
+
+    audit.log(id,state.currentUser.id,'update','status',oldStatus,newStatus,`Moved to ${newStatus.replace('-',' ')}`);
+
+    // If moving to 'done', clear SLA if it exists
+    if(newStatus==='done' && issue.sla){
+      issue.sla=null;
+      audit.log(id,state.currentUser.id,'update','sla','active','cleared','Cleared SLA on completion');
+    }
+
+    // If moving from 'done' back to active status, we could restart SLA here if needed
+    // For now, we'll leave it as is
+
+    this.render();
+    if(state.drawerIssueId===id) this.renderDrawer();
+    ui.toast('✓ Status updated','success');
   }
 };
 

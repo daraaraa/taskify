@@ -1,0 +1,4392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CBE Project Hub — Powered by Taskify</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --cbe-navy: #0A2540;
+            --cbe-navy-2: #13305a;
+            --cbe-gold: #D4A531;
+            --cbe-gold-soft: #F5E6B8;
+            --primary: #0A2540;
+            --primary-hover: #13305a;
+            --accent: #D4A531;
+            --bg: #F4F6FA;
+            --surface: #ffffff;
+            --surface-2: #FAFBFD;
+            --border: #E1E6EF;
+            --border-heavy: #B6C0D1;
+            --text: #0F172A;
+            --muted: #64748B;
+            --danger: #DC2626;
+            --warn: #D97706;
+            --success: #059669;
+            --info: #2563EB;
+            --sla-green: #059669;
+            --sla-amber: #D97706;
+            --sla-red: #DC2626;
+            --radius: 6px;
+            --radius-lg: 10px;
+            --shadow-sm: 0 1px 2px rgba(10, 37, 64, .06);
+            --shadow: 0 4px 10px -2px rgba(10, 37, 64, .12);
+            --shadow-lg: 0 14px 30px -8px rgba(10, 37, 64, .22);
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            font-size: 14px
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        p {
+            margin: 0
+        }
+
+        .hidden {
+            display: none !important
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            border-radius: var(--radius);
+            padding: .5rem .85rem;
+            font-weight: 500;
+            font-size: .85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            transition: all .15s
+        }
+
+        button.primary {
+            background: var(--cbe-navy);
+            color: #fff
+        }
+
+        button.primary:hover {
+            background: var(--cbe-navy-2)
+        }
+
+        button.gold {
+            background: var(--cbe-gold);
+            color: var(--cbe-navy);
+            font-weight: 600
+        }
+
+        button.gold:hover {
+            filter: brightness(.95)
+        }
+
+        button.secondary {
+            background: #fff;
+            color: var(--text);
+            border: 1px solid var(--border)
+        }
+
+        button.secondary:hover {
+            background: var(--surface-2);
+            border-color: var(--border-heavy)
+        }
+
+        button.ghost {
+            background: transparent;
+            color: var(--muted)
+        }
+
+        button.ghost:hover {
+            background: var(--bg);
+            color: var(--text)
+        }
+
+        button.danger {
+            background: #fff;
+            color: var(--danger);
+            border: 1px solid #fecaca
+        }
+
+        button.icon {
+            padding: .4rem;
+            border-radius: 6px
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: .5rem .65rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: .85rem;
+            background: #fff
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--cbe-navy);
+            box-shadow: 0 0 0 3px rgba(10, 37, 64, .1)
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px
+        }
+
+        .flex {
+            display: flex;
+            gap: .5rem;
+            align-items: center
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid var(--border)
+        }
+
+        /* LOGIN */
+        .login-wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--cbe-navy) 0%, #071a2e 100%)
+        }
+
+        .login-card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            width: 440px;
+            box-shadow: var(--shadow-lg);
+            text-align: center
+        }
+
+        .login-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            background: var(--cbe-navy);
+            color: var(--cbe-gold);
+            padding: .5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            margin-bottom: 1rem
+        }
+
+        .login-card h2 {
+            font-size: 1.4rem;
+            margin-bottom: .25rem;
+            color: var(--cbe-navy)
+        }
+
+        .login-card p {
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+            font-size: .85rem
+        }
+
+        .login-input-wrap {
+            position: relative;
+            text-align: left;
+            margin-bottom: .75rem
+        }
+
+        .login-input-wrap label {
+            display: block;
+            font-size: .7rem;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-weight: 600;
+            letter-spacing: .5px;
+            margin-bottom: .35rem
+        }
+
+        .login-input-wrap input {
+            padding: .6rem .65rem;
+            font-size: .9rem
+        }
+
+        .pw-toggle {
+            position: absolute;
+            right: .6rem;
+            top: 2.15rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--muted);
+            padding: .25rem
+        }
+
+        .login-error {
+            background: #fef2f2;
+            color: var(--danger);
+            padding: .6rem .85rem;
+            border-radius: var(--radius);
+            font-size: .82rem;
+            margin-bottom: .75rem;
+            border: 1px solid #fecaca;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: .4rem
+        }
+
+        .demo-creds {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: .65rem .85rem;
+            text-align: left;
+            font-size: .78rem;
+            margin-bottom: 1rem
+        }
+
+        .demo-creds summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--cbe-navy);
+            user-select: none;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: .4rem
+        }
+
+        .demo-creds summary::before {
+            content: '▶';
+            font-size: .65rem;
+            transition: .15s
+        }
+
+        .demo-creds[open] summary::before {
+            content: '▼'
+        }
+
+        .cred-table {
+            width: 100%;
+            margin-top: .5rem;
+            font-size: .75rem;
+            border-collapse: collapse
+        }
+
+        .cred-table td {
+            padding: .3rem .4rem;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .cred-table tr:last-child td {
+            border: none
+        }
+
+        .cred-table td:first-child {
+            font-weight: 600;
+            color: var(--cbe-navy);
+            font-family: monospace
+        }
+
+        .cred-table td:nth-child(2) {
+            font-family: monospace;
+            color: var(--muted)
+        }
+
+        /* TOP BAR */
+        .topbar {
+            background: var(--cbe-navy);
+            color: #fff;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            gap: 1rem;
+            border-bottom: 2px solid var(--cbe-gold)
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff
+        }
+
+        .brand .gold-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--cbe-gold);
+            border-radius: 50%
+        }
+
+        .brand small {
+            color: var(--cbe-gold);
+            font-weight: 500;
+            font-size: .7rem;
+            letter-spacing: 1px;
+            text-transform: uppercase
+        }
+
+        .search-box {
+            flex: 1;
+            max-width: 460px;
+            position: relative
+        }
+
+        .search-box input {
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .15);
+            color: #fff;
+            padding-left: 2rem
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, .6)
+        }
+
+        .search-box i {
+            position: absolute;
+            left: .5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, .6)
+        }
+
+        .search-results {
+            position: absolute;
+            top: calc(100% + .35rem);
+            left: 0;
+            right: 0;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 400;
+            max-height: 320px;
+            overflow-y: auto
+        }
+
+        .search-result {
+            padding: .55rem .85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            font-size: .82rem;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .search-result:last-child {
+            border: none
+        }
+
+        .search-result:hover {
+            background: var(--surface-2)
+        }
+
+        .search-result .node-key {
+            font-size: .7rem
+        }
+
+        .topbar-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: .75rem
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--cbe-gold);
+            color: var(--cbe-navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: .8rem
+        }
+
+        .role-badge {
+            background: rgba(212, 165, 49, .15);
+            color: var(--cbe-gold);
+            padding: .2rem .6rem;
+            border-radius: 999px;
+            font-size: .7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .5px
+        }
+
+        /* NOTIFICATION BELL */
+        .bell-wrap {
+            position: relative
+        }
+
+        .bell-btn {
+            background: rgba(255, 255, 255, .08);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, .15);
+            padding: .4rem;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative
+        }
+
+        .bell-btn:hover {
+            background: rgba(255, 255, 255, .15)
+        }
+
+        .bell-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--danger);
+            color: #fff;
+            font-size: .6rem;
+            font-weight: 700;
+            padding: 2px 5px;
+            border-radius: 999px;
+            min-width: 16px;
+            text-align: center;
+            border: 2px solid var(--cbe-navy)
+        }
+
+        .notif-panel {
+            position: absolute;
+            top: calc(100% + .5rem);
+            right: 0;
+            width: 340px;
+            max-height: 420px;
+            background: #fff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            z-index: 300;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column
+        }
+
+        .notif-panel h4 {
+            padding: .75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: .85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text)
+        }
+
+        .notif-list {
+            overflow-y: auto;
+            flex: 1
+        }
+
+        .notif-item {
+            padding: .65rem 1rem;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            font-size: .8rem;
+            line-height: 1.4
+        }
+
+        .notif-item:hover {
+            background: var(--surface-2)
+        }
+
+        .notif-item.unread {
+            background: #f0f7ff;
+            border-left: 3px solid var(--info)
+        }
+
+        .notif-item small {
+            color: var(--muted);
+            font-size: .7rem;
+            display: block;
+            margin-top: 2px
+        }
+
+        /* MAIN LAYOUT */
+        .workspace {
+            flex: 1;
+            display: flex;
+            overflow: hidden
+        }
+
+        .sidebar {
+            width: 290px;
+            min-width: 290px;
+            background: #fff;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            transition: width .22s ease, min-width .22s ease
+        }
+
+        .sidebar.collapsed {
+            width: 72px;
+            min-width: 72px
+        }
+
+        .sidebar.collapsed .sidebar-section h4,
+        .sidebar.collapsed .nav-label {
+            display: none
+        }
+
+        .sidebar.collapsed .sidebar-section {
+            padding: .75rem .45rem
+        }
+
+        .sidebar.collapsed .nav-item {
+            justify-content: center;
+            padding: .55rem .35rem
+        }
+
+        .sidebar.collapsed .nav-item i {
+            margin-top: 0
+        }
+
+        .sidebar.collapsed .nav-sub {
+            padding-left: 0 !important
+        }
+
+        .sidebar-section {
+            padding: .75rem 1rem;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .sidebar-section h4 {
+            font-size: .7rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: .5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: flex-start;
+            gap: .5rem;
+            padding: .5rem .6rem;
+            border-radius: var(--radius);
+            color: var(--text);
+            cursor: pointer;
+            font-size: .85rem;
+            margin-bottom: 2px
+        }
+
+        .nav-item:hover {
+            background: var(--surface-2)
+        }
+
+        .nav-item.active {
+            background: #eaf1fb;
+            color: var(--cbe-navy);
+            font-weight: 600
+        }
+
+        .nav-item i {
+            width: 14px;
+            height: 14px;
+            color: var(--muted);
+            margin-top: 2px
+        }
+
+        .nav-item.active i {
+            color: var(--cbe-navy)
+        }
+
+        .nav-sub {
+            padding-left: 1.5rem;
+            font-size: .8rem;
+            color: var(--muted)
+        }
+
+        .nav-label {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2
+        }
+
+        .nav-meta {
+            font-size: .68rem;
+            color: var(--muted);
+            margin-top: 2px
+        }
+
+        .nav-item i[data-lucide="chevron-right"],
+        .nav-item i[data-lucide="chevron-down"] {
+            color: var(--cbe-navy);
+            opacity: .8
+        }
+
+        .ad-nav-badge {
+            background: var(--cbe-gold);
+            color: var(--cbe-navy);
+            font-size: .6rem;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 999px;
+            margin-left: auto
+        }
+
+        /* VIEW TOGGLE */
+        .view-toolbar {
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            padding: .5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            flex-wrap: wrap
+        }
+
+        .breadcrumb {
+            font-size: .8rem;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: .35rem;
+            flex-wrap: wrap
+        }
+
+        .breadcrumb strong {
+            color: var(--text);
+            font-weight: 600
+        }
+
+        .view-tabs {
+            display: flex;
+            background: var(--surface-2);
+            padding: 3px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border)
+        }
+
+        .view-tab {
+            padding: .35rem .7rem;
+            border-radius: 4px;
+            font-size: .8rem;
+            cursor: pointer;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: .3rem
+        }
+
+        .view-tab.active {
+            background: #fff;
+            color: var(--cbe-navy);
+            font-weight: 600;
+            box-shadow: var(--shadow-sm)
+        }
+
+        .main-area {
+            flex: 1;
+            position: relative;
+            overflow: hidden
+        }
+
+        /* CANVAS */
+        .viewport {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            background: var(--bg);
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 22px 22px;
+            cursor: grab;
+            user-select: none
+        }
+
+        .viewport.panning {
+            cursor: grabbing
+        }
+
+        .canvas-plane {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: 0 0;
+            display: flex;
+            gap: 4rem;
+            padding: 3rem
+        }
+
+        /* TREE */
+        .tree ul {
+            padding-top: 24px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            padding-left: 0;
+            margin: 0
+        }
+
+        .tree li {
+            float: left;
+            text-align: center;
+            list-style: none;
+            position: relative;
+            padding: 24px 10px 0 10px
+        }
+
+        .tree li::before,
+        .tree li::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 50%;
+            border-top: 2px solid var(--border-heavy);
+            width: 50%;
+            height: 24px
+        }
+
+        .tree li::after {
+            right: auto;
+            left: 50%;
+            border-left: 2px solid var(--border-heavy)
+        }
+
+        .tree li:only-child::after,
+        .tree li:only-child::before {
+            display: none
+        }
+
+        .tree li:only-child {
+            padding-top: 0
+        }
+
+        .tree li:first-child::before,
+        .tree li:last-child::after {
+            border: 0 none
+        }
+
+        .tree li:last-child::before {
+            border-right: 2px solid var(--border-heavy);
+            border-radius: 0 5px 0 0
+        }
+
+        .tree li:first-child::after {
+            border-radius: 5px 0 0 0
+        }
+
+        .tree ul ul::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            border-left: 2px solid var(--border-heavy);
+            width: 0;
+            height: 24px;
+            margin-left: -1px
+        }
+
+        /* NODES */
+        .node {
+            display: inline-flex;
+            flex-direction: column;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--cbe-navy);
+            border-radius: var(--radius);
+            padding: .65rem .75rem;
+            min-width: 220px;
+            max-width: 250px;
+            box-shadow: var(--shadow-sm);
+            text-align: left;
+            position: relative;
+            z-index: 2;
+            transition: .15s
+        }
+
+        .node:hover {
+            box-shadow: var(--shadow);
+            transform: translateY(-1px)
+        }
+
+        .node-project {
+            border: 1px solid var(--cbe-navy);
+            border-left: 4px solid var(--cbe-gold);
+            background: linear-gradient(180deg, #fff 0%, #FAF6EC 100%)
+        }
+
+        .node-key {
+            font-size: .68rem;
+            color: var(--muted);
+            font-weight: 600;
+            letter-spacing: .5px;
+            font-family: 'SF Mono', monospace
+        }
+
+        .node-title {
+            font-weight: 600;
+            font-size: .85rem;
+            line-height: 1.25;
+            margin: 2px 0 6px;
+            word-wrap: break-word
+        }
+
+        .node-footer {
+            display: flex;
+            align-items: center;
+            gap: .35rem;
+            font-size: .7rem;
+            flex-wrap: wrap
+        }
+
+        .type-icon {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700
+        }
+
+        .t-epic {
+            background: #7C3AED
+        }
+
+        .t-story {
+            background: #059669
+        }
+
+        .t-task {
+            background: #2563EB
+        }
+
+        .t-sub {
+            background: #0891B2
+        }
+
+        .t-bug {
+            background: #DC2626
+        }
+
+        .t-risk {
+            background: #D97706
+        }
+
+        .t-compliance {
+            background: #0A2540
+        }
+
+        .badge {
+            padding: .1rem .45rem;
+            border-radius: 4px;
+            font-size: .65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .3px
+        }
+
+        .s-todo {
+            background: #F1F5F9;
+            color: #475569
+        }
+
+        .s-in-progress {
+            background: #FEF3C7;
+            color: #B45309
+        }
+
+        .s-review {
+            background: #DBEAFE;
+            color: #1E40AF
+        }
+
+        .s-done {
+            background: #D1FAE5;
+            color: #065F46
+        }
+
+        .s-blocked {
+            background: #FEE2E2;
+            color: #991B1B
+        }
+
+        .prio {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            font-size: .7rem;
+            font-weight: 600
+        }
+
+        .prio.highest {
+            color: #DC2626
+        }
+
+        .prio.high {
+            color: #EA580C
+        }
+
+        .prio.medium {
+            color: #D97706
+        }
+
+        .prio.low {
+            color: #059669
+        }
+
+        .mini-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--cbe-navy);
+            color: #fff;
+            font-size: .65rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: auto
+        }
+
+        .inactive-item {
+            opacity: .45;
+            filter: grayscale(80%)
+        }
+
+        /* SLA */
+        .sla-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: .1rem .4rem;
+            border-radius: 4px;
+            font-size: .65rem;
+            font-weight: 700;
+            font-family: 'SF Mono', monospace
+        }
+
+        .sla-green {
+            background: #D1FAE5;
+            color: var(--sla-green)
+        }
+
+        .sla-amber {
+            background: #FEF3C7;
+            color: var(--sla-amber)
+        }
+
+        .sla-red {
+            background: #FEE2E2;
+            color: var(--sla-red);
+            animation: pulse-red 2s infinite
+        }
+
+        .sla-breach {
+            background: var(--sla-red);
+            color: #fff
+        }
+
+        @keyframes pulse-red {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .6
+            }
+        }
+
+        .meta-mini {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            font-size: .65rem;
+            color: var(--muted)
+        }
+
+        .meta-mini i {
+            width: 11px;
+            height: 11px
+        }
+
+        /* Hover actions */
+        .node-actions {
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            bottom: -1px;
+            left: -1px;
+            background: rgba(255, 255, 255, .92);
+            backdrop-filter: blur(3px);
+            border-radius: var(--radius);
+            display: flex;
+            gap: .2rem;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: .15s;
+            z-index: 10
+        }
+
+        .node:hover .node-actions {
+            opacity: 1;
+            pointer-events: auto
+        }
+
+        /* Add form */
+        .add-form {
+            background: #fff;
+            padding: .6rem;
+            border-radius: var(--radius);
+            margin-top: .5rem;
+            border: 1px dashed var(--cbe-navy);
+            display: flex;
+            flex-direction: column;
+            gap: .4rem;
+            position: relative;
+            z-index: 20;
+            min-width: 220px
+        }
+
+        /* Canvas controls */
+        .canvas-ctrl {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: .25rem;
+            z-index: 10;
+            background: #fff;
+            padding: .35rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border)
+        }
+
+        .canvas-info {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #fff;
+            padding: .5rem .75rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            font-size: .75rem;
+            color: var(--muted)
+        }
+
+        /* KANBAN */
+        .kanban {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            height: 100%;
+            overflow-x: auto;
+            background: var(--bg)
+        }
+
+        .kanban-col {
+            min-width: 280px;
+            width: 280px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: .75rem;
+            display: flex;
+            flex-direction: column
+        }
+
+        .kanban-col h4 {
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+            margin-bottom: .75rem;
+            display: flex;
+            justify-content: space-between
+        }
+
+        .kanban-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: .65rem;
+            margin-bottom: .5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm)
+        }
+
+        .kanban-card:hover {
+            border-color: var(--cbe-navy)
+        }
+
+        /* LIST */
+        .list-view {
+            padding: 1rem;
+            overflow-y: auto;
+            height: 100%
+        }
+
+        .list-table {
+            width: 100%;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            border-collapse: collapse;
+            font-size: .85rem
+        }
+
+        .list-table th {
+            background: var(--surface-2);
+            text-align: left;
+            padding: .6rem .75rem;
+            font-weight: 600;
+            font-size: .75rem;
+            text-transform: uppercase;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border)
+        }
+
+        .list-table td {
+            padding: .6rem .75rem;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .list-table tr:hover {
+            background: var(--surface-2);
+            cursor: pointer
+        }
+
+        /* DRAWER */
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 540px;
+            height: 100%;
+            background: #fff;
+            box-shadow: var(--shadow-lg);
+            border-left: 1px solid var(--border);
+            z-index: 200;
+            transform: translateX(100%);
+            transition: transform .25s;
+            display: flex;
+            flex-direction: column
+        }
+
+        .drawer.open {
+            transform: translateX(0)
+        }
+
+        .drawer-head {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: .5rem
+        }
+
+        .drawer-body {
+            padding: 0;
+            overflow-y: auto;
+            flex: 1
+        }
+
+        .drawer-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface-2);
+            position: sticky;
+            top: 0;
+            z-index: 5
+        }
+
+        .drawer-tab {
+            flex: 1;
+            padding: .6rem .5rem;
+            text-align: center;
+            font-size: .75rem;
+            font-weight: 600;
+            color: var(--muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: .3rem;
+            text-transform: uppercase;
+            letter-spacing: .3px
+        }
+
+        .drawer-tab:hover {
+            background: #fff
+        }
+
+        .drawer-tab.active {
+            color: var(--cbe-navy);
+            border-bottom-color: var(--cbe-gold);
+            background: #fff
+        }
+
+        .drawer-tab .count-pill {
+            background: var(--cbe-navy);
+            color: #fff;
+            font-size: .6rem;
+            padding: 1px 5px;
+            border-radius: 999px;
+            font-weight: 700
+        }
+
+        .drawer-pane {
+            padding: 1rem;
+            display: none
+        }
+
+        .drawer-pane.active {
+            display: block
+        }
+
+        .drawer-field {
+            margin-bottom: 1rem
+        }
+
+        .drawer-field label {
+            display: block;
+            font-size: .7rem;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: .25rem;
+            font-weight: 600;
+            letter-spacing: .5px
+        }
+
+        .drawer-subpath {
+            font-size: .72rem;
+            color: var(--muted);
+            margin-left: .5rem
+        }
+
+        /* SLA Card */
+        .sla-card {
+            padding: .75rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+            background: var(--surface-2)
+        }
+
+        .sla-card.active-sla-green {
+            border-left: 4px solid var(--sla-green);
+            background: #ecfdf5
+        }
+
+        .sla-card.active-sla-amber {
+            border-left: 4px solid var(--sla-amber);
+            background: #fffbeb
+        }
+
+        .sla-card.active-sla-red {
+            border-left: 4px solid var(--sla-red);
+            background: #fef2f2
+        }
+
+        .sla-card h5 {
+            font-size: .8rem;
+            display: flex;
+            align-items: center;
+            gap: .3rem;
+            margin-bottom: .25rem;
+            color: var(--text)
+        }
+
+        .sla-bar {
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: .5rem 0
+        }
+
+        .sla-bar-fill {
+            height: 100%;
+            transition: width .3s
+        }
+
+        .sla-countdown {
+            font-family: 'SF Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: .5px
+        }
+
+        /* COMMENTS */
+        .comment {
+            padding: .75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: .5rem;
+            background: #fff
+        }
+
+        .comment-head {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            margin-bottom: .35rem
+        }
+
+        .comment-head strong {
+            font-size: .85rem
+        }
+
+        .comment-head small {
+            color: var(--muted);
+            font-size: .7rem
+        }
+
+        .comment-body {
+            font-size: .85rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-word
+        }
+
+        .mention-tag {
+            background: #eaf1fb;
+            color: var(--cbe-navy);
+            padding: 0 4px;
+            border-radius: 3px;
+            font-weight: 600
+        }
+
+        .mention-popup {
+            position: absolute;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            max-height: 180px;
+            overflow-y: auto;
+            z-index: 999;
+            min-width: 200px
+        }
+
+        .mention-option {
+            padding: .5rem .75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-size: .85rem
+        }
+
+        .mention-option:hover,
+        .mention-option.active {
+            background: #eaf1fb
+        }
+
+        .comment-input-wrap {
+            position: relative
+        }
+
+        /* ATTACHMENTS */
+        .attach-drop {
+            border: 2px dashed var(--border-heavy);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            text-align: center;
+            cursor: pointer;
+            transition: .15s;
+            background: var(--surface-2);
+            margin-bottom: .75rem
+        }
+
+        .attach-drop:hover,
+        .attach-drop.drag-active {
+            border-color: var(--cbe-navy);
+            background: #eaf1fb
+        }
+
+        .attach-item {
+            display: flex;
+            align-items: center;
+            gap: .65rem;
+            padding: .6rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: .4rem;
+            background: #fff
+        }
+
+        .attach-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: .7rem;
+            font-weight: 700;
+            flex-shrink: 0
+        }
+
+        .attach-info {
+            flex: 1;
+            min-width: 0
+        }
+
+        .attach-info strong {
+            font-size: .8rem;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+
+        .attach-info small {
+            font-size: .7rem;
+            color: var(--muted)
+        }
+
+        /* AUDIT */
+        .audit-entry {
+            padding: .5rem .75rem;
+            border-left: 2px solid var(--border);
+            margin-left: .5rem;
+            position: relative;
+            font-size: .8rem;
+            line-height: 1.45
+        }
+
+        .audit-entry::before {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: .85rem;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--cbe-gold);
+            border: 2px solid #fff
+        }
+
+        .audit-entry.a-create::before {
+            background: var(--success)
+        }
+
+        .audit-entry.a-delete::before {
+            background: var(--danger)
+        }
+
+        .audit-entry.a-comment::before {
+            background: var(--info)
+        }
+
+        .audit-diff {
+            font-size: .72rem;
+            background: var(--surface-2);
+            padding: .35rem .5rem;
+            border-radius: 4px;
+            margin-top: 4px;
+            font-family: 'SF Mono', monospace
+        }
+
+        .audit-diff .old {
+            color: var(--danger);
+            text-decoration: line-through
+        }
+
+        .audit-diff .new {
+            color: var(--success);
+            font-weight: 600
+        }
+
+        /* DRAG-DROP */
+        li[draggable="true"]>.node {
+            cursor: grab
+        }
+
+        li[draggable="true"]>.node:active {
+            cursor: grabbing;
+            transform: scale(1.03)
+        }
+
+        .dragging-branch {
+            opacity: .4
+        }
+
+        .drag-over {
+            border: 2px dashed var(--cbe-gold) !important;
+            background: #FAF6EC !important
+        }
+
+        /* MEMBER VIEW */
+        .member-view {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background: var(--bg)
+        }
+
+        .member-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem
+        }
+
+        .stat-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem
+        }
+
+        .stat {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1rem
+        }
+
+        .stat h3 {
+            font-size: 1.6rem;
+            color: var(--cbe-navy);
+            margin-top: .25rem
+        }
+
+        .stat small {
+            color: var(--muted);
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .5px
+        }
+
+        /* TOAST */
+        #toast-stack {
+            position: fixed;
+            top: 70px;
+            right: 1rem;
+            z-index: 500;
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+            pointer-events: none
+        }
+
+        .toast {
+            background: #fff;
+            border-left: 4px solid var(--cbe-gold);
+            padding: .75rem 1rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            min-width: 260px;
+            max-width: 320px;
+            font-size: .85rem;
+            animation: slide-in .25s;
+            pointer-events: auto
+        }
+
+        .toast.success {
+            border-left-color: var(--success)
+        }
+
+        .toast.danger {
+            border-left-color: var(--danger)
+        }
+
+        .toast.warn {
+            border-left-color: var(--warn)
+        }
+
+        @keyframes slide-in {
+            from {
+                transform: translateX(30px);
+                opacity: 0
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1
+            }
+        }
+
+        /* ===== ACTIVE DIRECTORY STYLES ===== */
+
+        /* Directory View */
+        .dir-view {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background: var(--bg)
+        }
+
+        .dir-tabs {
+            display: flex;
+            gap: .5rem;
+            margin-bottom: 1.25rem;
+            background: #fff;
+            padding: .4rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            width: fit-content
+        }
+
+        .dir-tab {
+            padding: .45rem 1rem;
+            border-radius: var(--radius);
+            font-size: .82rem;
+            cursor: pointer;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: .35rem;
+            font-weight: 500
+        }
+
+        .dir-tab.active {
+            background: var(--cbe-navy);
+            color: #fff
+        }
+
+        .dir-tab:hover:not(.active) {
+            background: var(--surface-2)
+        }
+
+        /* User Cards */
+        .user-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1rem
+        }
+
+        .user-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.1rem;
+            position: relative;
+            transition: .15s
+        }
+
+        .user-card:hover {
+            box-shadow: var(--shadow)
+        }
+
+        .user-card-head {
+            display: flex;
+            align-items: flex-start;
+            gap: .85rem;
+            margin-bottom: .85rem
+        }
+
+        .user-av {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--cbe-navy);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            position: relative
+        }
+
+        .user-av .enabled-dot {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid #fff
+        }
+
+        .user-av .enabled-dot.on {
+            background: var(--success)
+        }
+
+        .user-av .enabled-dot.off {
+            background: var(--danger)
+        }
+
+        .user-info h4 {
+            font-size: .92rem;
+            font-weight: 700;
+            margin-bottom: .15rem
+        }
+
+        .user-info .user-title {
+            font-size: .78rem;
+            color: var(--muted)
+        }
+
+        .user-info .user-sam {
+            font-size: .73rem;
+            font-family: monospace;
+            color: var(--cbe-navy);
+            font-weight: 600
+        }
+
+        .user-attr {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            font-size: .75rem;
+            color: var(--muted);
+            margin-bottom: .3rem
+        }
+
+        .user-attr i {
+            width: 12px;
+            height: 12px;
+            flex-shrink: 0
+        }
+
+        .user-groups {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .3rem;
+            margin-top: .6rem
+        }
+
+        .grp-chip {
+            padding: .15rem .5rem;
+            background: #eef2ff;
+            color: #4338ca;
+            border-radius: 999px;
+            font-size: .68rem;
+            font-weight: 600
+        }
+
+        .user-card-actions {
+            display: flex;
+            gap: .4rem;
+            margin-top: .85rem;
+            padding-top: .75rem;
+            border-top: 1px solid var(--border)
+        }
+
+        .acct-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .25rem;
+            padding: .15rem .5rem;
+            border-radius: 4px;
+            font-size: .68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .3px
+        }
+
+        .acct-enabled {
+            background: #d1fae5;
+            color: #065f46
+        }
+
+        .acct-disabled {
+            background: #fee2e2;
+            color: #991b1b
+        }
+
+        /* Group Cards */
+        .grp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 1rem
+        }
+
+        .grp-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.1rem
+        }
+
+        .grp-card-head {
+            display: flex;
+            align-items: center;
+            gap: .65rem;
+            margin-bottom: .65rem
+        }
+
+        .grp-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--cbe-navy);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0
+        }
+
+        .grp-icon i {
+            color: var(--cbe-gold);
+            width: 18px;
+            height: 18px
+        }
+
+        .grp-card h4 {
+            font-size: .9rem;
+            font-weight: 700;
+            margin-bottom: .1rem
+        }
+
+        .grp-card .grp-id {
+            font-family: monospace;
+            font-size: .72rem;
+            color: var(--muted)
+        }
+
+        .grp-members {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .3rem;
+            margin: .6rem 0
+        }
+
+        .grp-member-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: .3rem;
+            padding: .2rem .55rem;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            font-size: .73rem
+        }
+
+        .grp-perms {
+            margin-top: .5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: .25rem
+        }
+
+        .perm-tag {
+            padding: .1rem .4rem;
+            background: #f0f4ff;
+            color: #3730a3;
+            border-radius: 4px;
+            font-size: .65rem;
+            font-family: monospace;
+            font-weight: 600
+        }
+
+        /* Org Chart */
+        .org-chart-wrap {
+            padding: 1.5rem;
+            overflow: auto;
+            background: var(--bg)
+        }
+
+        .org-node {
+            display: inline-flex;
+            flex-direction: column;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--cbe-navy);
+            border-radius: var(--radius);
+            padding: .55rem .75rem;
+            min-width: 180px;
+            max-width: 210px;
+            text-align: left;
+            box-shadow: var(--shadow-sm);
+            font-size: .8rem
+        }
+
+        .org-node.is-admin {
+            border-left-color: var(--cbe-gold)
+        }
+
+        .org-node-name {
+            font-weight: 700;
+            margin-bottom: .15rem
+        }
+
+        .org-node-title {
+            color: var(--muted);
+            font-size: .72rem;
+            line-height: 1.3
+        }
+
+        .org-node-dept {
+            font-size: .65rem;
+            background: #eef2ff;
+            color: #3730a3;
+            padding: .1rem .35rem;
+            border-radius: 3px;
+            margin-top: .3rem;
+            display: inline-block
+        }
+
+        .org-tree ul {
+            padding-top: 20px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            padding-left: 0;
+            margin: 0
+        }
+
+        .org-tree li {
+            float: left;
+            text-align: center;
+            list-style: none;
+            position: relative;
+            padding: 20px 8px 0 8px
+        }
+
+        .org-tree li::before,
+        .org-tree li::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 50%;
+            border-top: 2px solid var(--border-heavy);
+            width: 50%;
+            height: 20px
+        }
+
+        .org-tree li::after {
+            right: auto;
+            left: 50%;
+            border-left: 2px solid var(--border-heavy)
+        }
+
+        .org-tree li:only-child::after,
+        .org-tree li:only-child::before {
+            display: none
+        }
+
+        .org-tree li:only-child {
+            padding-top: 0
+        }
+
+        .org-tree li:first-child::before,
+        .org-tree li:last-child::after {
+            border: 0 none
+        }
+
+        .org-tree li:last-child::before {
+            border-right: 2px solid var(--border-heavy);
+            border-radius: 0 5px 0 0
+        }
+
+        .org-tree li:first-child::after {
+            border-radius: 5px 0 0 0
+        }
+
+        .org-tree ul ul::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            border-left: 2px solid var(--border-heavy);
+            width: 0;
+            height: 20px;
+            margin-left: -1px
+        }
+
+        /* AD Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .45);
+            z-index: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem
+        }
+
+        .modal-box {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 640px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden
+        }
+
+        .modal-head {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: .75rem
+        }
+
+        .modal-head h3 {
+            font-size: 1rem;
+            flex: 1
+        }
+
+        .modal-body {
+            padding: 1.25rem;
+            overflow-y: auto;
+            flex: 1
+        }
+
+        .modal-section {
+            margin-bottom: 1.25rem
+        }
+
+        .modal-section h5 {
+            font-size: .72rem;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-weight: 700;
+            letter-spacing: .8px;
+            margin-bottom: .6rem;
+            padding-bottom: .35rem;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .ad-attr-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .5rem
+        }
+
+        .ad-attr {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: .5rem .75rem
+        }
+
+        .ad-attr label {
+            display: block;
+            font-size: .65rem;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-weight: 600;
+            letter-spacing: .5px;
+            margin-bottom: .15rem
+        }
+
+        .ad-attr span {
+            font-size: .8rem;
+            font-weight: 500;
+            font-family: monospace
+        }
+
+        .ad-attr span.val-normal {
+            font-family: inherit
+        }
+
+        .ou-path {
+            font-size: .72rem;
+            color: var(--muted);
+            font-family: monospace;
+            word-break: break-all;
+            background: var(--surface-2);
+            padding: .4rem .6rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            margin-bottom: .75rem
+        }
+
+        .group-manage-row {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            padding: .4rem .6rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: .35rem;
+            background: #fff
+        }
+
+        .group-manage-row .grp-name {
+            flex: 1;
+            font-size: .82rem;
+            font-weight: 600
+        }
+
+        .group-manage-row .grp-perms-mini {
+            font-size: .7rem;
+            color: var(--muted)
+        }
+
+        .pw-reset-row {
+            display: flex;
+            gap: .5rem;
+            margin-top: .5rem
+        }
+
+        /* Quick-Create Modal */
+        .qc-modal {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 520px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden
+        }
+
+        .qc-type-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: .5rem;
+            margin-bottom: 1rem
+        }
+
+        .qc-type-btn {
+            background: var(--surface-2);
+            border: 2px solid transparent;
+            border-radius: var(--radius);
+            padding: .65rem .5rem;
+            text-align: center;
+            cursor: pointer;
+            font-size: .8rem;
+            font-weight: 600;
+            transition: .12s
+        }
+
+        .qc-type-btn:hover {
+            border-color: var(--border-heavy)
+        }
+
+        .qc-type-btn.selected {
+            border-color: var(--cbe-navy);
+            background: #eaf1fb;
+            color: var(--cbe-navy)
+        }
+
+        @media (max-width: 1200px) {
+            .drawer {
+                width: 100%
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LOGIN -->
+    <div id="view-login" class="login-wrap">
+        <div class="login-card">
+            <div class="login-logo"><span class="gold-dot" style="background:var(--cbe-gold)"></span> CBE</div>
+            <h2>Commercial Bank of Ethiopia</h2>
+            <p>Project Hub · Enterprise PMO Platform</p>
+
+            <div id="login-error" class="login-error hidden"><i data-lucide="alert-circle" style="width:15px"></i> <span
+                    id="login-error-msg"></span></div>
+
+            <div class="login-input-wrap">
+                <label>Username</label>
+                <input id="login-username" placeholder="e.g. adamu.girma" autocomplete="username"
+                    onkeydown="if(event.key==='Enter')document.getElementById('login-password').focus()">
+            </div>
+            <div class="login-input-wrap">
+                <label>Password</label>
+                <input id="login-password" type="password" placeholder="Enter password" autocomplete="current-password"
+                    onkeydown="if(event.key==='Enter')app.login()">
+                <button class="pw-toggle" onclick="app.togglePw()" id="pw-toggle-btn" tabindex="-1" type="button">
+                    <i data-lucide="eye" style="width:15px" id="pw-eye"></i>
+                </button>
+            </div>
+
+            <details class="demo-creds">
+                <summary><i data-lucide="key-round" style="width:12px"></i> Demo Credentials</summary>
+                <table class="cred-table">
+                    <tr>
+                        <td>amare.bekele</td>
+                        <td>CBE@2026</td>
+                        <td style="color:var(--muted)">Executive VP (Admin)</td>
+                    </tr>
+                    <tr>
+                        <td>tariku.desta</td>
+                        <td>CBE@2026</td>
+                        <td style="color:var(--muted)">VP Digital Factory</td>
+                    </tr>
+                    <tr>
+                        <td>adamu.girma</td>
+                        <td>CBE@2026</td>
+                        <td style="color:var(--muted)">AI Tribe Lead</td>
+                    </tr>
+                    <tr>
+                        <td>abebe.tadesse</td>
+                        <td>CBE@2026</td>
+                        <td style="color:var(--muted)">Analyst</td>
+                    </tr>
+                    <tr>
+                        <td>abel.hailu</td>
+                        <td>CBE@2026</td>
+                        <td style="color:var(--muted)">Developer</td>
+                    </tr>
+                    <tr>
+                        <td>selam.worku</td>
+                        <td>CBE@2026</td>
+                        <td style="color:var(--muted)">Developer</td>
+                    </tr>
+                </table>
+            </details>
+
+            <button class="primary" style="width:100%" onclick="app.login()">
+                <i data-lucide="shield-check" style="width:16px"></i> Sign In via CBE SSO
+            </button>
+            <p style="margin-top:1rem;font-size:.7rem">🔒 Protected by CBE Active Directory · Internal use only</p>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="view-app" class="hidden" style="flex:1;display:flex;flex-direction:column">
+        <div class="topbar">
+            <div class="brand"><span class="gold-dot"></span> CBE Project Hub <small>· Powered by Taskify</small></div>
+
+            <div class="search-box">
+                <i data-lucide="search" style="width:14px"></i>
+                <input id="global-search" placeholder="Search issues, keys, projects..."
+                    oninput="app.search(this.value)"
+                    onblur="setTimeout(()=>document.getElementById('search-results').classList.add('hidden'),200)">
+                <div id="search-results" class="search-results hidden"></div>
+            </div>
+
+            <div class="topbar-right">
+                <button class="gold" onclick="app.openCreate()"><i data-lucide="plus" style="width:14px"></i>
+                    Create</button>
+
+                <div class="bell-wrap">
+                    <button class="bell-btn" onclick="app.toggleNotifPanel()">
+                        <i data-lucide="bell" style="width:16px"></i>
+                        <span id="bell-badge" class="bell-badge hidden">0</span>
+                    </button>
+                    <div id="notif-panel" class="notif-panel hidden"></div>
+                </div>
+
+                <span id="nav-role" class="role-badge"></span>
+                <div id="nav-avatar" class="avatar" title="" style="cursor:pointer" onclick="app.openMyProfile()"></div>
+                <button class="icon ghost" style="color:#fff" onclick="app.logout()" title="Logout">
+                    <i data-lucide="log-out" style="width:16px"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="workspace">
+            <aside class="sidebar" id="sidebar"></aside>
+
+            <section style="flex:1;display:flex;flex-direction:column">
+                <div class="view-toolbar">
+                    <button id="sidebar-toggle-btn" class="icon secondary" onclick="app.toggleSidebar()"
+                        title="Collapse sidebar">
+                        <i data-lucide="panel-left-close" style="width:16px"></i>
+                    </button>
+                    <div class="breadcrumb" id="breadcrumb"></div>
+                    <div style="margin-left:auto" class="flex">
+                        <div class="view-tabs" id="view-tabs">
+                            <div class="view-tab active" data-view="tree" onclick="app.setView('tree')"><i
+                                    data-lucide="git-fork" style="width:13px"></i> Tree</div>
+                            <div class="view-tab" data-view="kanban" onclick="app.setView('kanban')"><i
+                                    data-lucide="columns-3" style="width:13px"></i> Board</div>
+                            <div class="view-tab" data-view="list" onclick="app.setView('list')"><i data-lucide="list"
+                                    style="width:13px"></i> List</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-area" id="main-area"></div>
+            </section>
+        </div>
+    </div>
+
+    <!-- ISSUE DRAWER -->
+    <div id="drawer" class="drawer">
+        <div class="drawer-head">
+            <span id="drawer-key" class="node-key"></span>
+            <button class="icon ghost" style="margin-left:auto" onclick="app.closeDrawer()">
+                <i data-lucide="x" style="width:18px"></i>
+            </button>
+        </div>
+        <div class="drawer-body" id="drawer-body"></div>
+    </div>
+
+    <!-- AD MODAL -->
+    <div id="ad-modal" class="modal-overlay hidden" onclick="if(event.target===this)app.closeADModal()">
+        <div class="modal-box">
+            <div class="modal-head">
+                <div id="ad-modal-av" class="user-av" style="width:38px;height:38px;font-size:.95rem"></div>
+                <h3 id="ad-modal-title">User Account</h3>
+                <button class="icon ghost" onclick="app.closeADModal()"><i data-lucide="x"
+                        style="width:18px"></i></button>
+            </div>
+            <div class="modal-body" id="ad-modal-body"></div>
+        </div>
+    </div>
+
+    <!-- QUICK-CREATE MODAL -->
+    <div id="qc-modal" class="modal-overlay hidden" onclick="if(event.target===this)app.closeCreate()">
+        <div class="qc-modal">
+            <div class="modal-head">
+                <i data-lucide="plus-circle" style="width:18px;color:var(--cbe-gold)"></i>
+                <h3>Quick Create</h3>
+                <button class="icon ghost" onclick="app.closeCreate()"><i data-lucide="x"
+                        style="width:18px"></i></button>
+            </div>
+            <div class="modal-body" id="qc-body"></div>
+        </div>
+    </div>
+
+    <!-- TOASTS -->
+    <div id="toast-stack"></div>
+
+    <script>
+        // =====================================================================
+        // STATE
+        // =====================================================================
+        const state = {
+            currentUser: null,
+            selectedProjectId: null,
+            view: 'tree',
+            drawerTab: 'details',
+            drawerIssueId: null,
+            sidebarCollapsed: false,
+            directoryTab: 'users',
+            activeFilter: null,
+
+            orgOpen: {
+                'div-4': true,
+                'dep-41': true,
+                'team-401': true,
+                'team-402': false,
+                'team-403': false
+            },
+
+            users: [
+                {
+                    id: 11, name: "Amare", role: "portfolio-owner", dept: "TECH", title: "Executive VP, Technology",
+                    sAMAccountName: "amare.bekele", email: "amare.bekele@cbe.com.et",
+                    employeeId: "CBE-10001", managerId: null,
+                    ou: "OU=Executive,OU=Technology,DC=cbe,DC=com,DC=et",
+                    accountEnabled: true, passwordHash: "demo:CBE@2026",
+                    lastLogin: Date.now() - 3600000 * 2, failedLogins: 0,
+                    groups: ["GRP-ADMINS", "GRP-DEPT-HEADS"]
+                },
+                {
+                    id: 12, name: "Tariku", role: "department-head", dept: "DFX", title: "VP, Digital Factory",
+                    sAMAccountName: "tariku.desta", email: "tariku.desta@cbe.com.et",
+                    employeeId: "CBE-10012", managerId: 11,
+                    ou: "OU=Management,OU=DigitalFactory,OU=Technology,DC=cbe,DC=com,DC=et",
+                    accountEnabled: true, passwordHash: "demo:CBE@2026",
+                    lastLogin: Date.now() - 3600000 * 5, failedLogins: 0,
+                    groups: ["GRP-DEPT-HEADS", "GRP-AI-TEAM"]
+                },
+                {
+                    id: 13, name: "Adamu", role: "lead", dept: "AI", title: "AI Tribe Lead",
+                    sAMAccountName: "adamu.girma", email: "adamu.girma@cbe.com.et",
+                    employeeId: "CBE-10113", managerId: 12,
+                    ou: "OU=TeamLeads,OU=AITeam,OU=DigitalFactory,DC=cbe,DC=com,DC=et",
+                    accountEnabled: true, passwordHash: "demo:CBE@2026",
+                    lastLogin: Date.now() - 3600000 * 1, failedLogins: 0,
+                    groups: ["GRP-TEAM-LEADS", "GRP-AI-TEAM"]
+                },
+                {
+                    id: 14, name: "Abebe", role: "analyst", dept: "AI", title: "Software Engineer @DF",
+                    sAMAccountName: "abebe.tadesse", email: "abebe.tadesse@cbe.com.et",
+                    employeeId: "CBE-10214", managerId: 13,
+                    ou: "OU=Analysts,OU=AITeam,OU=DigitalFactory,DC=cbe,DC=com,DC=et",
+                    accountEnabled: true, passwordHash: "demo:CBE@2026",
+                    lastLogin: Date.now() - 3600000 * 3, failedLogins: 0,
+                    groups: ["GRP-ANALYSTS", "GRP-AI-TEAM", "GRP-COMPLIANCE"]
+                },
+                {
+                    id: 15, name: "Abel", role: "member", dept: "AI", title: "Software Engineer @DF",
+                    sAMAccountName: "abel.hailu", email: "abel.hailu@cbe.com.et",
+                    employeeId: "CBE-10215", managerId: 13,
+                    ou: "OU=Developers,OU=AITeam,OU=DigitalFactory,DC=cbe,DC=com,DC=et",
+                    accountEnabled: true, passwordHash: "demo:CBE@2026",
+                    lastLogin: Date.now() - 86400000, failedLogins: 0,
+                    groups: ["GRP-DEVELOPERS", "GRP-AI-TEAM"]
+                },
+                {
+                    id: 16, name: "Selam", role: "member", dept: "AI", title: "Software Engineer @DF",
+                    sAMAccountName: "selam.worku", email: "selam.worku@cbe.com.et",
+                    employeeId: "CBE-10216", managerId: 13,
+                    ou: "OU=Developers,OU=AITeam,OU=DigitalFactory,DC=cbe,DC=com,DC=et",
+                    accountEnabled: true, passwordHash: "demo:CBE@2026",
+                    lastLogin: Date.now() - 86400000 * 2, failedLogins: 0,
+                    groups: ["GRP-DEVELOPERS", "GRP-AI-TEAM"]
+                },
+            ],
+
+            groups: [
+                {
+                    id: "GRP-ADMINS", name: "Domain Admins",
+                    description: "Full system and user management access",
+                    ou: "OU=Admins,DC=cbe,DC=com,DC=et",
+                    members: [11],
+                    permissions: ["project.*", "issue.*", "user.*", "report.*", "ad.*", "comment.*", "attachment.*"]
+                },
+                {
+                    id: "GRP-DEPT-HEADS", name: "Department Heads",
+                    description: "Department-level project and issue management",
+                    ou: "OU=Management,DC=cbe,DC=com,DC=et",
+                    members: [11, 12],
+                    permissions: ["project.*", "issue.*", "report.*", "comment.*", "attachment.*"]
+                },
+                {
+                    id: "GRP-TEAM-LEADS", name: "Team Leads",
+                    description: "Team project management and issue resolution",
+                    ou: "OU=TeamLeads,DC=cbe,DC=com,DC=et",
+                    members: [13],
+                    permissions: ["project.create", "project.view", "issue.*", "report.view", "comment.*", "attachment.*"]
+                },
+                {
+                    id: "GRP-ANALYSTS", name: "Senior Analysts",
+                    description: "Issue creation, updates and compliance reporting",
+                    ou: "OU=Analysts,DC=cbe,DC=com,DC=et",
+                    members: [14],
+                    permissions: ["issue.create", "issue.update", "issue.view", "comment.*", "attachment.*", "report.compliance"]
+                },
+                {
+                    id: "GRP-DEVELOPERS", name: "Developers",
+                    description: "Issue updates and collaborative work",
+                    ou: "OU=Developers,DC=cbe,DC=com,DC=et",
+                    members: [15, 16],
+                    permissions: ["issue.update", "issue.view", "comment.*", "attachment.*"]
+                },
+                {
+                    id: "GRP-AI-TEAM", name: "AI & Analytics Team",
+                    description: "All members of the AI project team",
+                    ou: "OU=AITeam,DC=cbe,DC=com,DC=et",
+                    members: [12, 13, 14, 15, 16],
+                    permissions: ["issue.view", "comment.create", "attachment.upload"]
+                },
+                {
+                    id: "GRP-COMPLIANCE", name: "Compliance Officers",
+                    description: "Regulatory and compliance reporting access",
+                    ou: "OU=Compliance,DC=cbe,DC=com,DC=et",
+                    members: [14],
+                    permissions: ["issue.view", "report.compliance", "comment.create"]
+                },
+                {
+                    id: "GRP-READONLY", name: "Read Only Viewers",
+                    description: "View-only access to projects and issues",
+                    ou: "OU=ReadOnly,DC=cbe,DC=com,DC=et",
+                    members: [],
+                    permissions: ["issue.view", "report.view"]
+                },
+            ],
+
+            divisions: [{ id: 4, name: "Technology", ownerId: 11 }],
+            departments: [{ id: 41, divisionId: 4, name: "Digital Factory", code: "DFX", headId: 12 }],
+            teams: [
+                { id: 401, departmentId: 41, name: "AI Team", code: "AI", leadId: 13 },
+                { id: 402, departmentId: 41, name: "Mobile Squad", code: "MOB", leadId: 12 },
+                { id: 403, departmentId: 41, name: "API & Integration Squad", code: "API", leadId: 12 },
+            ],
+
+            projects: [
+                { id: 4101, deptId: 41, teamId: 401, title: "AI Service Desk Assistant", code: "AI", isActive: true, isCollapsed: false, lead: 13 },
+                { id: 4102, deptId: 41, teamId: 401, title: "AML Alert Prioritization Engine", code: "AMLAI", isActive: true, isCollapsed: false, lead: 13 },
+                { id: 4103, deptId: 41, teamId: 401, title: "Customer Churn Prediction Pilot", code: "CHURN", isActive: true, isCollapsed: false, lead: 13 },
+            ],
+
+            issues: [
+                { id: 5001, projectId: 4101, parentId: null, key: "AI-1", type: "epic", title: "Enterprise AI Assistant for Internal Support", status: "in-progress", assignedTo: 13, priority: "high", points: 13, due: "2026-05-30", labels: ["AI", "Internal-Tools", "Technology"], notes: "Internal AI assistant for employee support.", isActive: true, isCollapsed: false, sla: { hours: 240, startedAt: Date.now() - 86400000 * 2 } },
+                { id: 5002, projectId: 4101, parentId: 5001, key: "AI-2", type: "story", title: "Design AI assistant knowledge base structure", status: "review", assignedTo: 14, priority: "high", points: 5, due: "2026-05-08", labels: ["AI", "Knowledge-Base"], notes: "Organize FAQ, SOP, and ticket playbooks.", isActive: true, isCollapsed: false, sla: { hours: 72, startedAt: Date.now() - 3600000 * 30 } },
+                { id: 5003, projectId: 4101, parentId: 5001, key: "AI-3", type: "task", title: "Build embedding pipeline for internal documents", status: "in-progress", assignedTo: 16, priority: "high", points: 8, due: "2026-05-12", labels: ["AI", "RAG", "Data"], notes: "Chunk documents and store embeddings.", isActive: true, isCollapsed: false, sla: { hours: 96, startedAt: Date.now() - 3600000 * 20 } },
+                { id: 5004, projectId: 4101, parentId: 5003, key: "AI-4", type: "sub-task", title: "Prepare vector schema for HR, IT, and Operations manuals", status: "todo", assignedTo: 16, priority: "medium", points: 3, due: "2026-05-06", labels: ["Schema", "RAG"], notes: "", isActive: true, isCollapsed: false, sla: null },
+                { id: 5005, projectId: 4101, parentId: 5001, key: "AI-5", type: "compliance", title: "Review AI assistant responses for data privacy and banking compliance", status: "review", assignedTo: 14, priority: "highest", points: 8, due: "2026-05-10", labels: ["Compliance", "AI", "Privacy", "Regulatory"], notes: "Validate prompts, masking, and restricted data handling.", isActive: true, isCollapsed: false, sla: { hours: 48, startedAt: Date.now() - 3600000 * 38 } },
+                { id: 5006, projectId: 4102, parentId: null, key: "AMLAI-1", type: "epic", title: "AI-assisted AML alert scoring", status: "todo", assignedTo: 13, priority: "highest", points: 21, due: "2026-06-15", labels: ["AML", "AI", "Risk", "Regulatory"], notes: "Rank AML alerts to reduce analyst fatigue.", isActive: true, isCollapsed: false, sla: { hours: 168, startedAt: Date.now() - 3600000 * 12 } },
+                { id: 5007, projectId: 4102, parentId: 5006, key: "AMLAI-2", type: "risk", title: "False positives may bias alert prioritization", status: "in-progress", assignedTo: 14, priority: "high", points: 5, due: "2026-05-20", labels: ["Risk", "AML", "Model-Risk"], notes: "Need thresholds, explainability, and audit outputs.", isActive: true, isCollapsed: false, sla: { hours: 72, startedAt: Date.now() - 3600000 * 10 } },
+                { id: 5008, projectId: 4103, parentId: null, key: "CHURN-1", type: "story", title: "Build pilot model for customer churn prediction", status: "todo", assignedTo: 15, priority: "medium", points: 8, due: "2026-05-25", labels: ["AI", "Analytics", "Customer-Experience"], notes: "Pilot on selected segment before bank-wide rollout.", isActive: true, isCollapsed: false, sla: null }
+            ],
+
+            audit: [
+                { id: 1, issueId: 5001, userId: 13, action: 'create', field: null, from: null, to: null, at: Date.now() - 86400000 * 2, text: 'Created issue' },
+                { id: 2, issueId: 5005, userId: 13, action: 'create', field: null, from: null, to: null, at: Date.now() - 3600000 * 40, text: 'Created compliance review item' },
+                { id: 3, issueId: 5005, userId: 14, action: 'update', field: 'status', from: 'todo', to: 'review', at: Date.now() - 3600000 * 12, text: 'Changed status' },
+            ],
+
+            comments: [
+                { id: 1, issueId: 5001, userId: 13, body: '@Abebe prepare the business knowledge sources for the first retrieval prototype.', at: Date.now() - 3600000 * 15, mentions: [14] },
+                { id: 2, issueId: 5005, userId: 14, body: '@Adamu compliance review started. I will attach privacy checklist after legal review.', at: Date.now() - 3600000 * 8, mentions: [13] },
+            ],
+
+            attachments: [
+                { id: 1, issueId: 5005, userId: 14, name: 'AI_Privacy_Checklist_v1.pdf', size: 245678, type: 'application/pdf', at: Date.now() - 3600000 * 6, dataUrl: null },
+            ],
+
+            adAudit: [],
+
+            notifications: [],
+            nextId: Math.max(...[5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008]) + 1,
+            nextAudit: 100,
+            nextComment: 100,
+            nextAttach: 100,
+            nextNotif: 100,
+            nextAdAudit: 1,
+        };
+
+        // =====================================================================
+        // ACTIVE DIRECTORY MODULE
+        // =====================================================================
+        const ad = {
+
+            authenticate(username, password) {
+                const user = state.users.find(u => u.sAMAccountName === username.toLowerCase().trim());
+                if (!user) return { ok: false, error: "Account not found in directory" };
+                if (!user.accountEnabled) return { ok: false, error: "Account is disabled. Contact IT Help Desk." };
+                if (user.passwordHash !== `demo:${password}`) {
+                    user.failedLogins = (user.failedLogins || 0) + 1;
+                    if (user.failedLogins >= 3) {
+                        user.accountEnabled = false;
+                        this._adLog(user.id, 'account_lockout', null, null, null, 'Account locked after 3 failed attempts');
+                        return { ok: false, error: "Account locked due to 3 failed attempts. Contact IT." };
+                    }
+                    return { ok: false, error: `Invalid credentials. (${user.failedLogins}/3 attempts)` };
+                }
+                user.failedLogins = 0;
+                user.lastLogin = Date.now();
+                this._adLog(user.id, 'login', null, null, null, `Login from CBE SSO portal`);
+                return { ok: true, user };
+            },
+
+            getGroups(userId) {
+                return state.groups.filter(g => g.members.includes(userId));
+            },
+
+            can(userId, permission) {
+                const groups = this.getGroups(userId);
+                const [ns] = permission.split('.');
+                return groups.some(g => g.permissions.some(p => {
+                    if (p === permission) return true;
+                    if (p === '*') return true;
+                    if (p === ns + '.*') return true;
+                    return false;
+                }));
+            },
+
+            getManager(userId) {
+                const u = state.users.find(x => x.id === userId);
+                return u?.managerId ? state.users.find(x => x.id === u.managerId) : null;
+            },
+
+            getDirectReports(managerId) {
+                return state.users.filter(u => u.managerId === managerId);
+            },
+
+            disableAccount(userId) {
+                const u = state.users.find(x => x.id === userId);
+                if (!u) return;
+                u.accountEnabled = false;
+                this._adLog(userId, 'ad_disable', 'accountEnabled', true, false, `Account disabled by ${state.currentUser?.name || 'Admin'}`);
+                if (state.currentUser) notif.push(userId, 'assign', `⛔ Your account has been disabled by ${state.currentUser.name}. Contact IT.`, null);
+                ui.toast('Account disabled', 'warn');
+            },
+
+            enableAccount(userId) {
+                const u = state.users.find(x => x.id === userId);
+                if (!u) return;
+                u.accountEnabled = true;
+                u.failedLogins = 0;
+                this._adLog(userId, 'ad_enable', 'accountEnabled', false, true, `Account enabled by ${state.currentUser?.name || 'Admin'}`);
+                ui.toast('Account enabled', 'success');
+            },
+
+            resetPassword(userId, newPassword) {
+                const u = state.users.find(x => x.id === userId);
+                if (!u) return;
+                u.passwordHash = `demo:${newPassword}`;
+                u.failedLogins = 0;
+                this._adLog(userId, 'ad_pw_reset', 'password', '***', '***', `Password reset by ${state.currentUser?.name || 'Admin'}`);
+                ui.toast('Password reset successfully', 'success');
+            },
+
+            addToGroup(userId, groupId) {
+                const g = state.groups.find(x => x.id === groupId);
+                const u = state.users.find(x => x.id === userId);
+                if (!g || !u) return;
+                if (g.members.includes(userId)) { ui.toast('User already in group', 'warn'); return; }
+                g.members.push(userId);
+                u.groups = [...new Set([...u.groups, groupId])];
+                this._adLog(userId, 'ad_group_add', 'group', null, groupId, `Added to ${g.name}`);
+                ui.toast(`Added to ${g.name}`, 'success');
+            },
+
+            removeFromGroup(userId, groupId) {
+                const g = state.groups.find(x => x.id === groupId);
+                const u = state.users.find(x => x.id === userId);
+                if (!g || !u) return;
+                g.members = g.members.filter(id => id !== userId);
+                u.groups = u.groups.filter(id => id !== groupId);
+                this._adLog(userId, 'ad_group_remove', 'group', groupId, null, `Removed from ${g.name}`);
+                ui.toast(`Removed from ${g.name}`, 'success');
+            },
+
+            getEffectivePermissions(userId) {
+                const groups = this.getGroups(userId);
+                const all = new Set();
+                groups.forEach(g => g.permissions.forEach(p => all.add(p)));
+                return [...all].sort();
+            },
+
+            _adLog(targetUserId, action, field, from, to, text) {
+                state.adAudit.push({
+                    id: state.nextAdAudit++,
+                    targetUserId,
+                    actorId: state.currentUser?.id || 0,
+                    action, field, from, to, text,
+                    at: Date.now()
+                });
+            },
+
+            getAdAuditForUser(userId) {
+                return state.adAudit.filter(a => a.targetUserId === userId).sort((a, b) => b.at - a.at);
+            }
+        };
+
+        // =====================================================================
+        // UTIL
+        // =====================================================================
+        const util = {
+            now: () => Date.now(),
+            fmtTime(ts) {
+                if (!ts) return 'Never';
+                const d = util.now() - ts;
+                if (d < 60000) return 'just now';
+                if (d < 3600000) return Math.floor(d / 60000) + 'm ago';
+                if (d < 86400000) return Math.floor(d / 3600000) + 'h ago';
+                if (d < 2592000000) return Math.floor(d / 86400000) + 'd ago';
+                return new Date(ts).toLocaleDateString();
+            },
+            fmtFull(ts) { return new Date(ts).toLocaleString(); },
+            fmtSize(b) {
+                if (b < 1024) return b + ' B';
+                if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+                return (b / 1048576).toFixed(2) + ' MB';
+            },
+            fileColor(type) {
+                if (!type) return '#64748B';
+                if (type.includes('pdf')) return '#DC2626';
+                if (type.includes('image')) return '#7C3AED';
+                if (type.includes('word') || type.includes('doc')) return '#2563EB';
+                if (type.includes('sheet') || type.includes('excel')) return '#059669';
+                if (type.includes('zip')) return '#D97706';
+                return '#0A2540';
+            },
+            fileLabel(name) {
+                const ext = (name.split('.').pop() || 'FILE').toUpperCase();
+                return ext.length <= 4 ? ext : 'FILE';
+            },
+            escape(s) { return String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); },
+            highlightMentions(text) {
+                const esc = util.escape(text);
+                return esc.replace(/@(\w+)/g, (m, n) => {
+                    const u = state.users.find(x => x.name.toLowerCase() === n.toLowerCase());
+                    return u ? `<span class="mention-tag">@${u.name}</span>` : m;
+                });
+            }
+        };
+
+        // =====================================================================
+        // SLA
+        // =====================================================================
+        const sla = {
+            compute(issue) {
+                if (!issue.sla || issue.status === 'done') return null;
+                const elapsed = Date.now() - issue.sla.startedAt;
+                const total = issue.sla.hours * 3600000;
+                const remaining = total - elapsed;
+                const pct = Math.max(0, Math.min(100, (remaining / total) * 100));
+                let level = 'green';
+                if (remaining <= 0) level = 'breach';
+                else if (pct <= 25) level = 'red';
+                else if (pct <= 50) level = 'amber';
+                return { remaining, total, pct, level, breached: remaining <= 0 };
+            },
+            fmt(ms) {
+                if (ms <= 0) {
+                    const over = -ms;
+                    const d = Math.floor(over / 86400000), h = Math.floor(over % 86400000 / 3600000);
+                    return `-${d}d ${h}h`;
+                }
+                const d = Math.floor(ms / 86400000), h = Math.floor(ms % 86400000 / 3600000), m = Math.floor(ms % 3600000 / 60000);
+                if (d > 0) return `${d}d ${h}h ${m}m`;
+                if (h > 0) return `${h}h ${m}m`;
+                return `${m}m`;
+            },
+            scan() {
+                state.issues.forEach(i => {
+                    const s = sla.compute(i);
+                    if (!s) return;
+                    if (s.breached && !i._breachNotified) {
+                        i._breachNotified = true;
+                        const proj = state.projects.find(p => p.id === i.projectId);
+                        const targets = new Set([i.assignedTo, proj?.lead].filter(Boolean));
+                        targets.forEach(uid => notif.push(uid, 'sla', `⚠️ SLA BREACH: ${i.key} — ${i.title}`, i.id));
+                        audit.log(i.id, 0, 'sla_breach', null, null, null, 'SLA breached');
+                    }
+                });
+            }
+        };
+
+        // =====================================================================
+        // AUDIT
+        // =====================================================================
+        const audit = {
+            log(issueId, userId, action, field, from, to, text) {
+                state.audit.push({ id: state.nextAudit++, issueId, userId: userId || state.currentUser?.id || 0, action, field, from, to, at: Date.now(), text });
+            },
+            forIssue(id) { return state.audit.filter(a => a.issueId === id).sort((a, b) => b.at - a.at); }
+        };
+
+        // =====================================================================
+        // NOTIFICATIONS
+        // =====================================================================
+        const notif = {
+            push(userId, type, text, issueId) {
+                state.notifications.push({ id: state.nextNotif++, userId, type, text, issueId, at: Date.now(), read: false });
+                if (state.currentUser && userId === state.currentUser.id) {
+                    const label = { mention: '💬', sla: '⚠️', comment: '💭', assign: '📌' }[type] || '🔔';
+                    ui.toast(`${label} ${text}`, type === 'sla' ? 'danger' : 'success');
+                    ui.updateBell();
+                }
+            },
+            forMe() { return state.currentUser ? state.notifications.filter(n => n.userId === state.currentUser.id).sort((a, b) => b.at - a.at) : []; },
+            unread() { return this.forMe().filter(n => !n.read).length; },
+            markAllRead() { this.forMe().forEach(n => n.read = true); ui.updateBell(); }
+        };
+
+        // =====================================================================
+        // UI HELPERS
+        // =====================================================================
+        const ui = {
+            toast(msg, kind = 'success') {
+                const el = document.createElement('div');
+                el.className = 'toast ' + kind;
+                el.innerHTML = msg;
+                document.getElementById('toast-stack').appendChild(el);
+                setTimeout(() => {
+                    el.style.opacity = 0;
+                    el.style.transform = 'translateX(30px)';
+                    setTimeout(() => el.remove(), 300);
+                }, 3500);
+            },
+            updateBell() {
+                const n = notif.unread();
+                const b = document.getElementById('bell-badge');
+                if (!b) return;
+                if (n > 0) { b.classList.remove('hidden'); b.innerText = n > 9 ? '9+' : n; }
+                else b.classList.add('hidden');
+            }
+        };
+
+        // =====================================================================
+        // CANVAS PAN
+        // =====================================================================
+        const canvasPan = {
+            x: 60, y: 40, scale: .95, isDragging: false, startX: 0, startY: 0, upd: null,
+            init() {
+                const vp = document.getElementById('viewport'); if (!vp) return;
+                const plane = document.getElementById('canvas-plane');
+                const upd = () => {
+                    plane.style.transform = `translate(${this.x}px,${this.y}px) scale(${this.scale})`;
+                    vp.style.backgroundPosition = `${this.x}px ${this.y}px`;
+                    vp.style.backgroundSize = `${22 * this.scale}px ${22 * this.scale}px`;
+                };
+                upd();
+                vp.onmousedown = (e) => {
+                    if (e.target.closest('.node') || e.target.closest('.canvas-ctrl') || e.target.closest('.canvas-info')) return;
+                    this.isDragging = true;
+                    vp.classList.add('panning');
+                    this.startX = e.clientX - this.x;
+                    this.startY = e.clientY - this.y;
+                };
+                window.addEventListener('mousemove', e => {
+                    if (!this.isDragging) return;
+                    this.x = e.clientX - this.startX;
+                    this.y = e.clientY - this.startY;
+                    upd();
+                });
+                window.addEventListener('mouseup', () => { this.isDragging = false; vp.classList.remove('panning'); });
+                vp.addEventListener('wheel', e => {
+                    e.preventDefault();
+                    this.scale = Math.min(Math.max(.3, this.scale + (e.deltaY > 0 ? -.08 : .08)), 2);
+                    upd();
+                }, { passive: false });
+                this.upd = upd;
+            },
+            zoom(a) { this.scale = Math.min(Math.max(.3, this.scale + a), 2); this.upd && this.upd(); },
+            reset() { this.x = 60; this.y = 40; this.scale = .95; this.upd && this.upd(); }
+        };
+
+        // =====================================================================
+        // APP
+        // =====================================================================
+        const app = {
+
+            // ---------- SIDEBAR / ORG NAV ----------
+            isOrgOpen(key) { return state.orgOpen[key] !== false; },
+            toggleOrgNode(key) { state.orgOpen[key] = !this.isOrgOpen(key); this.renderSidebar(); },
+
+            expandProjectPath(projectId) {
+                const project = state.projects.find(p => p.id === projectId);
+                if (!project) return;
+                const dept = state.departments.find(d => d.id === project.deptId);
+                const div = dept ? state.divisions.find(v => v.id === dept.divisionId) : null;
+                const team = state.teams.find(t => t.id === project.teamId);
+                if (div) state.orgOpen[`div-${div.id}`] = true;
+                if (dept) state.orgOpen[`dep-${dept.id}`] = true;
+                if (team) state.orgOpen[`team-${team.id}`] = true;
+            },
+
+            toggleSidebar() {
+                state.sidebarCollapsed = !state.sidebarCollapsed;
+                const sb = document.getElementById('sidebar');
+                if (sb) sb.classList.toggle('collapsed', state.sidebarCollapsed);
+                this.updateSidebarToggleButton();
+            },
+
+            updateSidebarToggleButton() {
+                const btn = document.getElementById('sidebar-toggle-btn');
+                if (!btn) return;
+                btn.innerHTML = `<i data-lucide="${state.sidebarCollapsed ? 'panel-left-open' : 'panel-left-close'}" style="width:16px"></i>`;
+                btn.title = state.sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar';
+                lucide.createIcons();
+            },
+
+            // ---------- AUTH ----------
+            togglePw() {
+                const inp = document.getElementById('login-password');
+                const icon = document.getElementById('pw-eye');
+                if (inp.type === 'password') {
+                    inp.type = 'text';
+                    icon.setAttribute('data-lucide', 'eye-off');
+                } else {
+                    inp.type = 'password';
+                    icon.setAttribute('data-lucide', 'eye');
+                }
+                lucide.createIcons();
+            },
+
+            login() {
+                const username = document.getElementById('login-username').value.trim();
+                const password = document.getElementById('login-password').value;
+                const errEl = document.getElementById('login-error');
+                const errMsg = document.getElementById('login-error-msg');
+
+                if (!username || !password) {
+                    errMsg.innerText = 'Please enter your username and password.';
+                    errEl.classList.remove('hidden');
+                    return;
+                }
+
+                const result = ad.authenticate(username, password);
+                if (!result.ok) {
+                    errMsg.innerText = result.error;
+                    errEl.classList.remove('hidden');
+                    lucide.createIcons();
+                    return;
+                }
+
+                errEl.classList.add('hidden');
+                state.currentUser = result.user;
+
+                document.getElementById('view-login').classList.add('hidden');
+                document.getElementById('view-app').classList.remove('hidden');
+
+                const av = document.getElementById('nav-avatar');
+                av.innerText = state.currentUser.name[0];
+                av.title = `${state.currentUser.name} (${state.currentUser.sAMAccountName})`;
+
+                document.getElementById('nav-role').innerText = state.currentUser.title;
+
+                const defaultProjectByUser = { 11: 4101, 12: 4101, 13: 4101, 14: 4101, 15: 4102, 16: 4101 };
+                state.selectedProjectId = defaultProjectByUser[state.currentUser.id] || state.projects[0]?.id;
+                this.expandProjectPath(state.selectedProjectId);
+
+                sla.scan();
+                this.renderSidebar();
+                this.render();
+                ui.updateBell();
+                lucide.createIcons();
+            },
+
+            logout() {
+                state.currentUser = null;
+                state.drawerIssueId = null;
+                document.getElementById('view-app').classList.add('hidden');
+                document.getElementById('view-login').classList.remove('hidden');
+                document.getElementById('login-username').value = '';
+                document.getElementById('login-password').value = '';
+                document.getElementById('login-error').classList.add('hidden');
+                lucide.createIcons();
+            },
+
+            openMyProfile() {
+                if (state.currentUser) this.openADModal(state.currentUser.id);
+            },
+
+            // ---------- SIDEBAR ----------
+            renderSidebar() {
+                const sb = document.getElementById('sidebar');
+                sb.classList.toggle('collapsed', state.sidebarCollapsed);
+                const u = state.currentUser;
+
+                let html = `
+      <div class="sidebar-section">
+        <h4>Workspace</h4>
+        <div class="nav-item ${state.view === 'dashboard' ? 'active' : ''}" title="My Dashboard" onclick="app.setView('dashboard')">
+          <i data-lucide="home"></i><div class="nav-label">My Dashboard</div>
+        </div>
+        <div class="nav-item ${state.view === 'inbox' ? 'active' : ''}" title="Inbox" onclick="app.setView('inbox')">
+          <i data-lucide="inbox"></i><div class="nav-label">Inbox</div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h4>Enterprise Structure</h4>`;
+
+                state.divisions.forEach(div => {
+                    const owner = state.users.find(u => u.id === div.ownerId);
+                    const divKey = `div-${div.id}`;
+                    const divOpen = this.isOrgOpen(divKey);
+                    html += `
+        <div class="nav-item" title="${util.escape(div.name)}" onclick="app.toggleOrgNode('${divKey}')" style="font-weight:700">
+          <i data-lucide="${divOpen ? 'chevron-down' : 'chevron-right'}"></i>
+          <div class="nav-label"><div>${util.escape(div.name)}</div>
+          <div class="nav-meta">Owner: ${owner ? util.escape(owner.name) : '—'}</div></div>
+        </div>`;
+                    if (divOpen) {
+                        state.departments.filter(dep => dep.divisionId === div.id).forEach(dep => {
+                            const head = state.users.find(u => u.id === dep.headId);
+                            const depKey = `dep-${dep.id}`;
+                            const depOpen = this.isOrgOpen(depKey);
+                            html += `
+            <div class="nav-item nav-sub" onclick="app.toggleOrgNode('${depKey}')" style="font-weight:600">
+              <i data-lucide="${depOpen ? 'chevron-down' : 'chevron-right'}"></i>
+              <div class="nav-label"><div>${util.escape(dep.name)}</div>
+              <div class="nav-meta">Director: ${head ? util.escape(head.name) : '—'}</div></div>
+            </div>`;
+                            if (depOpen) {
+                                state.teams.filter(team => team.departmentId === dep.id).forEach(team => {
+                                    const lead = state.users.find(u => u.id === team.leadId);
+                                    const teamKey = `team-${team.id}`;
+                                    const teamOpen = this.isOrgOpen(teamKey);
+                                    const pc = state.projects.filter(p => p.teamId === team.id).length;
+                                    html += `
+                <div class="nav-item nav-sub" onclick="app.toggleOrgNode('${teamKey}')" style="padding-left:2.2rem;color:var(--cbe-navy)">
+                  <i data-lucide="${teamOpen ? 'chevron-down' : 'chevron-right'}"></i>
+                  <div class="nav-label"><div>${util.escape(team.name)}</div>
+                  <div class="nav-meta">Lead: ${lead ? util.escape(lead.name) : '—'} · ${pc} project${pc !== 1 ? 's' : ''}</div></div>
+                </div>`;
+                                    if (teamOpen) {
+                                        state.projects.filter(p => p.teamId === team.id).forEach(project => {
+                                            const active = project.id === state.selectedProjectId && state.view !== 'directory' ? 'active' : '';
+                                            html += `
+                    <div class="nav-item nav-sub ${active}" style="padding-left:3.1rem" onclick="app.selectProject(${project.id})">
+                      <i data-lucide="folder-kanban"></i>
+                      <div class="nav-label"><div>${util.escape(project.title)}</div>
+                      <div class="nav-meta">${util.escape(project.code)}</div></div>
+                    </div>`;
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+                html += `</div>
+      <div class="sidebar-section">
+        <h4>Quick Filters</h4>
+        <div class="nav-item ${state.activeFilter === 'mine' ? 'active' : ''}" onclick="app.setFilter('mine')">
+          <i data-lucide="user"></i><div class="nav-label">Assigned to me</div>
+        </div>
+        <div class="nav-item ${state.activeFilter === 'ai' ? 'active' : ''}" onclick="app.setFilter('ai')">
+          <i data-lucide="brain-circuit"></i><div class="nav-label">AI Team items</div>
+        </div>
+        <div class="nav-item ${state.activeFilter === 'compliance' ? 'active' : ''}" onclick="app.setFilter('compliance')">
+          <i data-lucide="shield"></i><div class="nav-label">Compliance items</div>
+        </div>
+        <div class="nav-item ${state.activeFilter === 'sla' ? 'active' : ''}" onclick="app.setFilter('sla')">
+          <i data-lucide="timer"></i><div class="nav-label">SLA at risk</div>
+        </div>
+      </div>`;
+
+                // Active Directory section — visible to admins and dept heads
+                if (ad.can(u.id, 'user.*') || ad.can(u.id, 'ad.*') || ad.can(u.id, 'report.*')) {
+                    const disabledCount = state.users.filter(x => !x.accountEnabled).length;
+                    html += `
+        <div class="sidebar-section">
+          <h4>Active Directory ${disabledCount > 0 ? `<span class="ad-nav-badge">${disabledCount} disabled</span>` : ''}</h4>
+          <div class="nav-item ${state.view === 'directory' && state.directoryTab === 'users' ? 'active' : ''}"
+            onclick="app.openDirectory('users')">
+            <i data-lucide="users"></i>
+            <div class="nav-label">User Accounts <span class="nav-meta">${state.users.length} accounts</span></div>
+          </div>
+          <div class="nav-item ${state.view === 'directory' && state.directoryTab === 'groups' ? 'active' : ''}"
+            onclick="app.openDirectory('groups')">
+            <i data-lucide="shield-check"></i>
+            <div class="nav-label">Security Groups <span class="nav-meta">${state.groups.length} groups</span></div>
+          </div>
+          <div class="nav-item ${state.view === 'directory' && state.directoryTab === 'orgchart' ? 'active' : ''}"
+            onclick="app.openDirectory('orgchart')">
+            <i data-lucide="network"></i>
+            <div class="nav-label">Org Chart</div>
+          </div>
+        </div>`;
+                }
+
+                sb.innerHTML = html;
+                lucide.createIcons();
+                this.updateSidebarToggleButton();
+            },
+
+            selectProject(id) {
+                state.selectedProjectId = id;
+                state.activeFilter = null;
+                this.expandProjectPath(id);
+                if (state.view === 'directory') state.view = 'tree';
+                this.renderSidebar();
+                this.render();
+            },
+
+            setView(v) {
+                state.view = v;
+                state.activeFilter = null;
+                document.querySelectorAll('.view-tab').forEach(t => t.classList.toggle('active', t.dataset.view === v));
+                this.render();
+            },
+
+            setFilter(filter) {
+                state.activeFilter = state.activeFilter === filter ? null : filter;
+                state.view = 'list';
+                this.renderSidebar();
+                this.render();
+            },
+
+            openDirectory(tab) {
+                state.view = 'directory';
+                state.directoryTab = tab;
+                state.activeFilter = null;
+                this.renderSidebar();
+                this.render();
+            },
+
+            // ---------- MAIN RENDER ----------
+            render() {
+                const user = state.currentUser;
+                if (!user) return;
+
+                // Directory view
+                if (state.view === 'directory') {
+                    this.renderDirectory();
+                    lucide.createIcons();
+                    return;
+                }
+
+                // Quick filter list view
+                if (state.activeFilter) {
+                    this.renderFilteredList();
+                    lucide.createIcons();
+                    return;
+                }
+
+                const project = state.projects.find(p => p.id === state.selectedProjectId);
+                if (!project) {
+                    document.getElementById('breadcrumb').innerHTML = '<strong>Dashboard</strong>';
+                    document.getElementById('main-area').innerHTML = '<div class="member-view"><p class="muted">No project selected.</p></div>';
+                    lucide.createIcons();
+                    return;
+                }
+
+                const dept = state.departments.find(d => d.id === project.deptId);
+                const div = dept ? state.divisions.find(d => d.id === dept.divisionId) : null;
+                const team = state.teams.find(t => t.id === project.teamId);
+
+                document.getElementById('breadcrumb').innerHTML = `
+      <i data-lucide="chevron-right" style="width:12px"></i> ${util.escape(div?.name || 'Division')}
+      <i data-lucide="chevron-right" style="width:12px"></i> ${util.escape(dept?.name || 'Department')}
+      <i data-lucide="chevron-right" style="width:12px"></i> ${util.escape(team ? team.name : 'No Team')}
+      <i data-lucide="chevron-right" style="width:12px"></i> <strong>${util.escape(project.title)}</strong>
+      <span class="node-key" style="margin-left:.5rem">[${util.escape(project.code)}]</span>`;
+
+                // Role-based: members/analysts get dashboard
+                if (user.role === 'member' || user.role === 'analyst') {
+                    this.renderMemberDash();
+                    lucide.createIcons();
+                    return;
+                }
+
+                if (state.view === 'tree') this.renderTree();
+                else if (state.view === 'kanban') this.renderKanban();
+                else this.renderList();
+
+                lucide.createIcons();
+            },
+
+            // ---------- FILTERED LIST ----------
+            renderFilteredList() {
+                const u = state.currentUser;
+                const main = document.getElementById('main-area');
+                let issues = state.issues.filter(i => i.isActive);
+                let title = '';
+
+                if (state.activeFilter === 'mine') {
+                    issues = issues.filter(i => i.assignedTo === u.id);
+                    title = 'Assigned to me';
+                    document.getElementById('breadcrumb').innerHTML = `<strong>Filter:</strong> Assigned to me (${issues.length})`;
+                } else if (state.activeFilter === 'ai') {
+                    issues = issues.filter(i => i.labels && i.labels.some(l => l.toLowerCase().includes('ai')));
+                    title = 'AI Team items';
+                    document.getElementById('breadcrumb').innerHTML = `<strong>Filter:</strong> AI Team items (${issues.length})`;
+                } else if (state.activeFilter === 'compliance') {
+                    issues = issues.filter(i => i.type === 'compliance' || i.labels && i.labels.some(l => l.toLowerCase().includes('compliance')));
+                    title = 'Compliance items';
+                    document.getElementById('breadcrumb').innerHTML = `<strong>Filter:</strong> Compliance items (${issues.length})`;
+                } else if (state.activeFilter === 'sla') {
+                    issues = issues.filter(i => { const s = sla.compute(i); return s && (s.level === 'amber' || s.level === 'red' || s.level === 'breach'); });
+                    title = 'SLA at risk';
+                    document.getElementById('breadcrumb').innerHTML = `<strong>Filter:</strong> SLA at risk (${issues.length})`;
+                }
+
+                let html = `<div class="list-view"><table class="list-table"><thead><tr>
+      <th>Key</th><th>Type</th><th>Title</th><th>Project</th><th>Status</th><th>Priority</th><th>Assignee</th><th>Due</th><th>SLA</th></tr></thead><tbody>`;
+                issues.forEach(i => {
+                    const a = state.users.find(u => u.id === i.assignedTo);
+                    const s = sla.compute(i);
+                    const proj = state.projects.find(p => p.id === i.projectId);
+                    html += `<tr onclick="app.openIssue(${i.id})">
+        <td><span class="node-key">${util.escape(i.key)}</span></td>
+        <td><span class="type-icon ${'t-' + (i.type === 'sub-task' ? 'sub' : i.type)}">${i.type[0].toUpperCase()}</span> ${i.type}</td>
+        <td style="font-weight:500">${util.escape(i.title)}</td>
+        <td><span class="badge" style="background:#eef2ff;color:#1e3a8a">${util.escape(proj?.code || '?')}</span></td>
+        <td><span class="badge s-${i.status}">${i.status}</span></td>
+        <td><span class="prio ${i.priority}">${i.priority}</span></td>
+        <td>${a ? util.escape(a.name) : '—'}</td>
+        <td>${i.due || '—'}</td>
+        <td>${s ? `<span class="sla-pill sla-${s.level === 'breach' ? 'breach' : s.level}">${sla.fmt(s.remaining)}</span>` : '—'}</td>
+      </tr>`;
+                });
+                if (issues.length === 0) html += `<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--muted)">No items match this filter.</td></tr>`;
+                html += '</tbody></table></div>';
+                main.innerHTML = html;
+            },
+
+            // ---------- TREE VIEW ----------
+            renderTree() {
+                const main = document.getElementById('main-area');
+                const project = state.projects.find(p => p.id === state.selectedProjectId);
+                const issues = state.issues.filter(i => i.projectId === project.id);
+                const top = issues.filter(i => i.parentId === null);
+                const nodesHtml = '<ul><li>' + this.projectNode(project, top.length) +
+                    (project.isCollapsed || top.length === 0 ? '' : `<ul>${top.map(t => this.renderIssueBranch(t, issues)).join('')}</ul>`) +
+                    '</li></ul>';
+                main.innerHTML = `
+      <div id="viewport" class="viewport">
+        <div class="canvas-info">💡 Drag nodes to re-parent · Scroll to zoom · Drag canvas to pan</div>
+        <div id="canvas-plane" class="canvas-plane">
+          <div class="tree ${project.isActive ? '' : 'inactive-item'}">${nodesHtml}</div>
+        </div>
+        <div class="canvas-ctrl">
+          <button class="icon secondary" onclick="canvasPan.zoom(.15)"><i data-lucide="zoom-in" style="width:16px"></i></button>
+          <button class="icon secondary" onclick="canvasPan.zoom(-.15)"><i data-lucide="zoom-out" style="width:16px"></i></button>
+          <button class="icon secondary" onclick="canvasPan.reset()"><i data-lucide="focus" style="width:16px"></i></button>
+        </div>
+      </div>`;
+                canvasPan.init();
+            },
+
+            projectNode(p, childCount) {
+                const lead = state.users.find(u => u.id === p.lead);
+                const team = state.teams.find(t => t.id === p.teamId);
+                const uid = state.currentUser.id;
+                const canDel = ad.can(uid, 'project.*');
+                return `
+      <div class="node node-project" ondrop="app.drop(event,null,${p.id})" ondragover="app.allowDrop(event)" ondragleave="app.dragLeave(event)">
+        <div class="node-key">${util.escape(p.code)} · PROJECT</div>
+        <div class="node-title"><i data-lucide="folder-kanban" style="width:14px"></i> ${util.escape(p.title)}</div>
+        <div class="node-footer">
+          ${team ? `<span class="badge" style="background:#eef2ff;color:#1e3a8a">${util.escape(team.name)}</span>` : ''}
+          ${p.isActive ? '<span class="badge s-in-progress">Active</span>' : '<span class="badge s-blocked">Deactivated</span>'}
+          ${childCount ? `<span class="badge" style="background:var(--cbe-gold-soft);color:var(--cbe-navy)">${childCount} items</span>` : ''}
+          <div class="mini-avatar" title="${lead ? util.escape(lead.name) : ''}">${lead ? lead.name[0] : '?'}</div>
+        </div>
+        <div class="node-actions">
+          ${childCount ? `<button class="icon secondary" onclick="app.toggleCollapse('project',${p.id})" title="${p.isCollapsed ? 'Expand' : 'Collapse'}"><i data-lucide="${p.isCollapsed ? 'chevron-down' : 'chevron-up'}" style="width:14px"></i></button>` : ''}
+          ${ad.can(uid, 'issue.create') ? `<button class="icon secondary" onclick="app.toggleForm('p${p.id}')" title="Add Issue"><i data-lucide="plus" style="width:14px"></i></button>` : ''}
+          ${canDel ? `<button class="icon secondary" onclick="app.toggleProjectActive(${p.id})" title="Toggle Active"><i data-lucide="power" style="width:14px"></i></button>` : ''}
+          ${canDel ? `<button class="icon danger" onclick="app.deleteProject(${p.id})" title="Delete Project"><i data-lucide="trash-2" style="width:14px"></i></button>` : ''}
+        </div>
+      </div>
+      ${ad.can(uid, 'issue.create') ? `<div id="form-p${p.id}" class="add-form hidden">${this.formHtml('project', p.id)}</div>` : ''}
+    `;
+            },
+
+            renderIssueBranch(issue, all) {
+                const kids = all.filter(i => i.parentId === issue.id);
+                const inactive = issue.isActive ? '' : 'inactive-item';
+                return `<li draggable="true" ondragstart="app.dragStart(event,${issue.id})" ondragend="app.dragEnd(event)" class="${inactive}">
+      ${this.issueNode(issue, kids.length)}
+      ${issue.isCollapsed || kids.length === 0 ? '' : `<ul>${kids.map(k => this.renderIssueBranch(k, all)).join('')}</ul>`}
+    </li>`;
+            },
+
+            issueNode(i, childCount) {
+                const assignee = state.users.find(u => u.id === i.assignedTo);
+                const typeIcon = { epic: 'E', story: 'S', task: 'T', 'sub-task': 'U', bug: 'B', risk: 'R', compliance: 'C' }[i.type] || 'T';
+                const typeCls = { epic: 't-epic', story: 't-story', task: 't-task', 'sub-task': 't-sub', bug: 't-bug', risk: 't-risk', compliance: 't-compliance' }[i.type] || 't-task';
+                const prioIcon = { highest: 'chevrons-up', high: 'chevron-up', medium: 'equal', low: 'chevron-down' }[i.priority] || 'equal';
+                const cc = state.comments.filter(c => c.issueId === i.id).length;
+                const ac = state.attachments.filter(a => a.issueId === i.id).length;
+                const s = sla.compute(i);
+                const uid = state.currentUser.id;
+                const canEdit = ad.can(uid, 'issue.update');
+                const canDel = ad.can(uid, 'issue.*') || ad.can(uid, 'project.*');
+                const canCreate = ad.can(uid, 'issue.create');
+
+                return `
+      <div class="node" onclick="app.openIssue(${i.id})"
+          ondrop="app.drop(event,${i.id},${i.projectId})" ondragover="app.allowDrop(event)" ondragleave="app.dragLeave(event)">
+        <div class="node-key">
+          ${util.escape(i.key)}
+          ${s ? `<span class="sla-pill sla-${s.level === 'breach' ? 'breach' : s.level}" title="SLA: ${sla.fmt(s.remaining)}"><i data-lucide="timer" style="width:10px"></i>${sla.fmt(s.remaining)}</span>` : ''}
+        </div>
+        <div class="node-title">${util.escape(i.title)}</div>
+        <div class="node-footer">
+          <span class="type-icon ${typeCls}" title="${i.type}">${typeIcon}</span>
+          <span class="badge s-${i.status}">${i.status.replace('-', ' ')}</span>
+          <span class="prio ${i.priority}" title="${i.priority} priority"><i data-lucide="${prioIcon}" style="width:12px"></i></span>
+          ${i.points ? `<span class="badge" style="background:#eef2ff;color:#4338ca">${i.points}pt</span>` : ''}
+          ${cc ? `<span class="meta-mini" title="${cc} comments"><i data-lucide="message-square"></i>${cc}</span>` : ''}
+          ${ac ? `<span class="meta-mini" title="${ac} attachments"><i data-lucide="paperclip"></i>${ac}</span>` : ''}
+          <div class="mini-avatar" title="${assignee ? util.escape(assignee.name) : 'Unassigned'}">${assignee ? assignee.name[0] : '?'}</div>
+        </div>
+        <div class="node-actions" onclick="event.stopPropagation()">
+          ${childCount ? `<button class="icon secondary" onclick="app.toggleCollapse('issue',${i.id})"><i data-lucide="${i.isCollapsed ? 'chevron-down' : 'chevron-up'}" style="width:14px"></i></button>` : ''}
+          ${canCreate ? `<button class="icon secondary" onclick="app.toggleForm('i${i.id}')" title="Add child"><i data-lucide="plus" style="width:14px"></i></button>` : ''}
+          <button class="icon secondary" onclick="app.openIssue(${i.id})" title="Details"><i data-lucide="eye" style="width:14px"></i></button>
+          ${canEdit ? `<button class="icon secondary" onclick="app.toggleIssueActive(${i.id})" title="Toggle"><i data-lucide="power" style="width:14px"></i></button>` : ''}
+          ${canDel ? `<button class="icon danger" onclick="app.deleteIssue(${i.id})" title="Delete"><i data-lucide="trash-2" style="width:14px"></i></button>` : ''}
+        </div>
+      </div>
+      ${canCreate ? `<div id="form-i${i.id}" class="add-form hidden">${this.formHtml('issue', i.id)}</div>` : ''}
+    `;
+            },
+
+            formHtml(ctx, id) {
+                const memberOpts = state.users.map(u => `<option value="${u.id}">${util.escape(u.name)}</option>`).join('');
+                const typeOpts = ['task', 'story', 'epic', 'sub-task', 'bug', 'risk', 'compliance']
+                    .map(t => `<option value="${t}">${t[0].toUpperCase() + t.slice(1)}</option>`).join('');
+                return `
+      <input placeholder="Issue title" id="nt-${ctx}-${id}">
+      <div class="flex">
+        <select id="ntype-${ctx}-${id}">${typeOpts}</select>
+        <select id="nassign-${ctx}-${id}">${memberOpts}</select>
+      </div>
+      <div class="flex">
+        <select id="nprio-${ctx}-${id}">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+          <option value="highest">Highest</option>
+        </select>
+        <input type="number" min="1" placeholder="Pts" id="npts-${ctx}-${id}" style="width:70px">
+        <input type="number" min="0" placeholder="SLA hrs" id="nsla-${ctx}-${id}" style="width:80px">
+      </div>
+      <div class="flex">
+        <button class="primary" style="flex:1" onclick="app.createIssue('${ctx}',${id})">Create</button>
+        <button class="secondary" onclick="app.toggleForm('${ctx === 'project' ? 'p' : 'i'}${id}')">Cancel</button>
+      </div>`;
+            },
+
+            // ---------- KANBAN ----------
+            renderKanban() {
+                const main = document.getElementById('main-area');
+                const project = state.projects.find(p => p.id === state.selectedProjectId);
+                const issues = state.issues.filter(i => i.projectId === project.id && i.isActive);
+                const cols = [['todo', 'To Do'], ['in-progress', 'In Progress'], ['review', 'In Review'], ['done', 'Done']];
+                let html = '<div class="kanban">';
+                cols.forEach(([s, label]) => {
+                    const items = issues.filter(i => i.status === s);
+                    html += `<div class="kanban-col"><h4>${label} <span>${items.length}</span></h4>`;
+                    items.forEach(i => {
+                        const assignee = state.users.find(u => u.id === i.assignedTo);
+                        const slaS = sla.compute(i);
+                        const cc = state.comments.filter(c => c.issueId === i.id).length;
+                        const ac = state.attachments.filter(a => a.issueId === i.id).length;
+                        html += `
+          <div class="kanban-card" onclick="app.openIssue(${i.id})">
+            <div class="node-key">${util.escape(i.key)} ${slaS ? `<span class="sla-pill sla-${slaS.level === 'breach' ? 'breach' : slaS.level}">${sla.fmt(slaS.remaining)}</span>` : ''}</div>
+            <div style="font-weight:600;margin:3px 0 6px;font-size:.85rem">${util.escape(i.title)}</div>
+            <div class="node-footer">
+              <span class="type-icon ${'t-' + (i.type === 'sub-task' ? 'sub' : i.type)}">${i.type[0].toUpperCase()}</span>
+              <span class="prio ${i.priority}"><i data-lucide="chevron-up" style="width:12px"></i></span>
+              ${i.points ? `<span class="badge" style="background:#eef2ff;color:#4338ca">${i.points}</span>` : ''}
+              ${cc ? `<span class="meta-mini"><i data-lucide="message-square"></i>${cc}</span>` : ''}
+              ${ac ? `<span class="meta-mini"><i data-lucide="paperclip"></i>${ac}</span>` : ''}
+              <div class="mini-avatar">${assignee ? assignee.name[0] : '?'}</div>
+            </div>
+          </div>`;
+                    });
+                    html += '</div>';
+                });
+                html += '</div>';
+                main.innerHTML = html;
+                lucide.createIcons();
+            },
+
+            // ---------- LIST ----------
+            renderList() {
+                const main = document.getElementById('main-area');
+                const project = state.projects.find(p => p.id === state.selectedProjectId);
+                const issues = state.issues.filter(i => i.projectId === project.id);
+                let html = `<div class="list-view"><table class="list-table"><thead><tr>
+      <th>Key</th><th>Type</th><th>Title</th><th>Status</th><th>Priority</th><th>Assignee</th><th>Due</th><th>Pts</th><th>SLA</th><th>💬</th><th>📎</th></tr></thead><tbody>`;
+                issues.forEach(i => {
+                    const a = state.users.find(u => u.id === i.assignedTo);
+                    const s = sla.compute(i);
+                    const cc = state.comments.filter(c => c.issueId === i.id).length;
+                    const ac = state.attachments.filter(at => at.issueId === i.id).length;
+                    html += `<tr onclick="app.openIssue(${i.id})">
+        <td><span class="node-key">${util.escape(i.key)}</span></td>
+        <td><span class="type-icon ${'t-' + (i.type === 'sub-task' ? 'sub' : i.type)}">${i.type[0].toUpperCase()}</span> ${i.type}</td>
+        <td style="font-weight:500">${util.escape(i.title)}</td>
+        <td><span class="badge s-${i.status}">${i.status}</span></td>
+        <td><span class="prio ${i.priority}">${i.priority}</span></td>
+        <td>${a ? util.escape(a.name) : '—'}</td>
+        <td>${i.due || '—'}</td>
+        <td>${i.points || '—'}</td>
+        <td>${s ? `<span class="sla-pill sla-${s.level === 'breach' ? 'breach' : s.level}">${sla.fmt(s.remaining)}</span>` : '—'}</td>
+        <td>${cc || '—'}</td>
+        <td>${ac || '—'}</td>
+      </tr>`;
+                });
+                html += '</tbody></table></div>';
+                main.innerHTML = html;
+            },
+
+            // ---------- MEMBER DASHBOARD ----------
+            renderMemberDash() {
+                const main = document.getElementById('main-area');
+                const mine = state.issues.filter(i => i.assignedTo === state.currentUser.id && i.isActive);
+                const open = mine.filter(i => i.status !== 'done').length;
+                const done = mine.filter(i => i.status === 'done').length;
+                const highPrio = mine.filter(i => ['high', 'highest'].includes(i.priority)).length;
+                const pts = mine.reduce((s, i) => s + (i.points || 0), 0);
+                const slaRisk = mine.filter(i => { const s = sla.compute(i); return s && (s.level === 'red' || s.level === 'breach'); }).length;
+                const u = state.currentUser;
+                const groups = ad.getGroups(u.id);
+
+                let html = `<div class="member-view">
+      <div style="display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.5rem">
+        <div>
+          <h2 style="margin-bottom:.25rem">Hello, ${util.escape(u.name)} 👋</h2>
+          <p class="muted" style="margin-bottom:.5rem">${util.escape(u.title)} · <code style="background:#eef2ff;padding:1px 6px;border-radius:3px;font-size:.78rem;color:#4338ca">${util.escape(u.sAMAccountName)}</code></p>
+          <div style="display:flex;gap:.3rem;flex-wrap:wrap">
+            ${groups.map(g => `<span class="grp-chip">${util.escape(g.name)}</span>`).join('')}
+          </div>
+        </div>
+        <button class="secondary" style="margin-left:auto" onclick="app.openADModal(${u.id})">
+          <i data-lucide="user-cog" style="width:14px"></i> My Account
+        </button>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><small>Open Issues</small><h3>${open}</h3></div>
+        <div class="stat"><small>Completed</small><h3>${done}</h3></div>
+        <div class="stat"><small>High Priority</small><h3 style="color:var(--danger)">${highPrio}</h3></div>
+        <div class="stat"><small>SLA at Risk</small><h3 style="color:var(--warn)">${slaRisk}</h3></div>
+      </div>
+      <h3 style="margin-bottom:.75rem">My Issues</h3>
+      <div class="member-grid">`;
+
+                mine.forEach(i => {
+                    const p = state.projects.find(pr => pr.id === i.projectId);
+                    const s = sla.compute(i);
+                    html += `
+        <div class="kanban-card" onclick="app.openIssue(${i.id})">
+          <div class="node-key">${util.escape(i.key)} · ${util.escape(p.title)} ${s ? `<span class="sla-pill sla-${s.level === 'breach' ? 'breach' : s.level}">${sla.fmt(s.remaining)}</span>` : ''}</div>
+          <div style="font-weight:600;margin:4px 0 8px">${util.escape(i.title)}</div>
+          <div class="node-footer">
+            <span class="type-icon ${'t-' + (i.type === 'sub-task' ? 'sub' : i.type)}">${i.type[0].toUpperCase()}</span>
+            <span class="badge s-${i.status}">${i.status}</span>
+            <span class="prio ${i.priority}">${i.priority}</span>
+            ${i.due ? `<span class="muted" style="font-size:.7rem">📅 ${i.due}</span>` : ''}
+          </div>
+        </div>`;
+                });
+                if (mine.length === 0) html += '<p class="muted">🎉 No assigned issues.</p>';
+                html += '</div></div>';
+                main.innerHTML = html;
+            },
+
+            // ---------- DIRECTORY VIEW ----------
+            renderDirectory() {
+                const main = document.getElementById('main-area');
+                document.getElementById('breadcrumb').innerHTML = `<i data-lucide="shield-check" style="width:12px;color:var(--cbe-gold)"></i> <strong>Active Directory</strong> <span class="muted">— CBE Domain</span>`;
+
+                const tabs = `
+      <div class="dir-tabs">
+        <div class="dir-tab ${state.directoryTab === 'users' ? 'active' : ''}" onclick="app.openDirectory('users')">
+          <i data-lucide="users" style="width:14px"></i> Users (${state.users.length})
+        </div>
+        <div class="dir-tab ${state.directoryTab === 'groups' ? 'active' : ''}" onclick="app.openDirectory('groups')">
+          <i data-lucide="shield" style="width:14px"></i> Groups (${state.groups.length})
+        </div>
+        <div class="dir-tab ${state.directoryTab === 'orgchart' ? 'active' : ''}" onclick="app.openDirectory('orgchart')">
+          <i data-lucide="network" style="width:14px"></i> Org Chart
+        </div>
+      </div>`;
+
+                let content = '';
+
+                if (state.directoryTab === 'users') {
+                    const disabled = state.users.filter(u => !u.accountEnabled).length;
+                    content = `
+        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem">
+          <div class="stat" style="padding:.65rem 1rem;display:inline-flex;gap:.5rem;align-items:center;min-width:0">
+            <i data-lucide="users" style="width:16px;color:var(--cbe-navy)"></i>
+            <div><div style="font-size:1.1rem;font-weight:700;color:var(--cbe-navy)">${state.users.length}</div>
+            <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase">Total Accounts</div></div>
+          </div>
+          <div class="stat" style="padding:.65rem 1rem;display:inline-flex;gap:.5rem;align-items:center;min-width:0">
+            <i data-lucide="check-circle" style="width:16px;color:var(--success)"></i>
+            <div><div style="font-size:1.1rem;font-weight:700;color:var(--success)">${state.users.length - disabled}</div>
+            <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase">Active</div></div>
+          </div>
+          ${disabled > 0 ? `<div class="stat" style="padding:.65rem 1rem;display:inline-flex;gap:.5rem;align-items:center;min-width:0">
+            <i data-lucide="x-circle" style="width:16px;color:var(--danger)"></i>
+            <div><div style="font-size:1.1rem;font-weight:700;color:var(--danger)">${disabled}</div>
+            <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase">Disabled</div></div>
+          </div>`: ''}
+        </div>
+        <div class="user-grid">
+          ${state.users.map(u => this.userCard(u)).join('')}
+        </div>`;
+                }
+
+                else if (state.directoryTab === 'groups') {
+                    content = `<div class="grp-grid">${state.groups.map(g => {
+                        const members = state.users.filter(u => g.members.includes(u.id));
+                        return `<div class="grp-card">
+          <div class="grp-card-head">
+            <div class="grp-icon"><i data-lucide="shield" style="width:18px;color:var(--cbe-gold)"></i></div>
+            <div>
+              <h4>${util.escape(g.name)}</h4>
+              <div class="grp-id">${util.escape(g.id)}</div>
+            </div>
+          </div>
+          <p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">${util.escape(g.description)}</p>
+          <div style="font-size:.7rem;color:var(--muted);font-family:monospace;margin-bottom:.5rem;word-break:break-all">${util.escape(g.ou)}</div>
+          <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;font-weight:600;margin-bottom:.35rem">Members (${members.length})</div>
+          <div class="grp-members">
+            ${members.length === 0 ? '<span class="muted" style="font-size:.75rem">No members</span>' :
+                                members.map(u => `<div class="grp-member-chip">
+                <div class="mini-avatar" style="width:18px;height:18px;font-size:.6rem">${u.name[0]}</div>
+                ${util.escape(u.name)}
+              </div>`).join('')}
+          </div>
+          <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;font-weight:600;margin:.6rem 0 .35rem">Permissions</div>
+          <div class="grp-perms">${g.permissions.map(p => `<span class="perm-tag">${util.escape(p)}</span>`).join('')}</div>
+          ${ad.can(state.currentUser.id, 'user.*') ? `<div style="margin-top:.75rem;padding-top:.65rem;border-top:1px solid var(--border);display:flex;gap:.4rem;flex-wrap:wrap">
+            ${state.users.map(u => `
+              <button class="secondary" style="font-size:.72rem;padding:.25rem .55rem" 
+                onclick="${g.members.includes(u.id) ? `app.adRemoveFromGroup(${u.id},'${g.id}')` :
+                                        `app.adAddToGroup(${u.id},'${g.id}')`}" 
+                title="${g.members.includes(u.id) ? 'Remove' : 'Add'} ${u.name}">
+                <i data-lucide="${g.members.includes(u.id) ? 'user-minus' : 'user-plus'}" style="width:11px"></i>
+                ${util.escape(u.name)}
+              </button>`).join('')}
+          </div>`: ''}
+        </div>`;
+                    }).join('')}</div>`;
+                }
+
+                else if (state.directoryTab === 'orgchart') {
+                    content = `<div class="org-chart-wrap">
+        <div style="margin-bottom:1rem;font-size:.8rem;color:var(--muted)">
+          <i data-lucide="info" style="width:13px"></i>
+          Reporting hierarchy based on AD <code>manager</code> attribute.
+        </div>
+        <div class="org-tree">${this.renderOrgTree()}</div>
+      </div>`;
+                }
+
+                main.innerHTML = `<div class="dir-view" style="overflow-y:auto">${tabs}${content}</div>`;
+                lucide.createIcons();
+            },
+
+            userCard(u) {
+                const groups = ad.getGroups(u.id);
+                const manager = ad.getManager(u.id);
+                const canManage = ad.can(state.currentUser.id, 'user.*') || ad.can(state.currentUser.id, 'ad.*');
+                return `<div class="user-card">
+      <div class="user-card-head">
+        <div class="user-av" style="background:${this._userColor(u.id)}">
+          ${u.name[0]}
+          <span class="enabled-dot ${u.accountEnabled ? 'on' : 'off'}"></span>
+        </div>
+        <div class="user-info">
+          <h4>${util.escape(u.name)}
+            <span class="acct-badge ${u.accountEnabled ? 'acct-enabled' : 'acct-disabled'}" style="margin-left:.4rem">
+              ${u.accountEnabled ? 'Active' : 'Disabled'}
+            </span>
+          </h4>
+          <div class="user-title">${util.escape(u.title)}</div>
+          <div class="user-sam">${util.escape(u.sAMAccountName)}</div>
+        </div>
+      </div>
+      <div class="user-attr"><i data-lucide="mail"></i> ${util.escape(u.email)}</div>
+      <div class="user-attr"><i data-lucide="badge"></i> Employee: ${util.escape(u.employeeId)}</div>
+      <div class="user-attr"><i data-lucide="clock"></i> Last login: ${util.fmtTime(u.lastLogin)}</div>
+      ${manager ? `<div class="user-attr"><i data-lucide="user"></i> Reports to: ${util.escape(manager.name)}</div>` : ''}
+      <div class="user-attr" style="font-size:.65rem;word-break:break-all;font-family:monospace;color:var(--muted)">${util.escape(u.ou)}</div>
+      <div class="user-groups">
+        ${groups.map(g => `<span class="grp-chip" title="${util.escape(g.description)}">${util.escape(g.id.replace('GRP-', ''))}</span>`).join('')}
+      </div>
+      <div class="user-card-actions">
+        <button class="secondary" style="flex:1;font-size:.78rem" onclick="app.openADModal(${u.id})">
+          <i data-lucide="user-cog" style="width:13px"></i> Manage
+        </button>
+        ${canManage && u.id !== state.currentUser.id ? `
+          <button class="${u.accountEnabled ? 'danger' : 'secondary'}" style="font-size:.78rem"
+            onclick="app.adToggleAccount(${u.id})" title="${u.accountEnabled ? 'Disable' : 'Enable'} account">
+            <i data-lucide="${u.accountEnabled ? 'user-x' : 'user-check'}" style="width:13px"></i>
+            ${u.accountEnabled ? 'Disable' : 'Enable'}
+          </button>`: ''}
+      </div>
+    </div>`;
+            },
+
+            _userColor(id) {
+                const colors = ['#0A2540', '#7C3AED', '#059669', '#0891B2', '#DC2626', '#D97706'];
+                return colors[id % colors.length];
+            },
+
+            renderOrgTree() {
+                // Build tree from managerId chain
+                const roots = state.users.filter(u => !u.managerId);
+                const renderNode = (u) => {
+                    const reports = ad.getDirectReports(u.id);
+                    const groups = ad.getGroups(u.id);
+                    const isAdmin = groups.some(g => g.id === 'GRP-ADMINS');
+                    return `<li>
+        <div class="org-node ${isAdmin ? 'is-admin' : ''}" onclick="app.openADModal(${u.id})" style="cursor:pointer">
+          <div class="org-node-name">${util.escape(u.name)}</div>
+          <div class="org-node-title">${util.escape(u.title)}</div>
+          <span class="org-node-dept">${util.escape(u.sAMAccountName)}</span>
+          <span class="acct-badge ${u.accountEnabled ? 'acct-enabled' : 'acct-disabled'}" style="margin-top:.35rem;display:inline-flex">
+            ${u.accountEnabled ? 'Active' : 'Disabled'}
+          </span>
+        </div>
+        ${reports.length > 0 ? `<ul>${reports.map(r => renderNode(r)).join('')}</ul>` : ''}
+      </li>`;
+                };
+                return `<ul>${roots.map(r => renderNode(r)).join('')}</ul>`;
+            },
+
+            // ---------- AD MODAL ----------
+            openADModal(userId) {
+                const u = state.users.find(x => x.id === userId);
+                if (!u) return;
+                const av = document.getElementById('ad-modal-av');
+                av.innerText = u.name[0];
+                av.style.background = this._userColor(u.id);
+                document.getElementById('ad-modal-title').innerHTML = `${util.escape(u.name)} <span class="acct-badge ${u.accountEnabled ? 'acct-enabled' : 'acct-disabled'}" style="margin-left:.35rem">${u.accountEnabled ? 'Enabled' : 'Disabled'}</span>`;
+                this.renderADModalBody(userId);
+                document.getElementById('ad-modal').classList.remove('hidden');
+                lucide.createIcons();
+            },
+
+            renderADModalBody(userId) {
+                const u = state.users.find(x => x.id === userId);
+                const manager = ad.getManager(userId);
+                const reports = ad.getDirectReports(userId);
+                const groups = ad.getGroups(userId);
+                const perms = ad.getEffectivePermissions(userId);
+                const adLog = ad.getAdAuditForUser(userId);
+                const canManage = (ad.can(state.currentUser.id, 'user.*') || ad.can(state.currentUser.id, 'ad.*')) && userId !== state.currentUser.id;
+                const isSelf = userId === state.currentUser.id;
+
+                let html = `
+      <!-- AD Attributes -->
+      <div class="modal-section">
+        <h5><i data-lucide="database" style="width:12px"></i> AD Attributes</h5>
+        <div class="ad-attr-grid">
+          <div class="ad-attr"><label>sAMAccountName</label><span>${util.escape(u.sAMAccountName)}</span></div>
+          <div class="ad-attr"><label>EmployeeID</label><span>${util.escape(u.employeeId)}</span></div>
+          <div class="ad-attr"><label>Email</label><span>${util.escape(u.email)}</span></div>
+          <div class="ad-attr"><label>Department</label><span class="val-normal">${util.escape(u.dept)}</span></div>
+          <div class="ad-attr"><label>Account Status</label><span class="val-normal">
+            <span class="acct-badge ${u.accountEnabled ? 'acct-enabled' : 'acct-disabled'}">${u.accountEnabled ? 'Enabled' : 'Disabled'}</span>
+          </span></div>
+          <div class="ad-attr"><label>Failed Logins</label><span style="color:${u.failedLogins > 0 ? 'var(--danger)' : 'inherit'}">${u.failedLogins || 0}</span></div>
+          <div class="ad-attr"><label>Last Login</label><span class="val-normal">${util.fmtTime(u.lastLogin)}</span></div>
+          <div class="ad-attr"><label>Manager</label><span class="val-normal">${manager ? util.escape(manager.name) : '— (Top-level)'}</span></div>
+        </div>
+        <div style="margin-top:.6rem">
+          <div style="font-size:.65rem;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:.25rem">Distinguished Name (DN)</div>
+          <div class="ou-path">${util.escape(u.ou)}</div>
+        </div>
+        ${reports.length > 0 ? `
+          <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;font-weight:600;margin-bottom:.35rem">Direct Reports (${reports.length})</div>
+          <div style="display:flex;flex-wrap:wrap;gap:.3rem">
+            ${reports.map(r => `<span class="grp-member-chip" onclick="app.renderADModalBody(${r.id});document.getElementById('ad-modal-title').innerHTML='${util.escape(r.name)}';document.getElementById('ad-modal-av').innerText='${r.name[0]}'" style="cursor:pointer">
+              <div class="mini-avatar" style="width:17px;height:17px;font-size:.6rem;background:${this._userColor(r.id)};color:#fff">${r.name[0]}</div>
+              ${util.escape(r.name)}
+            </span>`).join('')}
+          </div>`: ''}
+      </div>
+
+      <!-- Group Memberships -->
+      <div class="modal-section">
+        <h5><i data-lucide="shield" style="width:12px"></i> Security Group Memberships</h5>
+        ${state.groups.map(g => {
+                    const isMember = g.members.includes(userId);
+                    return `<div class="group-manage-row">
+            <div>
+              <div class="grp-name">${util.escape(g.name)}</div>
+              <div class="grp-perms-mini">${g.permissions.slice(0, 3).join(', ')}${g.permissions.length > 3 ? ` +${g.permissions.length - 3} more` : ''}</div>
+            </div>
+            <span class="acct-badge ${isMember ? 'acct-enabled' : 'acct-disabled'}">${isMember ? 'Member' : '—'}</span>
+            ${canManage ? `<button class="${isMember ? 'danger' : 'secondary'}" style="font-size:.72rem;padding:.25rem .55rem"
+              onclick="app.adToggleGroup(${userId},'${g.id}');app.renderADModalBody(${userId})">
+              <i data-lucide="${isMember ? 'user-minus' : 'user-plus'}" style="width:11px"></i>
+              ${isMember ? 'Remove' : 'Add'}
+            </button>`: ''}
+          </div>`;
+                }).join('')}
+      </div>
+
+      <!-- Effective Permissions -->
+      <div class="modal-section">
+        <h5><i data-lucide="key-round" style="width:12px"></i> Effective Permissions</h5>
+        <div class="grp-perms">
+          ${perms.map(p => `<span class="perm-tag">${util.escape(p)}</span>`).join('')}
+        </div>
+        ${perms.length === 0 ? '<p class="muted" style="font-size:.8rem">No permissions granted.</p>' : ''}
+      </div>
+
+      <!-- Account Actions -->
+      ${canManage || isSelf ? `<div class="modal-section">
+        <h5><i data-lucide="settings-2" style="width:12px"></i> Account Actions</h5>
+        ${canManage ? `<div style="display:flex;gap:.5rem;margin-bottom:.75rem;flex-wrap:wrap">
+          <button class="${u.accountEnabled ? 'danger' : 'primary'}" onclick="app.adToggleAccount(${userId});app.renderADModalBody(${userId});document.getElementById('ad-modal-title').innerHTML=state.users.find(x=>x.id===${userId})?.name+' <span class=\\'acct-badge \\'+(state.users.find(x=>x.id===${userId})?.accountEnabled?\\'acct-enabled\\':\\'acct-disabled\\')+'\\'>'+( state.users.find(x=>x.id===${userId})?.accountEnabled?\\'Enabled\\':\\'Disabled\\')+\\'</span>\\'">
+            <i data-lucide="${u.accountEnabled ? 'user-x' : 'user-check'}" style="width:14px"></i>
+            ${u.accountEnabled ? 'Disable Account' : 'Enable Account'}
+          </button>
+        </div>
+        <div style="font-size:.78rem;font-weight:600;margin-bottom:.35rem;color:var(--text)">Reset Password</div>
+        <div class="pw-reset-row">
+          <input type="password" id="new-pw-${userId}" placeholder="New password" style="flex:1">
+          <button class="secondary" onclick="app.adResetPassword(${userId})">
+            <i data-lucide="key-round" style="width:13px"></i> Reset
+          </button>
+        </div>`: ''}
+      </div>`: ''}
+
+      <!-- AD Audit Log -->
+      <div class="modal-section">
+        <h5><i data-lucide="scroll-text" style="width:12px"></i> Account Activity Log</h5>
+        ${adLog.length === 0 ? '<p class="muted" style="font-size:.8rem">No activity recorded.</p>' :
+                        adLog.slice(0, 8).map(a => {
+                            const actor = state.users.find(u => u.id === a.actorId);
+                            return `<div class="audit-entry">
+              <div class="flex" style="gap:.4rem">
+                <strong style="font-size:.8rem">${actor ? util.escape(actor.name) : 'System'}</strong>
+                <span class="muted" style="font-size:.78rem">${util.escape(a.text)}</span>
+              </div>
+              <small title="${util.fmtFull(a.at)}">${util.fmtTime(a.at)}</small>
+            </div>`;
+                        }).join('')}
+      </div>
+    `;
+
+                document.getElementById('ad-modal-body').innerHTML = html;
+                lucide.createIcons();
+            },
+
+            closeADModal() {
+                document.getElementById('ad-modal').classList.add('hidden');
+            },
+
+            adToggleAccount(userId) {
+                const u = state.users.find(x => x.id === userId);
+                if (!u) return;
+                if (u.accountEnabled) ad.disableAccount(userId);
+                else ad.enableAccount(userId);
+                this.renderSidebar();
+                if (state.view === 'directory') this.renderDirectory();
+            },
+
+            adToggleGroup(userId, groupId) {
+                const g = state.groups.find(x => x.id === groupId);
+                if (!g) return;
+                if (g.members.includes(userId)) ad.removeFromGroup(userId, groupId);
+                else ad.addToGroup(userId, groupId);
+                this.renderSidebar();
+            },
+
+            adAddToGroup(userId, groupId) { ad.addToGroup(userId, groupId); this.renderDirectory(); },
+            adRemoveFromGroup(userId, groupId) { ad.removeFromGroup(userId, groupId); this.renderDirectory(); },
+
+            adResetPassword(userId) {
+                const pw = document.getElementById(`new-pw-${userId}`)?.value;
+                if (!pw || pw.length < 6) { ui.toast('Password must be at least 6 characters', 'warn'); return; }
+                ad.resetPassword(userId, pw);
+                document.getElementById(`new-pw-${userId}`).value = '';
+            },
+
+            // ---------- SEARCH ----------
+            search(q) {
+                const box = document.getElementById('search-results');
+                if (!q || q.length < 2) { box.classList.add('hidden'); return; }
+                const lq = q.toLowerCase();
+                const matches = state.issues.filter(i =>
+                    i.key.toLowerCase().includes(lq) ||
+                    i.title.toLowerCase().includes(lq) ||
+                    (i.labels || []).some(l => l.toLowerCase().includes(lq))
+                ).slice(0, 8);
+                if (matches.length === 0) { box.classList.add('hidden'); return; }
+                box.innerHTML = matches.map(i => {
+                    const s = sla.compute(i);
+                    const p = state.projects.find(pr => pr.id === i.projectId);
+                    return `<div class="search-result" onclick="app.searchClick(${i.id})">
+        <span class="node-key">${util.escape(i.key)}</span>
+        <span class="badge" style="background:#eef2ff;color:#1e3a8a">${util.escape(p?.code || '?')}</span>
+        <span style="flex:1;font-size:.82rem;color:var(--text)">${util.escape(i.title)}</span>
+        ${s ? `<span class="sla-pill sla-${s.level === 'breach' ? 'breach' : s.level}">${sla.fmt(s.remaining)}</span>` : ''}
+      </div>`;
+                }).join('');
+                box.classList.remove('hidden');
+            },
+
+            searchClick(id) {
+                document.getElementById('search-results').classList.add('hidden');
+                document.getElementById('global-search').value = '';
+                const issue = state.issues.find(i => i.id === id);
+                if (issue && issue.projectId !== state.selectedProjectId) {
+                    state.selectedProjectId = issue.projectId;
+                    this.expandProjectPath(issue.projectId);
+                    if (state.view === 'directory') state.view = 'list';
+                    this.renderSidebar();
+                    this.render();
+                }
+                setTimeout(() => this.openIssue(id), 100);
+            },
+
+            // ---------- QUICK CREATE ----------
+            _qcType: 'task',
+            openCreate() {
+                if (!ad.can(state.currentUser.id, 'issue.create')) {
+                    ui.toast('⛔ You do not have permission to create issues', 'danger'); return;
+                }
+                this._qcType = 'task';
+                const memberOpts = state.users.map(u => `<option value="${u.id}" ${u.id === state.currentUser.id ? 'selected' : ''}>${util.escape(u.name)}</option>`).join('');
+                const projectOpts = state.projects.map(p => `<option value="${p.id}" ${p.id === state.selectedProjectId ? 'selected' : ''}>${util.escape(p.title)}</option>`).join('');
+                const types = ['epic', 'story', 'task', 'sub-task', 'bug', 'risk', 'compliance'];
+                const typeColors = { epic: '#7C3AED', story: '#059669', task: '#2563EB', 'sub-task': '#0891B2', bug: '#DC2626', risk: '#D97706', compliance: '#0A2540' };
+
+                document.getElementById('qc-body').innerHTML = `
+      <div style="margin-bottom:.85rem">
+        <label style="font-size:.7rem;text-transform:uppercase;color:var(--muted);font-weight:600;letter-spacing:.5px;display:block;margin-bottom:.4rem">Issue Type</label>
+        <div class="qc-type-grid">
+          ${types.map(t => `<div class="qc-type-btn ${t === 'task' ? 'selected' : ''}" onclick="app._qcType='${t}';this.closest('.qc-type-grid').querySelectorAll('.qc-type-btn').forEach(b=>b.classList.remove('selected'));this.classList.add('selected')">
+            <div class="type-icon" style="background:${typeColors[t] || '#64748b'};margin:0 auto .35rem">${t[0].toUpperCase()}</div>
+            ${t}
+          </div>`).join('')}
+        </div>
+      </div>
+      <div class="drawer-field"><label>Title</label>
+        <input id="qc-title" placeholder="Issue title" autofocus>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+        <div class="drawer-field"><label>Project</label>
+          <select id="qc-project">${projectOpts}</select>
+        </div>
+        <div class="drawer-field"><label>Assign To</label>
+          <select id="qc-assign">${memberOpts}</select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem">
+        <div class="drawer-field"><label>Priority</label>
+          <select id="qc-prio">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+            <option value="highest">Highest</option>
+          </select>
+        </div>
+        <div class="drawer-field"><label>Points</label>
+          <input type="number" id="qc-pts" placeholder="e.g. 5" min="1">
+        </div>
+        <div class="drawer-field"><label>SLA (hours)</label>
+          <input type="number" id="qc-sla" placeholder="e.g. 48" min="0">
+        </div>
+      </div>
+      <div class="drawer-field"><label>Due Date</label>
+        <input type="date" id="qc-due">
+      </div>
+      <div style="display:flex;gap:.5rem;justify-content:flex-end;padding-top:.5rem;border-top:1px solid var(--border)">
+        <button class="secondary" onclick="app.closeCreate()">Cancel</button>
+        <button class="primary" onclick="app.submitCreate()">
+          <i data-lucide="plus" style="width:14px"></i> Create Issue
+        </button>
+      </div>`;
+                document.getElementById('qc-modal').classList.remove('hidden');
+                lucide.createIcons();
+                setTimeout(() => document.getElementById('qc-title')?.focus(), 100);
+            },
+
+            closeCreate() {
+                document.getElementById('qc-modal').classList.add('hidden');
+            },
+
+            submitCreate() {
+                const title = document.getElementById('qc-title').value.trim();
+                if (!title) { ui.toast('Please enter a title', 'warn'); return; }
+                const projectId = parseInt(document.getElementById('qc-project').value);
+                const assignedTo = parseInt(document.getElementById('qc-assign').value);
+                const priority = document.getElementById('qc-prio').value;
+                const points = parseInt(document.getElementById('qc-pts').value) || 0;
+                const slaHours = parseInt(document.getElementById('qc-sla').value) || 0;
+                const due = document.getElementById('qc-due').value;
+                const type = this._qcType;
+
+                const project = state.projects.find(p => p.id === projectId);
+                const count = state.issues.filter(i => i.projectId === projectId).length + 1;
+                const newIssue = {
+                    id: state.nextId++,
+                    projectId,
+                    parentId: null,
+                    key: `${project.code}-${count}`,
+                    type, title,
+                    status: 'todo',
+                    assignedTo, priority, points,
+                    due: due || '',
+                    labels: [], notes: '',
+                    isActive: true, isCollapsed: false,
+                    sla: slaHours ? { hours: slaHours, startedAt: Date.now() } : null
+                };
+                state.issues.push(newIssue);
+                audit.log(newIssue.id, state.currentUser.id, 'create', null, null, null, `Created ${type}: ${title}`);
+                if (assignedTo !== state.currentUser.id) notif.push(assignedTo, 'assign', `You were assigned ${newIssue.key} — ${title}`, newIssue.id);
+
+                this.closeCreate();
+                state.selectedProjectId = projectId;
+                this.expandProjectPath(projectId);
+                this.renderSidebar();
+                this.render();
+                ui.toast(`✓ Created ${newIssue.key}`, 'success');
+            },
+
+            // ---------- ISSUE ACTIONS ----------
+            createIssue(ctx, parentId) {
+                const title = document.getElementById(`nt-${ctx}-${parentId}`).value.trim();
+                if (!title) return;
+                const type = document.getElementById(`ntype-${ctx}-${parentId}`).value;
+                const assignedTo = parseInt(document.getElementById(`nassign-${ctx}-${parentId}`).value);
+                const priority = document.getElementById(`nprio-${ctx}-${parentId}`).value;
+                const points = parseInt(document.getElementById(`npts-${ctx}-${parentId}`).value) || 0;
+                const slaHours = parseInt(document.getElementById(`nsla-${ctx}-${parentId}`).value) || 0;
+                let projectId, parent = null;
+                if (ctx === 'project') projectId = parentId;
+                else { const p = state.issues.find(x => x.id === parentId); projectId = p.projectId; parent = parentId; }
+                const project = state.projects.find(p => p.id === projectId);
+                const count = state.issues.filter(i => i.projectId === projectId).length + 1;
+                const newIssue = { id: state.nextId++, projectId, parentId: parent, key: `${project.code}-${count}`, type, title, status: 'todo', assignedTo, priority, points, due: '', labels: [], notes: '', isActive: true, isCollapsed: false, sla: slaHours ? { hours: slaHours, startedAt: Date.now() } : null };
+                state.issues.push(newIssue);
+                audit.log(newIssue.id, state.currentUser.id, 'create', null, null, null, `Created ${type}: ${title}`);
+                if (assignedTo !== state.currentUser.id) notif.push(assignedTo, 'assign', `You were assigned ${newIssue.key} — ${title}`, newIssue.id);
+                this.render();
+                ui.toast('✓ Created ' + newIssue.key, 'success');
+            },
+
+            toggleForm(id) { const el = document.getElementById(`form-${id}`); if (el) el.classList.toggle('hidden'); },
+
+            toggleCollapse(kind, id) {
+                if (kind === 'project') { const p = state.projects.find(x => x.id === id); p.isCollapsed = !p.isCollapsed; }
+                else { const i = state.issues.find(x => x.id === id); i.isCollapsed = !i.isCollapsed; }
+                this.render();
+            },
+
+            toggleProjectActive(id) { const p = state.projects.find(x => x.id === id); p.isActive = !p.isActive; this.render(); },
+
+            toggleIssueActive(id) {
+                const i = state.issues.find(x => x.id === id);
+                i.isActive = !i.isActive;
+                audit.log(id, state.currentUser.id, 'update', 'active', !i.isActive, i.isActive, 'Toggled active');
+                this.render();
+            },
+
+            deleteProject(id) {
+                if (!ad.can(state.currentUser.id, 'project.*')) { ui.toast('⛔ No permission to delete projects', 'danger'); return; }
+                if (!confirm('Delete this project and all issues?')) return;
+                state.projects = state.projects.filter(p => p.id !== id);
+                state.issues = state.issues.filter(i => i.projectId !== id);
+                state.selectedProjectId = state.projects[0]?.id || null;
+                if (state.selectedProjectId) this.expandProjectPath(state.selectedProjectId);
+                this.renderSidebar();
+                this.render();
+            },
+
+            deleteIssue(id) {
+                if (!ad.can(state.currentUser.id, 'issue.*') && !ad.can(state.currentUser.id, 'project.*')) {
+                    ui.toast('⛔ No permission to delete issues', 'danger'); return;
+                }
+                if (!confirm('Delete this issue and its children?')) return;
+                const i = state.issues.find(x => x.id === id);
+                const kill = (ids) => {
+                    state.issues.filter(item => ids.includes(item.parentId)).forEach(c => kill([c.id]));
+                    state.issues = state.issues.filter(item => !ids.includes(item.id));
+                };
+                audit.log(id, state.currentUser.id, 'delete', null, i?.title, null, `Deleted ${i?.key || 'issue'}`);
+                kill([id]);
+                this.render();
+            },
+
+            // ---------- DRAG DROP ----------
+            dragStart(e, id) { e.dataTransfer.setData('text/plain', id); e.target.classList.add('dragging-branch'); e.stopPropagation(); },
+            dragEnd(e) { e.target.classList.remove('dragging-branch'); document.querySelectorAll('.drag-over').forEach(n => n.classList.remove('drag-over')); },
+            allowDrop(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); },
+            dragLeave(e) { e.currentTarget.classList.remove('drag-over'); },
+            drop(e, newParentId, projectId) {
+                e.preventDefault();
+                e.currentTarget.classList.remove('drag-over');
+                if (!ad.can(state.currentUser.id, 'issue.update')) { ui.toast('⛔ No permission to move issues', 'danger'); return; }
+                const id = parseInt(e.dataTransfer.getData('text/plain'));
+                const issue = state.issues.find(i => i.id === id);
+                if (!issue || issue.id === newParentId) return;
+                let p = newParentId;
+                while (p) { if (p === id) return; p = state.issues.find(i => i.id === p)?.parentId; }
+                const oldParent = issue.parentId;
+                issue.parentId = newParentId;
+                issue.projectId = projectId;
+                audit.log(id, state.currentUser.id, 'update', 'parent', oldParent, newParentId, 'Re-parented issue');
+                this.render();
+            },
+
+            // ---------- ISSUE DRAWER ----------
+            openIssue(id) {
+                const i = state.issues.find(x => x.id === id);
+                if (!i) return;
+                state.drawerIssueId = id;
+                state.drawerTab = 'details';
+                this.renderDrawer();
+                document.getElementById('drawer').classList.add('open');
+            },
+
+            setDrawerTab(t) { state.drawerTab = t; this.renderDrawer(); },
+
+            renderDrawer() {
+                const i = state.issues.find(x => x.id === state.drawerIssueId);
+                if (!i) return;
+                const p = state.projects.find(x => x.id === i.projectId);
+                const d = state.departments.find(x => x.id === p.deptId);
+                const div = state.divisions.find(x => x.id === d.divisionId);
+                const team = state.teams.find(x => x.id === p.teamId);
+                const s = sla.compute(i);
+                const cc = state.comments.filter(c => c.issueId === i.id).length;
+                const ac = state.attachments.filter(a => a.issueId === i.id).length;
+                const au = state.audit.filter(a => a.issueId === i.id).length;
+                const uid = state.currentUser.id;
+                const canEdit = ad.can(uid, 'issue.update') || ad.can(uid, 'issue.*');
+
+                document.getElementById('drawer-key').innerHTML = `
+      ${util.escape(i.key)}
+      <span style="margin-left:.5rem" class="type-icon ${'t-' + (i.type === 'sub-task' ? 'sub' : i.type)}">${i.type[0].toUpperCase()}</span>
+      <span class="muted" style="text-transform:capitalize">${i.type}</span>
+      <span class="drawer-subpath">· ${util.escape(div.name)} / ${util.escape(d.name)} / ${util.escape(team.name)}</span>
+    `;
+
+                const tabs = `<div class="drawer-tabs">
+      <div class="drawer-tab ${state.drawerTab === 'details' ? 'active' : ''}" onclick="app.setDrawerTab('details')"><i data-lucide="info" style="width:13px"></i> Details</div>
+      <div class="drawer-tab ${state.drawerTab === 'comments' ? 'active' : ''}" onclick="app.setDrawerTab('comments')"><i data-lucide="message-square" style="width:13px"></i> Comments ${cc ? `<span class="count-pill">${cc}</span>` : ''}</div>
+      <div class="drawer-tab ${state.drawerTab === 'attachments' ? 'active' : ''}" onclick="app.setDrawerTab('attachments')"><i data-lucide="paperclip" style="width:13px"></i> Files ${ac ? `<span class="count-pill">${ac}</span>` : ''}</div>
+      <div class="drawer-tab ${state.drawerTab === 'history' ? 'active' : ''}" onclick="app.setDrawerTab('history')"><i data-lucide="history" style="width:13px"></i> Audit ${au ? `<span class="count-pill">${au}</span>` : ''}</div>
+    </div>`;
+
+                let pane = '';
+                if (state.drawerTab === 'details') {
+                    const slaBlock = s ? `<div class="sla-card active-sla-${s.level === 'breach' ? 'red' : s.level}">
+        <h5><i data-lucide="timer" style="width:14px"></i> Regulatory SLA ${s.breached ? '<span class="badge" style="background:var(--danger);color:#fff;margin-left:.4rem">BREACHED</span>' : ''}</h5>
+        <div class="sla-countdown" style="color:var(--sla-${s.level === 'breach' ? 'red' : s.level})">${sla.fmt(s.remaining)}</div>
+        <div class="sla-bar"><div class="sla-bar-fill" style="width:${s.pct}%;background:var(--sla-${s.level === 'breach' ? 'red' : s.level})"></div></div>
+        <small class="muted">Target: ${i.sla.hours}h · Started ${util.fmtTime(i.sla.startedAt)}</small>
+      </div>`: `<div class="sla-card"><h5><i data-lucide="timer" style="width:14px"></i> SLA</h5><small class="muted">No SLA configured.</small></div>`;
+
+                    pane = `<div class="drawer-pane active">
+        <h3 style="margin-bottom:.75rem">${util.escape(i.title)}</h3>
+        ${slaBlock}
+        <div class="flex" style="gap:.5rem;margin-bottom:1rem">
+          <div style="flex:1">
+            <label style="font-size:.7rem;text-transform:uppercase;color:var(--muted);font-weight:600">SLA Hours</label>
+            <input type="number" min="0" value="${i.sla ? i.sla.hours : ''}" placeholder="e.g. 72" ${canEdit ? '' : 'disabled'} onchange="app.updateSla(${i.id},this.value)">
+          </div>
+          ${canEdit ? `<button class="secondary" style="align-self:end" onclick="app.resetSla(${i.id})"><i data-lucide="refresh-cw" style="width:14px"></i> Reset</button>` : ''}
+        </div>
+        <div class="drawer-field"><label>Status</label>
+          <select ${canEdit ? '' : 'disabled'} onchange="app.updateIssue(${i.id},'status',this.value)">
+            ${['todo', 'in-progress', 'review', 'done', 'blocked'].map(x => `<option value="${x}" ${i.status === x ? 'selected' : ''}>${x}</option>`).join('')}
+          </select>
+        </div>
+        <div class="drawer-field"><label>Assignee</label>
+          <select ${canEdit ? '' : 'disabled'} onchange="app.updateIssue(${i.id},'assignedTo',parseInt(this.value))">
+            ${state.users.map(u => `<option value="${u.id}" ${i.assignedTo === u.id ? 'selected' : ''}>${util.escape(u.name)} (${util.escape(u.title)})</option>`).join('')}
+          </select>
+        </div>
+        <div class="drawer-field"><label>Priority</label>
+          <select ${canEdit ? '' : 'disabled'} onchange="app.updateIssue(${i.id},'priority',this.value)">
+            ${['low', 'medium', 'high', 'highest'].map(pr => `<option value="${pr}" ${i.priority === pr ? 'selected' : ''}>${pr}</option>`).join('')}
+          </select>
+        </div>
+        <div class="flex" style="gap:.75rem">
+          <div class="drawer-field" style="flex:1"><label>Story Points</label>
+            <input type="number" value="${i.points || ''}" ${canEdit ? '' : 'disabled'} onchange="app.updateIssue(${i.id},'points',parseInt(this.value)||0)"></div>
+          <div class="drawer-field" style="flex:1"><label>Due Date</label>
+            <input type="date" value="${i.due || ''}" ${canEdit ? '' : 'disabled'} onchange="app.updateIssue(${i.id},'due',this.value)"></div>
+        </div>
+        <div class="drawer-field"><label>Labels</label>
+          <input value="${(i.labels || []).join(', ')}" ${canEdit ? '' : 'disabled'} onchange="app.updateIssue(${i.id},'labels',this.value.split(',').map(s=>s.trim()).filter(Boolean))">
+        </div>
+        <div class="drawer-field"><label>Description / Notes</label>
+          <textarea ${canEdit ? '' : 'disabled'} onchange="app.updateIssue(${i.id},'notes',this.value)">${util.escape(i.notes || '')}</textarea>
+        </div>
+        ${!canEdit ? `<p class="muted" style="font-size:.75rem;display:flex;align-items:center;gap:.4rem;margin-top:-.5rem"><i data-lucide="lock" style="width:12px"></i> Read-only — your role does not allow editing issues</p>` : ''}
+      </div>`;
+                }
+                else if (state.drawerTab === 'comments') {
+                    const comments = state.comments.filter(c => c.issueId === i.id).sort((a, b) => a.at - b.at);
+                    pane = `<div class="drawer-pane active">
+        <div class="comment-input-wrap">
+          <label style="font-size:.7rem;text-transform:uppercase;color:var(--muted);font-weight:600;display:block;margin-bottom:.35rem">Add Comment · use @ to mention</label>
+          <textarea id="comment-input" placeholder="Write a comment... tag with @Amare, @Tariku, @Adamu..."
+            oninput="app.onCommentInput(event)" onkeydown="app.onCommentKey(event)"></textarea>
+          <div id="mention-popup" class="mention-popup hidden"></div>
+          <button class="primary" style="margin-top:.5rem" onclick="app.addComment()"><i data-lucide="send" style="width:13px"></i> Post</button>
+        </div>
+        <hr style="margin:1rem 0">
+        ${comments.length === 0 ? '<p class="muted" style="text-align:center;padding:1rem">No comments yet.</p>' : comments.map(c => {
+                        const u = state.users.find(x => x.id === c.userId);
+                        return `<div class="comment">
+            <div class="comment-head">
+              <div class="avatar" style="width:26px;height:26px;font-size:.7rem;background:${app._userColor(u?.id || 0)};color:#fff">${u ? u.name[0] : '?'}</div>
+              <strong>${u ? util.escape(u.name) : 'Unknown'}</strong>
+              <small>${util.fmtTime(c.at)}</small>
+              ${c.userId === state.currentUser.id ? `<button class="icon ghost" style="margin-left:auto" onclick="app.deleteComment(${c.id})"><i data-lucide="trash-2" style="width:13px"></i></button>` : ''}
+            </div>
+            <div class="comment-body">${util.highlightMentions(c.body)}</div>
+          </div>`;
+                    }).join('')}
+      </div>`;
+                }
+                else if (state.drawerTab === 'attachments') {
+                    const files = state.attachments.filter(a => a.issueId === i.id).sort((a, b) => b.at - a.at);
+                    pane = `<div class="drawer-pane active">
+        <div class="attach-drop" id="drop-zone" onclick="document.getElementById('file-input').click()"
+          ondragover="event.preventDefault();this.classList.add('drag-active')"
+          ondragleave="this.classList.remove('drag-active')"
+          ondrop="app.handleDrop(event)">
+          <i data-lucide="upload-cloud" style="width:28px;color:var(--cbe-navy)"></i>
+          <div style="font-weight:600;margin-top:.35rem">Click or drop files here</div>
+          <small class="muted">PDF · DOCX · XLSX · Images · Max 10MB each</small>
+          <input type="file" id="file-input" multiple style="display:none" onchange="app.handleFiles(this.files)">
+        </div>
+        ${files.length === 0 ? '<p class="muted" style="text-align:center;padding:1rem">No attachments uploaded.</p>' : files.map(f => {
+                        const u = state.users.find(x => x.id === f.userId);
+                        return `<div class="attach-item">
+            <div class="attach-icon" style="background:${util.fileColor(f.type)}">${util.fileLabel(f.name)}</div>
+            <div class="attach-info">
+              <strong title="${util.escape(f.name)}">${util.escape(f.name)}</strong>
+              <small>${util.fmtSize(f.size)} · by ${u ? util.escape(u.name) : '?'} · ${util.fmtTime(f.at)}</small>
+            </div>
+            ${f.dataUrl ? `<button class="icon secondary" onclick="app.downloadFile(${f.id})"><i data-lucide="download" style="width:14px"></i></button>` : ''}
+            ${f.userId === state.currentUser.id ? `<button class="icon danger" onclick="app.deleteAttach(${f.id})"><i data-lucide="trash-2" style="width:14px"></i></button>` : ''}
+          </div>`;
+                    }).join('')}
+      </div>`;
+                }
+                else if (state.drawerTab === 'history') {
+                    const entries = audit.forIssue(i.id);
+                    pane = `<div class="drawer-pane active">
+        <div class="muted" style="font-size:.75rem;margin-bottom:.75rem;padding:.5rem .65rem;background:var(--surface-2);border-radius:var(--radius);border-left:3px solid var(--cbe-gold)">
+          <strong style="color:var(--text)">🔒 Immutable Audit Trail</strong><br>
+          Every change is logged for governance and compliance review.
+        </div>
+        ${entries.length === 0 ? '<p class="muted">No history yet.</p>' : entries.map(a => {
+                        const u = state.users.find(x => x.id === a.userId);
+                        const icon = { create: 'plus-circle', delete: 'trash-2', update: 'edit-3', comment: 'message-square', attach: 'paperclip', sla_breach: 'alert-triangle', assign: 'user' }[a.action] || 'activity';
+                        let diff = '';
+                        if (a.action === 'update' && a.from !== null) { diff = `<div class="audit-diff"><span class="old">${util.escape(String(a.from))}</span> → <span class="new">${util.escape(String(a.to))}</span></div>`; }
+                        return `<div class="audit-entry a-${a.action}">
+            <div class="flex" style="gap:.4rem">
+              <i data-lucide="${icon}" style="width:13px;color:var(--muted)"></i>
+              <strong style="font-size:.8rem">${u ? util.escape(u.name) : 'System'}</strong>
+              <span class="muted" style="font-size:.78rem">${util.escape(a.text)}${a.field ? ` <code style="background:#eef2ff;color:#4338ca;padding:0 4px;border-radius:3px;font-size:.7rem">${util.escape(a.field)}</code>` : ''}</span>
+            </div>
+            ${diff}
+            <small title="${util.fmtFull(a.at)}">${util.fmtTime(a.at)}</small>
+          </div>`;
+                    }).join('')}
+      </div>`;
+                }
+
+                document.getElementById('drawer-body').innerHTML = tabs + pane;
+                lucide.createIcons();
+            },
+
+            closeDrawer() { document.getElementById('drawer').classList.remove('open'); state.drawerIssueId = null; },
+
+            updateIssue(id, field, val) {
+                const i = state.issues.find(x => x.id === id);
+                if (!i) return;
+                if (!ad.can(state.currentUser.id, 'issue.update') && !ad.can(state.currentUser.id, 'issue.*')) {
+                    ui.toast('⛔ No permission to update issues', 'danger'); return;
+                }
+                const old = i[field];
+                if (JSON.stringify(old) === JSON.stringify(val)) return;
+                i[field] = val;
+                audit.log(id, state.currentUser.id, 'update', field, Array.isArray(old) ? old.join(', ') : old, Array.isArray(val) ? val.join(', ') : val, `Changed ${field}`);
+                if (field === 'assignedTo' && val !== state.currentUser.id) { notif.push(val, 'assign', `You were assigned to ${i.key} — ${i.title}`, id); }
+                this.render();
+                if (state.drawerIssueId === id) this.renderDrawer();
+                ui.toast('✓ Saved', 'success');
+            },
+
+            updateSla(id, hours) {
+                const i = state.issues.find(x => x.id === id);
+                if (!i) return;
+                const prev = i.sla ? i.sla.hours : null;
+                const h = parseInt(hours);
+                if (!h) { i.sla = null; audit.log(id, state.currentUser.id, 'update', 'sla', prev, 'cleared', 'Cleared SLA'); }
+                else { i.sla = { hours: h, startedAt: Date.now() }; i._breachNotified = false; audit.log(id, state.currentUser.id, 'update', 'sla', prev, h + 'h', 'Updated SLA'); }
+                this.render(); this.renderDrawer(); ui.toast('⏱ SLA updated', 'success');
+            },
+
+            resetSla(id) {
+                const i = state.issues.find(x => x.id === id);
+                if (!i || !i.sla) return;
+                i.sla.startedAt = Date.now(); i._breachNotified = false;
+                audit.log(id, state.currentUser.id, 'update', 'sla', 'running', 'restarted', 'Reset SLA timer');
+                this.render(); this.renderDrawer(); ui.toast('⏱ SLA timer reset', 'success');
+            },
+
+            // ---------- COMMENTS ----------
+            _mentionState: { active: false, query: '', start: 0, selected: 0 },
+
+            onCommentInput(e) {
+                const ta = e.target;
+                const val = ta.value;
+                const pos = ta.selectionStart;
+                const before = val.slice(0, pos);
+                const m = before.match(/@(\w*)$/);
+                const pop = document.getElementById('mention-popup');
+                if (m) {
+                    this._mentionState = { active: true, query: m[1].toLowerCase(), start: pos - m[0].length, selected: 0 };
+                    const matches = state.users.filter(u => u.name.toLowerCase().startsWith(m[1].toLowerCase()));
+                    if (matches.length === 0) { pop.classList.add('hidden'); return; }
+                    pop.classList.remove('hidden');
+                    pop.innerHTML = matches.map((u, idx) => `
+        <div class="mention-option ${idx === 0 ? 'active' : ''}" data-uid="${u.id}" onclick="app.insertMention(${u.id})">
+          <div class="avatar" style="width:22px;height:22px;font-size:.65rem;background:${app._userColor(u.id)};color:#fff">${u.name[0]}</div>
+          ${util.escape(u.name)} <small class="muted">${util.escape(u.title)}</small>
+        </div>`).join('');
+                    pop.style.top = (ta.offsetTop + ta.offsetHeight + 4) + 'px';
+                    pop.style.left = ta.offsetLeft + 'px';
+                } else {
+                    this._mentionState.active = false;
+                    pop.classList.add('hidden');
+                }
+            },
+
+            onCommentKey(e) {
+                const ms = this._mentionState;
+                if (!ms.active) {
+                    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); this.addComment(); }
+                    return;
+                }
+                const pop = document.getElementById('mention-popup');
+                const opts = pop.querySelectorAll('.mention-option');
+                if (!opts.length) return;
+                if (e.key === 'ArrowDown') { e.preventDefault(); ms.selected = (ms.selected + 1) % opts.length; opts.forEach((o, i) => o.classList.toggle('active', i === ms.selected)); }
+                else if (e.key === 'ArrowUp') { e.preventDefault(); ms.selected = (ms.selected - 1 + opts.length) % opts.length; opts.forEach((o, i) => o.classList.toggle('active', i === ms.selected)); }
+                else if (e.key === 'Enter' || e.key === 'Tab') { e.preventDefault(); this.insertMention(parseInt(opts[ms.selected].dataset.uid)); }
+                else if (e.key === 'Escape') { ms.active = false; pop.classList.add('hidden'); }
+            },
+
+            insertMention(uid) {
+                const u = state.users.find(x => x.id === uid);
+                if (!u) return;
+                const ta = document.getElementById('comment-input');
+                const ms = this._mentionState;
+                const val = ta.value;
+                ta.value = val.slice(0, ms.start) + '@' + u.name + ' ' + val.slice(ta.selectionStart);
+                const newPos = ms.start + u.name.length + 2;
+                ta.focus(); ta.setSelectionRange(newPos, newPos);
+                ms.active = false;
+                document.getElementById('mention-popup').classList.add('hidden');
+            },
+
+            addComment() {
+                const ta = document.getElementById('comment-input');
+                const body = ta.value.trim();
+                if (!body) return;
+                const mentions = [];
+                body.replace(/@(\w+)/g, (m, n) => {
+                    const u = state.users.find(x => x.name.toLowerCase() === n.toLowerCase());
+                    if (u && !mentions.includes(u.id)) mentions.push(u.id);
+                });
+                const c = { id: state.nextComment++, issueId: state.drawerIssueId, userId: state.currentUser.id, body, at: Date.now(), mentions };
+                state.comments.push(c);
+                const issue = state.issues.find(x => x.id === state.drawerIssueId);
+                audit.log(state.drawerIssueId, state.currentUser.id, 'comment', null, null, null, 'Added comment');
+                mentions.forEach(uid => { if (uid !== state.currentUser.id) notif.push(uid, 'mention', `${state.currentUser.name} mentioned you on ${issue.key}`, issue.id); });
+                if (issue.assignedTo !== state.currentUser.id && !mentions.includes(issue.assignedTo)) { notif.push(issue.assignedTo, 'comment', `${state.currentUser.name} commented on ${issue.key}`, issue.id); }
+                ta.value = '';
+                this.renderDrawer(); this.render(); ui.toast('✓ Comment posted', 'success');
+            },
+
+            deleteComment(id) {
+                if (!confirm('Delete this comment?')) return;
+                const c = state.comments.find(x => x.id === id);
+                if (!c) return;
+                state.comments = state.comments.filter(x => x.id !== id);
+                audit.log(c.issueId, state.currentUser.id, 'delete', 'comment', null, null, 'Deleted comment');
+                this.renderDrawer(); this.render();
+            },
+
+            // ---------- FILES ----------
+            handleFiles(fileList) {
+                Array.from(fileList).forEach(file => {
+                    if (file.size > 10 * 1024 * 1024) { ui.toast('⚠ ' + file.name + ' exceeds 10MB', 'danger'); return; }
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        const att = { id: state.nextAttach++, issueId: state.drawerIssueId, userId: state.currentUser.id, name: file.name, size: file.size, type: file.type, at: Date.now(), dataUrl: e.target.result };
+                        state.attachments.push(att);
+                        audit.log(state.drawerIssueId, state.currentUser.id, 'attach', null, null, file.name, `Uploaded: ${file.name}`);
+                        const issue = state.issues.find(x => x.id === state.drawerIssueId);
+                        if (issue && issue.assignedTo !== state.currentUser.id) { notif.push(issue.assignedTo, 'comment', `${state.currentUser.name} attached ${file.name} to ${issue.key}`, issue.id); }
+                        this.renderDrawer(); this.render(); ui.toast('✓ Uploaded ' + file.name, 'success');
+                    };
+                    reader.readAsDataURL(file);
+                });
+            },
+
+            handleDrop(e) {
+                e.preventDefault(); e.currentTarget.classList.remove('drag-active');
+                if (e.dataTransfer.files && e.dataTransfer.files.length) this.handleFiles(e.dataTransfer.files);
+            },
+
+            downloadFile(id) {
+                const f = state.attachments.find(x => x.id === id);
+                if (!f || !f.dataUrl) return;
+                const a = document.createElement('a'); a.href = f.dataUrl; a.download = f.name; a.click();
+            },
+
+            deleteAttach(id) {
+                if (!confirm('Remove this attachment?')) return;
+                const f = state.attachments.find(x => x.id === id);
+                if (!f) return;
+                state.attachments = state.attachments.filter(x => x.id !== id);
+                audit.log(f.issueId, state.currentUser.id, 'delete', 'attachment', f.name, null, `Deleted file: ${f.name}`);
+                this.renderDrawer(); this.render();
+            },
+
+            // ---------- NOTIFICATIONS ----------
+            toggleNotifPanel() {
+                const p = document.getElementById('notif-panel');
+                if (p.classList.contains('hidden')) this.renderNotifPanel();
+                p.classList.toggle('hidden');
+            },
+
+            renderNotifPanel() {
+                const list = notif.forMe();
+                const p = document.getElementById('notif-panel');
+                p.innerHTML = `<h4>Notifications <button class="ghost" style="font-size:.7rem" onclick="notif.markAllRead();app.renderNotifPanel()">Mark all read</button></h4>
+      <div class="notif-list">
+        ${list.length === 0 ? '<p class="muted" style="padding:1rem;text-align:center">No notifications</p>' :
+                        list.map(n => `<div class="notif-item ${n.read ? '' : 'unread'}" onclick="app.clickNotif(${n.id})">${util.escape(n.text)}<small>${util.fmtTime(n.at)}</small></div>`).join('')}
+      </div>`;
+            },
+
+            clickNotif(id) {
+                const n = state.notifications.find(x => x.id === id);
+                if (!n) return;
+                n.read = true;
+                if (n.issueId) this.openIssue(n.issueId);
+                document.getElementById('notif-panel').classList.add('hidden');
+                ui.updateBell();
+            }
+        };
+
+        // =====================================================================
+        // TIMERS & EVENTS
+        // =====================================================================
+        setInterval(() => {
+            if (!state.currentUser) return;
+            sla.scan();
+            app.render();
+            if (state.drawerIssueId) app.renderDrawer();
+        }, 30000);
+
+        document.addEventListener('click', e => {
+            if (!e.target.closest('.bell-wrap')) {
+                document.getElementById('notif-panel')?.classList.add('hidden');
+            }
+            if (!e.target.closest('.search-box')) {
+                document.getElementById('search-results')?.classList.add('hidden');
+            }
+        });
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                document.getElementById('drawer').classList.remove('open');
+                document.getElementById('ad-modal').classList.add('hidden');
+                document.getElementById('qc-modal').classList.add('hidden');
+            }
+        });
+
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
